@@ -1,0 +1,38 @@
+.sidebar {
+  width: 240px;
+  background: linear-gradient(180deg, #1e293b, #0f172a);
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  position: fixed;   /* ✅ FIXED SIDEBAR */
+  top: 0;
+  left: 0;
+  height: 100vh;     /* full height */
+  overflow-y: auto; 
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+li:hover {
+  background: #334155;
+}
+
+.active {
+  background: #2563eb;
+}

@@ -1,0 +1,120 @@
+.job-container {
+  width: 70%;
+  margin: auto;
+  margin-top: 30px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.08);
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  margin-bottom: 25px;
+}
+
+/* Row Layout */
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1;
+  margin-bottom: 18px;
+}
+
+label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: 0.2s;
+}
+
+input:focus, textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Skills */
+.skill-input {
+  display: flex;
+  gap: 10px;
+}
+
+.skill-input input {
+  flex: 1;
+}
+
+.skill-input button {
+  padding: 10px 15px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.skill-input button:hover {
+  background: #1e40af;
+}
+
+/* Skill tags */
+.skill-list {
+  margin-top: 10px;
+}
+
+.skill {
+  display: inline-flex;
+  align-items: center;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 6px 10px;
+  border-radius: 20px;
+  margin: 5px;
+  font-size: 13px;
+}
+
+.skill button {
+  margin-left: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: red;
+}
+
+/* Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  border: none;
+  background: #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  border: none;
+  background: #16a34a;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #15803d;
+}

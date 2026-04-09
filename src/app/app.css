@@ -1,0 +1,21 @@
+.layout {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+}
+
+/* ✅ THIS IS THE REAL FIX */
+.main-content {
+  margin-left: 240px;              /* pushes entire page */
+  width: calc(100% - 240px);
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 20px;
+}

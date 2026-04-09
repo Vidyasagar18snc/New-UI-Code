@@ -1,0 +1,21 @@
+.layout {
+  display: flex;
+}
+
+.main {
+  flex: 1;
+  padding: 20px;
+  background: #f4f6f9;
+  min-height: 100vh;
+}
+.layout {
+  display: flex;
+}
+
+/* Push content right */
+.main-content {
+  margin-left: 240px;             /* ✅ SAME as sidebar width */
+  width: calc(100% - 240px);      /* ✅ prevent overflow */
+  min-height: 100vh;
+  background: #f8fafc;
+}

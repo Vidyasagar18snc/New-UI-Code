@@ -1,0 +1,11 @@
+<div class="sidebar">
+  <h2 class="logo">AI Recruit</h2>
+
+  <ul>
+    <li *ngFor="let item of menu"
+        [routerLink]="item.route"
+        routerLinkActive="active">
+      {{ item.icon }} {{ item.name }}
+    </li>
+  </ul>
+</div>

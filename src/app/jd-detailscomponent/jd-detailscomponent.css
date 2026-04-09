@@ -1,0 +1,64 @@
+.table-container {
+  width: 95%;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.job-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.job-table th {
+  background-color: #2c3e50;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+.job-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.job-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.skill {
+  display: inline-block;
+  background: #3498db;
+  color: white;
+  padding: 3px 8px;
+  margin: 2px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.read-more {
+  color: blue;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.edit-btn {
+  background: orange;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.apply-btn {
+  background: green;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}

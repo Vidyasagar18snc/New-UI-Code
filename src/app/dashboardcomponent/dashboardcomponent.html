@@ -1,0 +1,52 @@
+<div class="dashboard">
+
+  <h2>📊 AI Resume Screening Dashboard</h2>
+
+  <!-- 🔄 Loader -->
+  <div *ngIf="loading">Loading candidates...</div>
+ 
+  <!-- Cards -->
+  <div class="card-container" *ngIf="!loading">
+    <div class="card" *ngFor="let stat of stats"> 
+      <div class="icon">{{ stat.icon }}</div> 
+      <div>       
+        <h3>{{ stat.value }}</h3>      
+        <p>{{ stat.title }}</p>    
+      </div> 
+    </div>
+  </div>      
+   
+  <!-- Table --> 
+  <div class="table-section" *ngIf="!loading">
+    <h3>Recent Candidates</h3>
+
+    <table *ngIf="candidates.length > 0">
+      <thead>
+        <tr> 
+          <th>Name</th>
+          <th>Score</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let c of candidates">
+          <td>{{ c?.name }}</td>
+          <td>{{ c?.score }}%</td>
+          <td>
+            <span [ngClass]="c?.status?.toLowerCase()">
+              {{ c?.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ❗ No Data Message -->
+    <div *ngIf="candidates.length === 0">
+      No candidates found
+    </div>
+
+  </div>
+
+</div>

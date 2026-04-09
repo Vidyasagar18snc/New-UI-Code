@@ -1,0 +1,61 @@
+
+<div class="table-container" *ngIf="jobs.length > 0; else noJobs">
+
+
+  <h2>📊 Job Details Table</h2>
+  
+  <table class="job-table"> 
+    <thead>
+      <tr>  
+        <th>Title</th>
+        <th>Experience</th>  
+        <th>Location</th>
+        <th>Skills</th>    
+        <th>Description</th>  
+        <th>Actions</th>   
+      </tr>    
+    </thead>   
+    
+    <tbody>
+      <tr *ngFor="let job of jobs">
+
+        <td>{{ job.title }}</td>
+
+        <td>{{ job.experience }} Years</td>
+
+        <td>{{ job.location }}</td>
+
+        <td>
+          <span class="skill" *ngFor="let skill of job.skills">
+            {{ skill }}
+          </span>
+        </td>
+
+        <td>
+          {{
+            job.isExpanded
+              ? job.description
+              : (job.description | slice:0:60) + '...'
+          }}
+
+          <br>
+
+          <span class="read-more" (click)="toggleDescription(job)">
+            {{ job.isExpanded ? 'Less ▲' : 'More ▼' }}
+          </span>
+        </td>
+
+        <td>
+          <button class="edit-btn">Edit</button>
+          <button class="apply-btn">Proceed</button>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<ng-template #noJobs>
+  <p>No jobs available</p>
+</ng-template>

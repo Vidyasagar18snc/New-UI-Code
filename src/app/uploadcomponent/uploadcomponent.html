@@ -1,0 +1,30 @@
+<div class="upload-container">
+
+  <h2>📤 Upload Resume</h2>
+
+ <select [(ngModel)]="jobRole">
+  <option value="">Select Role</option>
+  <option *ngFor="let role of roles" [value]="role">
+    {{ role }}
+  </option>
+</select>
+
+  <div class="form-group">
+    <label>Language</label>
+    <select [(ngModel)]="language">
+      <option value="auto">Auto</option>
+      <option value="english">English</option>
+      <option value="hindi">Hindi</option>
+    </select>
+  </div>
+
+  <input type="file" multiple (change)="onFileSelect($event)">
+
+  <div *ngFor="let file of selectedFiles; let i=index">
+    {{ file.name }}
+    <button (click)="removeFile(i)">❌</button>
+  </div>
+
+  <button (click)="upload()">Upload</button>
+
+</div>
