@@ -1,0 +1,212 @@
+<div class="employee-dashboard">
+
+  <!-- HEADER -->
+  <div class="dashboard-header">
+    <div class="header-left">
+      <div class="header-eyebrow">
+        <span class="pulse-dot"></span>
+        Live · Synced now
+      </div>
+      <h1>Employee Management</h1>
+      <p class="header-sub">Track, manage and monitor your entire workforce in one place.</p>
+    </div>
+    <div class="header-right">
+      <div class="header-avatar-group">
+        <div class="avatar-stack">
+          <span class="avatar av1">RK</span>
+          <span class="avatar av2">SM</span>
+          <span class="avatar av3">AP</span>
+        </div>
+        <span class="avatar-label">Active right now</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS STRIP -->
+  <div class="stats-grid">
+
+    <div class="stat-card stat-primary">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-label">Total Employees</span>
+        <span class="stat-value">{{ employees.length }}</span>
+      </div>
+      <div class="stat-trend up">↑ Live count</div>
+    </div>
+
+    <div class="stat-card stat-success">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-label">Active</span>
+        <span class="stat-value">{{ activeCount }}</span>
+      </div>
+      <div class="stat-trend up">↑ On duty</div>
+    </div>
+
+    <div class="stat-card stat-warning">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-label">Inactive</span>
+        <span class="stat-value">{{ inactiveCount }}</span>
+      </div>
+      <div class="stat-trend neutral">— Offboarded</div>
+    </div>
+
+    <div class="stat-card stat-info">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-label">Departments</span>
+        <span class="stat-value">{{ departmentCount }}</span>
+      </div>
+      <div class="stat-trend up">↑ Teams</div>
+    </div>
+
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        placeholder="Search by name, email or ID…"
+        [(ngModel)]="searchQuery"
+        (input)="filterEmployees()"
+        class="search-input"
+      />
+    </div>
+    <div class="filter-group">
+      <select [(ngModel)]="statusFilter" (change)="filterEmployees()" class="filter-select">
+        <option value="">All Status</option>
+        <option value="ACTIVE">Active</option>
+        <option value="INACTIVE">Inactive</option>
+      </select>
+      <select [(ngModel)]="deptFilter" (change)="filterEmployees()" class="filter-select">
+        <option value="">All Departments</option>
+        <option *ngFor="let d of departments" [value]="d">{{ d }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="card">
+
+    <div class="card-header">
+      <div class="card-title-group">
+        <h2>All Employees</h2>
+        <span class="record-badge">{{ filteredEmployees.length }} records</span>
+      </div>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]">
+        <div class="skeleton sk-sm"></div>
+        <div class="skeleton sk-md"></div>
+        <div class="skeleton sk-lg"></div>
+        <div class="skeleton sk-md"></div>
+        <div class="skeleton sk-md"></div>
+        <div class="skeleton sk-sm"></div>
+        <div class="skeleton sk-sm"></div>
+      </div>
+    </div>
+
+    <div class="table-wrapper" *ngIf="!isLoading">
+      <table>
+        <thead>
+          <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Official Email</th>
+            <th>Department</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Joining Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let employee of filteredEmployees; let i = index"
+            class="table-row"
+            [style.animation-delay]="i * 40 + 'ms'"
+          >
+            <td>
+              <span class="emp-id">{{ employee.employeeId }}</span>
+            </td>
+            <td>
+              <div class="emp-name-cell">
+                <div class="emp-avatar">{{ getInitials(employee.employeeName) }}</div>
+                <span class="emp-name">{{ employee.employeeName }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="emp-email">{{ employee.officialEmail }}</span>
+            </td>
+            <td>
+              <span class="dept-tag">{{ employee.department }}</span>
+            </td>
+            <td>{{ employee.role }}</td>
+            <td>
+              <span
+                class="status-badge"
+                [ngClass]="{
+                  'status-active': employee.status === 'ACTIVE',
+                  'status-inactive': employee.status !== 'ACTIVE'
+                }"
+              >
+                <span class="status-dot"></span>
+                {{ employee.status }}
+              </span>
+            </td>
+            <td>
+              <span class="date-chip">{{ employee.joiningDate | date: 'dd MMM yyyy' }}</span>
+            </td>
+          </tr>
+
+          <!-- EMPTY STATE -->
+          <tr *ngIf="filteredEmployees.length === 0">
+            <td colspan="7" class="empty-state-cell">
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <line x1="23" y1="11" x2="17" y2="11"/>
+                </svg>
+                <p>No employees found</p>
+                <span>Try adjusting your filters or search query</span>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>

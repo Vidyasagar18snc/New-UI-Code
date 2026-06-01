@@ -1,11 +1,214 @@
-<div class="sidebar">
-  <h2 class="logo">AI Recruit</h2>
+<aside class="sidebar">
 
-  <ul>
-    <li *ngFor="let item of menu"
-        [routerLink]="item.route"
-        routerLinkActive="active">
-      {{ item.icon }} {{ item.name }}
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <span class="logo-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+    </span>
+    <span class="logo-text">AI <strong>Recruit</strong></span>
+  </div>
+
+  <!-- Nav list -->
+  <ul class="nav-list">
+    <li
+      *ngFor="let item of menu"
+      class="nav-item"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+    >
+      <!-- Active indicator bar -->
+      <span class="active-bar"></span>
+
+      <!-- Icon -->
+      <span class="nav-icon">
+
+        <!-- layout-dashboard -->
+        <ng-container *ngIf="item.icon === 'layout-dashboard'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="9" rx="1.5"/>
+            <rect x="14" y="3" width="7" height="5" rx="1.5"/>
+            <rect x="14" y="12" width="7" height="9" rx="1.5"/>
+            <rect x="3" y="16" width="7" height="5" rx="1.5"/>
+          </svg>
+        </ng-container>
+
+        <!-- upload-cloud -->
+        <ng-container *ngIf="item.icon === 'upload-cloud'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 16 12 12 8 16"/>
+            <line x1="12" y1="12" x2="12" y2="21"/>
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+          </svg>
+        </ng-container>
+
+        <!-- file-text -->
+        <ng-container *ngIf="item.icon === 'file-text'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </ng-container>
+
+        <!-- briefcase-business -->
+        <ng-container *ngIf="item.icon === 'briefcase-business'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            <path d="M12 12v3"/>
+            <path d="M8 12h8"/>
+            <circle cx="12" cy="15" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </ng-container>
+
+        <!-- message-square-check -->
+        <ng-container *ngIf="item.icon === 'message-square-check'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <path d="m9 11 2 2 4-4"/>
+          </svg>
+        </ng-container>
+
+        <!-- file-signature (Offer Letter) -->
+        <ng-container *ngIf="item.icon === 'file-signature'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 19.5v.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8.5L18 5.5"/>
+            <path d="M8 18h1"/>
+            <path d="M18.42 9.61a2.1 2.1 0 1 1 2.97 2.97L16.95 17 13 18l.99-3.95z"/>
+          </svg>
+        </ng-container>
+
+        <!-- trophy -->
+        <ng-container *ngIf="item.icon === 'trophy'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="17" x2="12" y2="21"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <path d="M7 4H4a1 1 0 0 0-1 1v2a4 4 0 0 0 4 4"/>
+            <path d="M17 4h3a1 1 0 0 1 1 1v2a4 4 0 0 1-4 4"/>
+            <path d="M7 4h10v8a5 5 0 0 1-10 0V4z"/>
+          </svg>
+        </ng-container>
+
+        <!-- bar-chart-3 -->
+        <ng-container *ngIf="item.icon === 'bar-chart-3'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="8"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6"  y1="20" x2="6"  y2="12"/>
+            <line x1="2"  y1="20" x2="22" y2="20"/>
+          </svg>
+        </ng-container>
+
+        <!-- laptop (Asset Tracking) -->
+        <ng-container *ngIf="item.icon === 'laptop'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9"/>
+            <rect x="2" y="16" width="20" height="2" rx="1"/>
+            <line x1="9" y1="20" x2="15" y2="20"/>
+          </svg>
+        </ng-container>
+
+        <!-- line-chart (Analytics) -->
+        <ng-container *ngIf="item.icon === 'line-chart'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </ng-container>
+
+        <!-- flask-conical (Test) -->
+        <ng-container *ngIf="item.icon === 'flask-conical'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 2v7.31l-4.72 7.07A1 1 0 0 0 6.14 18h11.72a1 1 0 0 0 .86-1.62L14 9.31V2"/>
+            <path d="M8.5 2h7"/>
+            <path d="M7 16h10"/>
+          </svg>
+        </ng-container>
+
+        <!-- users (Employee Dashboard) -->
+        <ng-container *ngIf="item.icon === 'users'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </ng-container>
+
+        <!-- badge-check (HR Doc Verification) -->
+        <ng-container *ngIf="item.icon === 'badge-check'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </ng-container>
+
+        <!-- calendar-days (Interview Schedule) -->
+        <ng-container *ngIf="item.icon === 'calendar-days'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8"  y1="2" x2="8"  y2="6"/>
+            <line x1="3"  y1="10" x2="21" y2="10"/>
+            <circle cx="8"  cy="15" r="1" fill="currentColor" stroke="none"/>
+            <circle cx="12" cy="15" r="1" fill="currentColor" stroke="none"/>
+            <circle cx="16" cy="15" r="1" fill="currentColor" stroke="none"/>
+            <circle cx="8"  cy="19" r="1" fill="currentColor" stroke="none"/>
+            <circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </ng-container>
+
+        <!-- user-round (Employee Details) -->
+        <ng-container *ngIf="item.icon === 'user-round'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20a8 8 0 0 1 16 0"/>
+          </svg>
+        </ng-container>
+
+        <!-- boxes (Asset Management) -->
+        <ng-container *ngIf="item.icon === 'boxes'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42z"/>
+            <path d="m7 16.5-4.74-2.85"/>
+            <path d="m7 16.5 5-3"/>
+            <path d="M7 16.5v5.17"/>
+            <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3z"/>
+            <path d="m17 16.5-5-3"/>
+            <path d="m17 16.5 4.74-2.85"/>
+            <path d="M17 16.5v5.17"/>
+            <path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8z"/>
+            <path d="M12 8 7.26 5.15"/>
+            <path d="m12 8 4.74-2.85"/>
+            <path d="M12 13.5V8"/>
+          </svg>
+        </ng-container>
+
+      </span>
+
+      <span class="nav-label">{{ item.name }}</span>
     </li>
   </ul>
-</div>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">HR</div>
+      <div class="user-info">
+        <span class="user-name">HR Admin</span>
+        <span class="user-role">Recruiter</span>
+      </div>
+      <svg class="user-settings" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    </div>
+  </div>
+
+</aside>

@@ -1,0 +1,65 @@
+.analytics-page {
+  padding: 28px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.page-header h1 { font-size: 22px; font-weight: 600; color: #f1f5f9; }
+.subtitle       { font-size: 13px; color: #64748b; margin-top: 4px; }
+.live-badge     { font-size: 11px; padding: 4px 12px; background: rgba(29,158,117,0.15);
+                  color: #34d399; border-radius: 20px; border: 1px solid rgba(29,158,117,0.3); }
+
+/* Metric cards */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.metric-card   { background: #1e293b; border-radius: 12px; padding: 16px 18px; }
+.metric-label  { font-size: 12px; color: #64748b; margin-bottom: 8px; }
+.metric-value  { font-size: 24px; font-weight: 600; color: #f1f5f9; }
+.metric-delta  { font-size: 11px; margin-top: 6px; }
+.up            { color: #34d399; }
+.down          { color: #f87171; }
+
+/* Cards */
+.card { background: #1e293b; border-radius: 12px; padding: 18px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.06); }
+.card-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; margin-bottom: 14px; }
+
+/* Grids */
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin-bottom: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; margin-bottom: 16px; }
+
+/* Chart wrappers */
+.chart-wrap          { position: relative; width: 100%; }
+.h160                { height: 160px; }
+.h190                { height: 190px; }
+.h220                { height: 220px; }
+.h240                { height: 240px; }
+
+/* Legend */
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; font-size: 12px; color: #94a3b8; }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.mt10 { margin-top: 10px; margin-bottom: 0; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+.recruiter {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #6366f1, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+}

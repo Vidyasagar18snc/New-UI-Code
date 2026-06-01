@@ -1,0 +1,273 @@
+<!-- offer-response-component.html -->
+
+<div class="offer-container">
+
+  <!-- ═══════════════════════════════════════════════════
+       TOAST NOTIFICATION
+  ════════════════════════════════════════════════════ -->
+  <div
+    class="toast"
+    [class.toast--visible]="showToast"
+    [class.toast--error]="toastType === 'error'"
+    [class.toast--success]="toastType === 'success'"
+    role="alert"
+    aria-live="assertive"
+  >
+    <span class="toast__icon">
+      {{ toastType === 'success' ? '✓' : '✕' }}
+    </span>
+    <span class="toast__message">{{ toastMessage }}</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       LOADING STATE
+  ════════════════════════════════════════════════════ -->
+  <div *ngIf="loading" class="loading-state" aria-busy="true" aria-label="Loading offer letter">
+    <div class="loading-state__ring">
+      <div class="loading-state__ring-inner"></div>
+    </div>
+    <p class="loading-state__text">Fetching your offer letter…</p>
+    <p class="loading-state__sub">This will only take a moment.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       ERROR STATE
+  ════════════════════════════════════════════════════ -->
+  <div *ngIf="!loading && loadError" class="error-state">
+    <div class="error-state__icon">⚠</div>
+    <h2 class="error-state__title">Link Unavailable</h2>
+    <p class="error-state__message">
+      This offer link is invalid or has expired.<br />
+      Please contact HR for a new link.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       OFFER CARD
+  ════════════════════════════════════════════════════ -->
+  <div *ngIf="offer && !loading && !loadError" class="offer-card">
+
+    <!-- Header -->
+    <header class="offer-card__header">
+      <div class="offer-card__badge">Official Document</div>
+      <h1 class="offer-card__title">Offer Letter</h1>
+      <p class="offer-card__welcome">Welcome aboard, <strong>{{ offer.name }}</strong></p>
+    </header>
+
+    <!-- Details grid -->
+    <section class="offer-details" aria-label="Offer details">
+      <div class="offer-details__item">
+        <span class="offer-details__label">Role</span>
+        <span class="offer-details__value">{{ offer.role }}</span>
+      </div>
+      <div class="offer-details__item">
+        <span class="offer-details__label">Department</span>
+        <span class="offer-details__value">{{ offer.department }}</span>
+      </div>
+      <div class="offer-details__item">
+        <span class="offer-details__label">Salary (Annual)</span>
+        <span class="offer-details__value offer-details__value--highlight">₹ {{ offer.salary }}</span>
+      </div>
+      <div class="offer-details__item">
+        <span class="offer-details__label">Joining Date</span>
+        <span class="offer-details__value">{{ offer.joiningDate }}</span>
+      </div>
+    </section>
+
+    <!-- PDF viewer -->
+    <div class="pdf-viewer" role="region" aria-label="Offer letter document">
+      <iframe
+        [src]="pdfUrl"
+        width="100%"
+        height="680px"
+        title="Offer Letter PDF"
+        loading="lazy"
+        frameborder="0"
+      ></iframe>
+    </div>
+
+    <!-- Action bar -->
+    <footer class="action-bar" *ngIf="!offerAccepted && !offerRejected">
+      <p class="action-bar__hint">
+        Please review the offer letter above before responding.
+      </p>
+      <div class="action-bar__buttons">
+        <button
+          class="btn btn--accept"
+          (click)="respondOffer('accept')"
+          [disabled]="isAccepting"
+          [attr.aria-busy]="isAccepting"
+        >
+          <span class="btn__spinner" *ngIf="isAccepting"></span>
+          <span class="btn__icon" *ngIf="!isAccepting">✓</span>
+          {{ isAccepting ? 'Accepting…' : 'Accept Offer' }}
+        </button>
+
+        <button
+          class="btn btn--reject"
+          (click)="openRejectPopup()"
+          [disabled]="isAccepting"
+        >
+          <span class="btn__icon">✕</span>
+          Reject Offer
+        </button>
+      </div>
+    </footer>
+
+    <!-- Already responded banner -->
+    <div
+      *ngIf="offerAccepted || offerRejected"
+      class="responded-banner"
+      [class.responded-banner--accepted]="offerAccepted"
+      [class.responded-banner--rejected]="offerRejected"
+      role="status"
+    >
+      <span class="responded-banner__icon">{{ offerAccepted ? '✓' : '✕' }}</span>
+      <div>
+        <strong>{{ offerAccepted ? 'Offer Accepted' : 'Offer Rejected' }}</strong>
+        <p>{{ offerAccepted ? 'Thank you! HR will be in touch soon.' : 'Your response has been recorded.' }}</p>
+      </div>
+    </div>
+
+  </div><!-- /offer-card -->
+
+
+  <!-- ═══════════════════════════════════════════════════
+       REJECT MODAL
+  ════════════════════════════════════════════════════ -->
+  <div
+    class="modal-backdrop"
+    *ngIf="showRejectPopup"
+    (click)="closeRejectPopup()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="reject-modal-title"
+  >
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <button
+        class="modal__close"
+        (click)="closeRejectPopup()"
+        [disabled]="isSubmittingRejection"
+        aria-label="Close"
+      >✕</button>
+
+      <div class="modal__header">
+        <div class="modal__icon modal__icon--reject">✕</div>
+        <h2 id="reject-modal-title" class="modal__title">Decline This Offer</h2>
+        <p class="modal__subtitle">
+          We're sorry to see you go. Please let us know why so we can improve.
+        </p>
+      </div>
+
+      <div class="modal__body">
+
+        <!-- Reason dropdown -->
+        <div class="form-field" [class.form-field--error]="showReasonError">
+          <label class="form-field__label" for="rejection-reason">
+            Reason for declining <span aria-hidden="true">*</span>
+          </label>
+          <div class="form-field__select-wrap">
+            <select
+              id="rejection-reason"
+              class="form-field__select"
+              [(ngModel)]="rejectionReason"
+              (ngModelChange)="onReasonChange()"
+              [disabled]="isSubmittingRejection"
+              aria-required="true"
+              [attr.aria-invalid]="showReasonError"
+            >
+              <option value="">— Select a reason —</option>
+              <option value="Salary expectations not met">Salary expectations not met</option>
+              <option value="Accepted another offer">Accepted another offer</option>
+              <option value="Location is not suitable">Location is not suitable</option>
+              <option value="Work mode not preferred">Work mode not preferred</option>
+              <option value="Role does not match expectations">Role does not match expectations</option>
+              <option value="Joining date is not suitable">Joining date is not suitable</option>
+              <option value="Personal reasons">Personal reasons</option>
+              <option value="Other">Other (please specify)</option>
+            </select>
+            <span class="form-field__chevron" aria-hidden="true">▾</span>
+          </div>
+          <p
+            class="form-field__error"
+            *ngIf="showReasonError"
+            role="alert"
+            id="reason-error"
+          >
+            Please select a reason before submitting.
+          </p>
+        </div>
+
+        <!-- Free-text for "Other" -->
+        <div
+          class="form-field"
+          *ngIf="rejectionReason === 'Other'"
+          [class.form-field--error]="showReasonError && !rejectionComment.trim()"
+        >
+          <label class="form-field__label" for="rejection-comment">
+            Please describe your reason <span aria-hidden="true">*</span>
+          </label>
+          <textarea
+            id="rejection-comment"
+            class="form-field__textarea"
+            [(ngModel)]="rejectionComment"
+            [disabled]="isSubmittingRejection"
+            rows="4"
+            placeholder="Tell us a bit more about your decision…"
+            maxlength="500"
+            aria-required="true"
+          ></textarea>
+          <p class="form-field__counter">{{ rejectionComment.length }} / 500</p>
+        </div>
+
+      </div><!-- /modal__body -->
+
+      <div class="modal__footer">
+        <button
+          class="btn btn--ghost"
+          (click)="closeRejectPopup()"
+          [disabled]="isSubmittingRejection"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn btn--danger"
+          (click)="submitRejectOffer()"
+          [disabled]="isSubmitDisabled"
+          [attr.aria-busy]="isSubmittingRejection"
+        >
+          <span class="btn__spinner" *ngIf="isSubmittingRejection"></span>
+          {{ isSubmittingRejection ? 'Submitting…' : 'Submit Rejection' }}
+        </button>
+      </div>
+
+    </div><!-- /modal -->
+  </div><!-- /modal-backdrop -->
+
+
+  <div
+    class="popup-backdrop"
+    *ngIf="showPopup"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="'popup-title'"
+  >
+    <div class="popup">
+      <div
+        class="popup__icon"
+        [class.popup__icon--success]="popupType === 'success'"
+        [class.popup__icon--error]="popupType === 'error'"
+        aria-hidden="true"
+      >
+        {{ popupType === 'success' ? '✓' : '✕' }}
+      </div>
+      <h2 id="popup-title" class="popup__title">{{ popupTitle }}</h2>
+      <p class="popup__message">{{ popupMessage }}</p>
+      <button class="btn btn--primary popup__btn" (click)="closePopup()">
+        Got it
+      </button>
+    </div>
+  </div>
+
+</div><!-- /offer-container -->

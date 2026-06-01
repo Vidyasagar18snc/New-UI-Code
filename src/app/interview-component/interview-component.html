@@ -1,0 +1,121 @@
+<div class="feedback-page">
+  <div class="feedback-panel">
+
+    <div class="panel-header">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h2>Candidate Feedback</h2>
+        <p>Submit interview evaluation &amp; ratings</p>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <div *ngIf="successMsg" class="success-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        {{ successMsg }}
+      </div>
+
+      <p class="section-label">Candidate Details</p>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Full Name</label>
+          <input [(ngModel)]="feedback.name" placeholder="e.g. Rahul Sharma" />
+        </div>
+        <div class="field">
+          <label>Role</label>
+          <input [(ngModel)]="feedback.role" placeholder="e.g. Senior Developer" />
+        </div>
+      </div>
+
+      <div class="three-col">
+        <div class="field">
+          <label>Experience (yrs)</label>
+          <input type="number" [(ngModel)]="feedback.experience" placeholder="0" min="0" />
+        </div>
+        <div class="field">
+          <label>Created By</label>
+          <input [(ngModel)]="feedback.createdBy" placeholder="Interviewer name" />
+        </div>
+        <div class="field">
+          <label>Round</label>
+          <select [(ngModel)]="feedback.round">
+            <option value="">Select round</option>
+            <option value="Technical">Technical</option>
+            <option value="HR">HR</option>
+            <option value="Manager">Manager</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <p class="section-label">Performance Ratings (1–5)</p>
+
+      <div class="rating-group">
+        <div class="rating-field">
+          <label>Technical</label>
+          <div class="rating-input-wrap">
+            <input type="number" min="1" max="5"
+              [(ngModel)]="feedback.technical"
+              (ngModelChange)="clampRating('technical')" />
+            <span class="rating-badge">/ 5</span>
+          </div>
+          <div class="stars">
+            <span *ngFor="let s of [1,2,3,4,5]" class="star"
+              [class.on]="s <= feedback.technical"></span>
+          </div>
+        </div>
+
+        <div class="rating-field">
+          <label>Communication</label>
+          <div class="rating-input-wrap">
+            <input type="number" min="1" max="5"
+              [(ngModel)]="feedback.communication"
+              (ngModelChange)="clampRating('communication')" />
+            <span class="rating-badge">/ 5</span>
+          </div>
+          <div class="stars">
+            <span *ngFor="let s of [1,2,3,4,5]" class="star"
+              [class.on]="s <= feedback.communication"></span>
+          </div>
+        </div>
+
+        <div class="rating-field">
+          <label>Problem Solving</label>
+          <div class="rating-input-wrap">
+            <input type="number" min="1" max="5"
+              [(ngModel)]="feedback.problemSolving"
+              (ngModelChange)="clampRating('problemSolving')" />
+            <span class="rating-badge">/ 5</span>
+          </div>
+          <div class="stars">
+            <span *ngFor="let s of [1,2,3,4,5]" class="star"
+              [class.on]="s <= feedback.problemSolving"></span>
+          </div>
+        </div>
+      </div>
+
+      <button class="submit-btn" (click)="submitFeedback()" [disabled]="loading">
+        <svg *ngIf="!loading" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+        <span class="spinner" *ngIf="loading"></span>
+        {{ loading ? 'Submitting...' : 'Submit Feedback' }}
+      </button>
+
+    </div>
+  </div>
+</div>

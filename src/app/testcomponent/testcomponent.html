@@ -1,0 +1,356 @@
+<!-- ═══════════════════════════════════════════════════════════════
+     AI Recruiter — MCQ Exam Portal  |  testcomponent.html
+     ═══════════════════════════════════════════════════════════════ -->
+
+<div class="exam-wrap">
+
+  <!-- ══════════════════════════════════════════════════════════
+       LOADING STATE
+       ══════════════════════════════════════════════════════════ -->
+  <div class="loading-screen" *ngIf="loading">
+    <div class="spinner"></div>
+    <span class="loading-label">Loading your assessment…</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ERROR STATE
+       ══════════════════════════════════════════════════════════ -->
+  <div class="error-screen" *ngIf="!loading && !isValid">
+    <div class="error-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <div class="error-title">{{ errorMessage }}</div>
+    <div class="error-sub">Please check your link and try again.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       INTRO SCREEN  (valid + not yet started)
+       ══════════════════════════════════════════════════════════ -->
+  <div class="intro-screen" *ngIf="!loading && isValid && !examStarted && !submitted">
+
+    <div class="intro-logo-row">
+      <div class="intro-logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+      <span class="intro-logo-name">AI Recruiter</span>
+    </div>
+
+    <div class="intro-eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>
+      Skill Assessment · MCQ
+    </div>
+
+    <h1 class="intro-headline">{{ assessmentTitle || 'Technical Skills Assessment' }}</h1>
+    <p class="intro-sub">
+      Answer each question carefully. You can navigate freely between questions,
+      flag uncertain ones, and revisit before submitting.
+    </p>
+
+    <div class="intro-stats">
+      <div class="stat-tile">
+        <div class="stat-tile-icon purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </div>
+        <div class="stat-tile-val">{{ questions.length }}</div>
+        <div class="stat-tile-lbl">Questions</div>
+      </div>
+
+      <div class="stat-tile">
+        <div class="stat-tile-icon red">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="stat-tile-val">{{ totalMinutes }}</div>
+        <div class="stat-tile-lbl">Minutes</div>
+      </div>
+
+      <div class="stat-tile">
+        <div class="stat-tile-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div class="stat-tile-val">1 pt</div>
+        <div class="stat-tile-lbl">Per answer</div>
+      </div>
+    </div>
+
+    <div class="intro-rules">
+      <div class="intro-rules-title">Before you begin</div>
+      <div class="rule-item"><div class="rule-dot"></div><span>Do not refresh or close the browser tab during the test.</span></div>
+      <div class="rule-item"><div class="rule-dot"></div><span>Timer starts the moment you click "Begin assessment".</span></div>
+      <div class="rule-item"><div class="rule-dot"></div><span>All answers are auto-saved as you select them.</span></div>
+      <div class="rule-item"><div class="rule-dot"></div><span>You can flag questions to revisit before final submission.</span></div>
+    </div>
+
+    <button class="btn-begin" (click)="beginExam()">
+      Begin assessment
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SUBMITTED / THANK YOU STATE
+       ══════════════════════════════════════════════════════════ -->
+  <div class="submitted-screen" *ngIf="!loading && isValid && submitted">
+    <div class="submitted-card">
+
+      <!-- Animated score ring -->
+      <div class="score-ring-wrap">
+        <svg viewBox="0 0 100 100" width="100" height="100">
+          <!-- Track -->
+          <circle cx="50" cy="50" r="42"
+                  fill="none"
+                  stroke="rgba(0,0,0,0.07)"
+                  stroke-width="7"/>
+          <!-- Fill — dasharray driven by [style] binding -->
+          <circle cx="50" cy="50" r="42"
+                  fill="none"
+                  [attr.stroke]="scoreRingColor"
+                  stroke-width="7"
+                  stroke-linecap="round"
+                  [style.stroke-dasharray]="scoreRingDash"
+                  [style.transition]="'stroke-dasharray 1s ease'"
+                  />
+        </svg>
+        <div class="score-ring-label">
+          <span class="score-pct-val">{{ scorePercent }}%</span>
+          <span class="score-pct-lbl">score</span>
+        </div>
+      </div>
+
+      <h2 class="submitted-title">Test submitted!</h2>
+      <p class="submitted-sub">Thank you for completing the assessment.</p>
+
+      <hr class="submitted-divider">
+
+      <p class="submitted-msg">
+        Our team will review your responses and get back to you shortly.
+        Keep an eye on your inbox — we'll be in touch soon.
+      </p>
+
+      <div class="submitted-meta">
+        <div class="meta-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          {{ submittedAnswerCount }} of {{ questions.length }} answered
+        </div>
+        <div class="meta-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Completed in {{ completionTime }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ACTIVE EXAM
+       ══════════════════════════════════════════════════════════ -->
+  <div class="exam-inner" *ngIf="!loading && isValid && examStarted && !submitted">
+
+    <!-- ── Header ────────────────────────────────────────────── -->
+    <div class="exam-header">
+      <div class="hd-brand">
+        <div class="hd-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </div>
+        <div>
+          <div class="hd-text-title">MCQ Assessment</div>
+          <div class="hd-text-sub">{{ assessmentTitle || 'Technical Skills' }} · {{ answeredCount }} / {{ questions.length }} answered</div>
+        </div>
+      </div>
+
+      <div class="timer-box" [class.danger]="timeSeconds <= 300">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span class="timer-val">{{ formattedTime }}</span>
+      </div>
+    </div>
+
+    <!-- ── Progress ──────────────────────────────────────────── -->
+    <div class="progress-section">
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="progressPercent"></div>
+      </div>
+
+      <div class="progress-meta">
+        <div class="status-row">
+          <span class="pill pill-answered">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {{ answeredCount }} answered
+          </span>
+
+          <span class="pill pill-remaining">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+            {{ remainingCount }} remaining
+          </span>
+
+          <span class="pill pill-flagged" *ngIf="flaggedCount > 0">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+              <line x1="4" y1="22" x2="4" y2="15"/>
+            </svg>
+            {{ flaggedCount }} flagged
+          </span>
+
+          <span class="pill pill-saved" *ngIf="lastSaved">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Auto-saved
+          </span>
+        </div>
+
+        <span class="prog-step">{{ currentIndex + 1 }} / {{ questions.length }}</span>
+      </div>
+    </div>
+
+    <!-- ── Question Navigator Dots ────────────────────────────── -->
+    <div class="q-nav">
+      <div
+        *ngFor="let q of questions; let i = index"
+        class="q-dot"
+        [class.answered]="isAnswered(q.id) && i !== currentIndex"
+        [class.current]="i === currentIndex"
+        [class.flagged]="isFlagged(q.id)"
+        [title]="'Q' + (i + 1) + (isAnswered(q.id) ? ' · Answered' : '') + (isFlagged(q.id) ? ' · Flagged' : '')"
+        (click)="goTo(i)">
+        {{ i + 1 }}
+      </div>
+    </div>
+
+    <!-- ── Question Card ─────────────────────────────────────── -->
+    <div class="q-card" *ngIf="currentQuestion" [@questionAnim]="currentIndex">
+      <div class="q-card-header">
+        <span class="q-badge">Q{{ currentIndex + 1 }}</span>
+        <div class="q-content">
+          <div class="q-topic">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+              <line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+            {{ currentQuestion.category || 'General' }}
+          </div>
+          <div class="q-text">{{ currentQuestion.question }}</div>
+        </div>
+      </div>
+
+      <div class="options-grid">
+        <div
+          *ngFor="let opt of currentQuestion.options; let i = index"
+          class="opt-item"
+          [class.selected]="getAnswer(currentQuestion.id) === opt"
+          (click)="selectAnswer(currentQuestion.id, opt)">
+          <div class="opt-radio">
+            <div class="opt-radio-dot"></div>
+          </div>
+          <span class="opt-letter">{{ letters[i] }}</span>
+          <span class="opt-label">{{ opt }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Unanswered Warning ────────────────────────────────── -->
+    <div class="warn-box" *ngIf="showUnansweredWarning">
+      <div class="warn-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        {{ remainingCount }} question{{ remainingCount !== 1 ? 's' : '' }} unanswered
+      </div>
+      <div class="warn-list">
+        <ng-container *ngFor="let q of unansweredQuestions">
+          · {{ q.question | slice:0:65 }}…<br>
+        </ng-container>
+      </div>
+      <div class="warn-actions">
+        <button class="btn-warn-back" (click)="cancelSubmit()">Keep reviewing</button>
+        <button class="btn-warn-confirm" (click)="confirmSubmit()">Submit anyway</button>
+      </div>
+    </div>
+
+    <!-- ── Nav Footer ────────────────────────────────────────── -->
+    <div class="nav-footer">
+      <div class="nav-footer-left">
+        <button class="btn-nav" [disabled]="currentIndex === 0" (click)="navigate(-1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Previous
+        </button>
+      </div>
+
+      <div class="nav-footer-right">
+        <!-- Flag for review -->
+        <button
+          class="btn-flag"
+          [class.active]="isFlagged(currentQuestion?.id)"
+          (click)="toggleFlag(currentQuestion?.id)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+            <line x1="4" y1="22" x2="4" y2="15"/>
+          </svg>
+          {{ isFlagged(currentQuestion?.id) ? 'Flagged' : 'Flag' }}
+        </button>
+
+        <!-- Next (all questions except last) -->
+        <button
+          class="btn-nav"
+          *ngIf="currentIndex < questions.length - 1"
+          (click)="navigate(1)">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+
+        <!-- Submit (last question only) -->
+        <button
+          class="btn-submit"
+          *ngIf="currentIndex === questions.length - 1"
+          [disabled]="isSubmitting"
+          (click)="submitTest()">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          {{ isSubmitting ? 'Submitting…' : 'Submit test' }}
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /exam-inner -->
+
+</div><!-- /exam-wrap -->

@@ -1,0 +1,344 @@
+<div class="dashboard">
+
+  <!-- ================= HEADER ================= -->
+
+  <div class="dashboard-header">
+
+    <div class="header-inner">
+
+      <div class="header-text">
+
+        <span class="header-eyebrow">
+          HR · Recruitment
+        </span>
+
+        <h1>
+          Interview Scheduling
+        </h1>
+
+        <p class="header-sub">
+          {{ candidates.length }}
+          candidate{{ candidates.length !== 1 ? 's' : '' }}
+          shortlisted
+        </p>
+
+      </div>
+
+      <div class="header-controls">
+
+        <div class="search-wrap">
+
+          <input class="search-input" type="text" placeholder="Search candidates..." [(ngModel)]="searchQuery" />
+
+        </div>
+
+        <select class="filter-select" [(ngModel)]="statusFilter">
+
+          <option value="">
+            All Statuses
+          </option>
+
+          <option value="Shortlisted">
+            Shortlisted
+          </option>
+
+          <option value="Pending">
+            Pending
+          </option>
+
+          <option value="Scheduled">
+            Scheduled
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= CANDIDATES ================= -->
+
+  <div class="section-label">
+    Candidates
+  </div>
+
+
+  <!-- ================= LOADING ================= -->
+
+  <div class="empty-state" *ngIf="candidatesLoading">
+
+    <p>
+      Loading candidates...
+    </p>
+
+  </div>
+
+
+  <!-- ================= EMPTY ================= -->
+
+  <div class="empty-state" *ngIf="!candidatesLoading && filteredCandidates().length === 0">
+
+    <p>
+      No candidates found
+    </p>
+
+  </div>
+
+
+  <!-- ================= CANDIDATE GRID ================= -->
+
+  <div class="candidate-grid" *ngIf="!candidatesLoading && filteredCandidates().length > 0">
+
+    <div class="candidate-card" *ngFor="let candidate of filteredCandidates()">
+
+      <div class="candidate-top">
+
+        <div class="candidate-avatar">
+          {{ getInitials(candidate.name) }}
+        </div>
+
+        <div class="candidate-meta">
+
+          <h2>
+            {{ candidate?.name || 'Unknown' }}
+          </h2>
+
+          <p class="role">
+            {{ candidate?.role || candidate?.position || '—' }}
+          </p>
+
+        </div>
+
+        <span class="status-badge" [ngClass]="getStatusClass(candidate?.status)">
+
+          {{ candidate?.status || 'Shortlisted' }}
+
+        </span>
+
+      </div>
+
+
+      <!-- ================= SCORE ================= -->
+
+      <div class="score-section">
+
+        <span class="score-label">
+          AI Match Score
+        </span>
+
+        <div class="score-bar-wrap">
+
+          <div class="score-bar">
+
+            <div class="score-fill" [style.width.%]="candidate?.score || 0"></div>
+
+          </div>
+
+          <strong class="score-num">
+            {{ candidate?.score || 0 }}%
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= SKILLS ================= -->
+
+      <div class="skills" *ngIf="candidate?.matchedSkills?.length > 0">
+
+        <span *ngFor="let skill of candidate.matchedSkills">
+          {{ skill }}
+        </span>
+
+      </div>
+
+      <div class="skills no-skills" *ngIf="!candidate?.matchedSkills?.length">
+
+        <span class="no-data">
+          No skills listed
+        </span>
+
+      </div>
+
+
+      <!-- ================= BUTTON ================= -->
+
+      <button class="schedule-btn" (click)="openScheduler(candidate)">
+
+        Schedule Interview
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= MODAL ================= -->
+
+  <div class="modal-overlay" *ngIf="selectedCandidate" (click)="onOverlayClick($event)">
+
+    <div class="modal" role="dialog" aria-modal="true">
+
+      <!-- ================= MODAL HEADER ================= -->
+
+      <div class="modal-header">
+
+        <div>
+
+          <p class="modal-eyebrow">
+            New Interview
+          </p>
+
+          <h2>
+            Schedule Interview
+          </h2>
+
+        </div>
+
+        <button class="close-btn" (click)="closeModal()">
+
+          X
+
+        </button>
+
+      </div>
+
+
+      <!-- ================= CANDIDATE INFO ================= -->
+
+      <div class="candidate-info">
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Candidate
+          </span>
+
+          <span class="info-value">
+            {{ selectedCandidate?.name }}
+          </span>
+
+        </div>
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Role
+          </span>
+
+          <span class="info-value">
+            {{ selectedCandidate?.role || selectedCandidate?.position }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= PANEL ================= -->
+
+      <div class="form-group">
+
+  <label>
+    Assigned Interviewer
+  </label>
+
+  <input
+    type="text"
+    [value]="selectedPanelName"
+    readonly
+  />
+
+</div>
+
+
+      <!-- ================= DATE ================= -->
+
+      <div class="form-group">
+
+        <label for="date-input">
+          Select Date
+        </label>
+
+        <input id="date-input" type="date" [(ngModel)]="selectedDate" [min]="todayDate" />
+
+      </div>
+
+
+      <!-- ================= CHECK ================= -->
+
+      <button class="check-btn" (click)="checkAvailability()" [disabled]="!selectedPanel || !selectedDate || loading">
+
+        <span *ngIf="!loading">
+          Check Availability
+        </span>
+
+        <span *ngIf="loading">
+          Checking...
+        </span>
+
+      </button>
+
+
+      <!-- ================= SLOTS ================= -->
+
+      <div class="slots-section" *ngIf="!loading && freeSlots.length > 0">
+
+        <h3>
+          Available Slots
+        </h3>
+
+        <div class="slots-grid">
+
+          <label class="slot-card" *ngFor="let slot of freeSlots" [class.selected]="selectedSlot === slot">
+
+            <input type="radio" name="slot" [value]="slot" [(ngModel)]="selectedSlot" />
+
+            <span>
+              {{ slot }}
+            </span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= NO SLOTS ================= -->
+
+      <div class="no-slots" *ngIf="!loading && slotsChecked && freeSlots.length === 0">
+
+        No available slots for selected date.
+
+      </div>
+
+
+      <!-- ================= ACTIONS ================= -->
+
+      <div class="actions">
+
+        <button class="confirm-btn" [disabled]="!selectedSlot" (click)="scheduleInterview()">
+
+          Confirm Interview
+
+        </button>
+
+        <button class="cancel-btn" (click)="closeModal()">
+
+          Cancel
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

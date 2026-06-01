@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
-
   private baseUrl = 'http://localhost:8080/api';
 
   constructor(private http: HttpClient) {}
@@ -15,29 +15,313 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/jobs`, job);
   }
 
-  // ✅ Upload Resume (FIXED URL)
-  // uploadResume(file: File) {
-  //   const formData = new FormData();
-  //   formData.append('file', file);
-
-  //   return this.http.post(`${this.baseUrl}/upload`, formData);
-  // }
   uploadResume(file: File, role: string) {
-  const formData = new FormData();
+    const formData = new FormData();
 
-  formData.append('file', file);
-  formData.append('role', role); // ✅ ADD THIS
+    formData.append('file', file);
+    formData.append('role', role); // ✅ ADD THIS
 
-  return this.http.post(`${this.baseUrl}/upload`, formData);
-}
+    return this.http.post(`${this.baseUrl}/upload`, formData);
+  }
 
-  // ✅ Get Candidates
   getCandidates() {
     return this.http.get(`${this.baseUrl}/resume`);
   }
-  // ✅ Get Latest Job
-// ✅ Get All Jobs
-getAllJobs() {
-  return this.http.get<any[]>(`${this.baseUrl}/jobs`);
+
+  getAllJobs() {
+    return this.http.get<any[]>(`${this.baseUrl}/jobs`);
+  }
+  validateInterview(token: string) {
+    return this.http.get<any>(`${this.baseUrl}/test/validate?token=${token}`);
+  }
+
+  getQuestions() {
+    return this.http.get<any[]>(`${this.baseUrl}/test/questions`);
+  }
+
+  submitTest(payload: any) {
+    return this.http.post(`${this.baseUrl}/submit`, payload);
+  }
+  getRanking() {
+    return this.http.get<any[]>(`${this.baseUrl}/all`);
+  }
+  // 🔥 NEW → Upload JD
+  uploadJD(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post(`${this.baseUrl}/upload-jd`, formData);
+  }
+  create(feedback: any) {
+    return this.http.post(`${this.baseUrl}/feedback`, feedback);
+  }
+  getDashboard() {
+    return this.http.get(`${this.baseUrl}/feedback/dashboard`);
+  }
+  sendOffer(data: any) {
+    return this.http.post(`${this.baseUrl}/send`, data);
+  }
+  updateJob(id: string, data: any) {
+    return this.http.put(`${this.baseUrl}/jobs/${id}`, data);
+    //
+  }
+  deleteJob(id: string | number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/jobs/${id}`);
+  }
+  getShortlistedCandidates() {
+    return this.http.get<any[]>(`${this.baseUrl}/shortlisted`);
+  }
+  getPanels(role: string) {
+    return this.http.get(`${this.baseUrl}/by-role?role=${role}`);
+  }
+  getAvailableSlots(panelEmail: string, date: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/free-slots?email=${panelEmail}&date=${date}`);
+  }
+  scheduleInterview(payload: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/schedule-interview`, payload);
+  }
+  panelLogin(data: any) {
+    return this.http.post(
+      `${this.baseUrl}/panel/login`,
+
+      data,
+    );
+  }
+  getMyCandidates(panelId: string) {
+    return this.http.get(`${this.baseUrl}/my-candidates/${panelId}`);
+  }
+  getSlots(token: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/slots?token=${token}`);
+  }
+
+  // Select Slot
+
+  selectSlot(payload: any): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/select-slot`,
+
+      payload,
+    );
+  }
+  getOfferByToken(token: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${token}`);
+  }
+
+  // ACCEPT / REJECT OFFER
+
+respondOffer(
+  token: string,
+  action: string,
+  rejectionReason?: string
+): Observable<any> {
+
+  let url =
+    `${this.baseUrl}/respond?token=${token}&action=${action}`;
+
+  if (rejectionReason) {
+    url += `&rejectionReason=${encodeURIComponent(rejectionReason)}`;
+  }
+
+  return this.http.post(url, {});
+}
+  uploadDocuments(formData: FormData) {
+    return this.http.post(
+      `${this.baseUrl}/onboarding/upload-document`,
+
+      formData,
+    );
+  }
+  // GET DOCUMENTS
+
+  getDocuments() {
+    return this.http.get(`${this.baseUrl}/onboarding/documents`);
+  }
+
+  // VERIFY DOCUMENT
+
+  verifyAllDocuments(candidateId: string) {
+    return this.http.post(
+      `${this.baseUrl}/onboarding/verify-all-documents?candidateId=${candidateId}`,
+
+      {},
+    );
+  }
+  employeeLogin(payload: any) {
+    return this.http.post(
+      `${this.baseUrl}/login`,
+
+      payload,
+    );
+  }
+  resetPassword(payload: any) {
+    return this.http.post(
+      `${this.baseUrl}/reset-password`,
+
+      payload,
+    );
+  }
+ 
+
+  employeeCheckIn(employeeId: string) {
+    return this.http.post(
+      `${this.baseUrl}/attendance/checkin/${employeeId}`,
+
+      {},
+    );
+  }
+
+  employeeCheckOut(employeeId: string) {
+    return this.http.post(
+      `${this.baseUrl}/attendance/checkout/${employeeId}`,
+
+      {},
+    );
+  }
+
+  
+
+  getTotalAttendance(employeeId: string) {
+    return this.http.get(`${this.baseUrl}/attendance/total/${employeeId}`);
+  }
+
+
+
+  getLeaveBalance(employeeId: string) {
+    return this.http.get(`${this.baseUrl}/attendance/leaves/${employeeId}`);
+  }
+
+  // TODAY ATTENDANCE
+
+  getTodayAttendance(employeeId: string) {
+    return this.http.get(`${this.baseUrl}/attendance/today/${employeeId}`);
+  }
+  createAsset(data:any){
+return this.http.post(`${this.baseUrl}/create`,data);
+}
+
+getAllAssets(){
+return this.http.get(`${this.baseUrl}/assets`);
+}
+
+assignAsset(
+
+  assetId: string,
+
+  employeeId: string,
+
+  assignedBy: string,
+
+  location: string,
+
+  condition: string,
+
+  remarks: string
+
+) {
+
+  return this.http.post(
+
+    `${this.baseUrl}/assign`,
+
+    {},
+
+    {
+
+      params: {
+
+        assetId,
+
+        employeeId,
+
+        assignedBy,
+
+        location,
+
+        condition,
+
+        remarks
+      }
+    }
+  );
+}
+
+returnAsset(assetId:string,employeeId:string){
+return this.http.post(
+`${this.baseUrl}/return?assetId=${assetId}&employeeId=${employeeId}`,
+{}
+);
+}
+getEmployeeAssets(
+  employeeId: string
+) {
+
+  return this.http.get(
+
+    `${this.baseUrl}/employee/${employeeId}`
+  );
+}
+updateAsset(id: string, asset: any) {
+
+  return this.http.put(
+    `${this.baseUrl}/update/${id}`,
+    asset
+  );
+}
+deleteAsset(id: string) {
+
+  return this.http.delete(
+    `${this.baseUrl}/delete/${id}`
+  );
+}
+getAllEmployees() {
+
+  return this.http.get(
+
+    `${this.baseUrl}/Employee`
+  );
+}
+getAssetTracking() {
+
+  return this.http.get(
+
+    `${this.baseUrl}/tracking`
+  );
+}
+getTotalEmployeesCount(): Observable<number> {
+  return this.http.get<number>(`${this.baseUrl}/employees/count`);
+}
+// ==============================
+// DEBOARDING APIs
+// ==============================
+
+initiateDeboarding(data: any) {
+  return this.http.post(
+    `${this.baseUrl}/Deboardinitiate`,
+    data
+  );
+}
+
+getAllDeboarding() {
+  return this.http.get(
+    `${this.baseUrl}/Deboardingall`
+  );
+}
+
+// ==============================
+// KNOWLEDGE TRANSFER APIs
+// ==============================
+
+initiateKT(data: any) {
+  return this.http.post(
+    `${this.baseUrl}/ktinitiate`,
+    data
+  );
+}
+
+completeKT(employeeId: string) {
+  return this.http.post(
+    `${this.baseUrl}/ktcomplete?employeeId=${employeeId}`,
+    {}
+  );
 }
 }

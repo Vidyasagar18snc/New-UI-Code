@@ -1,0 +1,172 @@
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Employee Deboarding</h1>
+    <p>Manage employee exit process</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <h3>Total Records</h3>
+      <p>{{ deboardingRecords.length }}</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Completed</h3>
+      <p>
+        {{
+          deboardingRecords
+          .filter(x => x.status === 'COMPLETED')
+          .length
+        }}
+      </p>
+    </div>
+
+  </div>
+
+  <!-- KT FORM -->
+  <div class="card">
+
+    <h2>Knowledge Transfer</h2>
+
+    <div class="form-grid">
+
+      <input
+        type="text"
+        placeholder="Employee ID"
+        [(ngModel)]="kt.employeeId"
+      />
+
+      <input
+        type="text"
+        placeholder="Project Name"
+        [(ngModel)]="kt.projectName"
+      />
+
+      <input
+        type="text"
+        placeholder="Task Details"
+        [(ngModel)]="kt.taskDetails"
+      />
+
+      <input
+        type="text"
+        placeholder="Documentation Link"
+        [(ngModel)]="kt.documentationLink"
+      />
+
+      <input
+        type="text"
+        placeholder="Credentials Shared"
+        [(ngModel)]="kt.credentialsShared"
+      />
+
+      <input
+        type="text"
+        placeholder="Transferred To"
+        [(ngModel)]="kt.transferredTo"
+      />
+
+      <input
+        type="text"
+        placeholder="Remarks"
+        [(ngModel)]="kt.remarks"
+      />
+
+    </div>
+
+    <button (click)="initiateKT()">
+      Start KT
+    </button>
+
+    <button
+      class="complete-btn"
+(click)="completeKT(selectedEmployeeId)"    >
+      Complete KT
+    </button>
+
+  </div>
+
+  <!-- DEBOARDING FORM -->
+  <div class="card">
+
+    <h2>Deboard Employee</h2>
+
+    <div class="form-grid">
+
+      <input
+        type="text"
+        placeholder="Employee ID"
+        [(ngModel)]="deboarding.employeeId"
+      />
+
+      <input
+        type="text"
+        placeholder="Reason"
+        [(ngModel)]="deboarding.reason"
+      />
+
+      <input
+        type="date"
+        [(ngModel)]="deboarding.lastWorkingDate"
+      />
+
+      <input
+        type="text"
+        placeholder="Remarks"
+        [(ngModel)]="deboarding.remarks"
+      />
+
+    </div>
+
+    <button (click)="initiateDeboarding()">
+      Complete Deboarding
+    </button>
+
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-card">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Department</th>
+          <th>Reason</th>
+          <th>Last Working Day</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let item of deboardingRecords">
+
+          <td>{{ item.employeeName }}</td>
+
+          <td>{{ item.department }}</td>
+
+          <td>{{ item.reason }}</td>
+
+          <td>{{ item.lastWorkingDate }}</td>
+
+          <td>
+            <span class="status">
+              {{ item.status }}
+            </span>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

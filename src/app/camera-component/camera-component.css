@@ -1,0 +1,60 @@
+.login-container {
+
+.form-group {
+
+  margin-bottom: 20px;
+}
+
+.form-group label {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-weight: 600;
+}
+
+.form-group input {
+
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 6px;
+}
+
+button {
+
+  width: 100%;
+
+  padding: 12px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #1976d2;
+
+  color: white;
+
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+button:hover {
+
+  background: #125aa0;
+}
+
+.error {
+
+  color: red;
+
+  text-align: center;
+
+  margin-top: 15px;
+}
+}

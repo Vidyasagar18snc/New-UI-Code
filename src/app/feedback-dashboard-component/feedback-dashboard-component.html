@@ -1,0 +1,152 @@
+<div class="dash-page">
+
+  <div class="dash-header">
+    <div class="dash-title">
+      <h2>AI Recruiter Dashboard</h2>
+      <p>Realtime candidate evaluation &amp; ranking</p>
+    </div>
+    <div class="live-indicator">
+      <span class="live-dot"></span> Live
+    </div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card" *ngFor="let m of metrics">
+      <div class="metric-label">{{ m.label }}</div>
+      <div class="metric-value">{{ m.value }}</div>
+      <div class="metric-sub">{{ m.sub }}</div>
+      <div class="metric-bar">
+        <div class="metric-bar-fill" [style.width.%]="m.pct" [style.background]="m.color"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+
+    <div class="left-col">
+      <div class="filter-row">
+        <button
+          *ngFor="let f of filterOptions"
+          class="filter-btn"
+          [class.active]="activeFilter === f"
+          (click)="setFilter(f)">
+          {{ f }}
+        </button>
+      </div>
+
+      <div *ngIf="loading" class="loading-state">
+        <span class="spinner"></span>
+        <span>Loading candidates...</span>
+      </div>
+
+      <div class="candidates-list" *ngIf="!loading">
+        <div
+          *ngFor="let c of filteredCandidates; let i = index"
+          class="cand-card"
+          [class.selected]="selectedCandidate?.id === c.id"
+          (click)="selectCandidate(c)">
+
+          <div class="avatar" [style.background]="avatarBg(i)" [style.color]="avatarColor(i)">
+            {{ initials(c.name) }}
+          </div>
+
+          <div class="cand-info">
+            <div class="cand-name-row">
+              <span class="cand-name">{{ c.name }}</span>
+              <span class="rank-badge">#{{ i + 1 }}</span>
+            </div>
+            <div class="cand-meta">{{ c.role }} · {{ c.experience }}yr · {{ c.round }}</div>
+          </div>
+
+          <span class="decision-pill" [ngClass]="decisionClass(c.decision)">
+            {{ c.decision }}
+          </span>
+
+          <div class="score-ring">
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <circle cx="22" cy="22" r="20" fill="none" stroke="#f3f4f6" stroke-width="3.5"/>
+              <circle
+                cx="22" cy="22" r="20" fill="none"
+                [attr.stroke]="scoreRingColor(c.score)"
+                stroke-width="3.5"
+                [attr.stroke-dasharray]="scoreDash(c.score)"
+                stroke-linecap="round"
+                transform="rotate(-90 22 22)"/>
+            </svg>
+            <div class="score-text">{{ c.score }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="panel-card">
+        <h4 class="panel-title">Score Distribution</h4>
+        <div class="chart-wrap">
+          <canvas #distChart role="img" aria-label="Candidate score distribution bar chart"></canvas>
+        </div>
+      </div>
+
+      <div class="panel-card detail-panel" *ngIf="!selectedCandidate">
+        <h4 class="panel-title">Select a candidate</h4>
+        <p class="no-selection-hint">Click any row to view details</p>
+      </div>
+
+      <div class="panel-card detail-panel" *ngIf="selectedCandidate">
+        <h4 class="panel-title">Candidate Detail</h4>
+
+        <div class="detail-header">
+          <div class="avatar"
+            [style.background]="avatarBgByIndex(selectedCandidateIndex)"
+            [style.color]="avatarColorByIndex(selectedCandidateIndex)">
+            {{ initials(selectedCandidate.name) }}
+          </div>
+          <div>
+            <div class="detail-name">{{ selectedCandidate.name }}</div>
+            <div class="detail-role">{{ selectedCandidate.role }}</div>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <span>Experience</span><span>{{ selectedCandidate.experience }} years</span>
+        </div>
+        <div class="detail-row">
+          <span>Round</span><span>{{ selectedCandidate.round }}</span>
+        </div>
+        <div class="detail-row">
+          <span>Created by</span><span>{{ selectedCandidate.createdBy }}</span>
+        </div>
+        <div class="detail-row">
+          <span>Technical</span>
+          <span class="stars">
+            <span *ngFor="let s of [1,2,3,4,5]" [class.filled]="s <= selectedCandidate.technical">★</span>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span>Communication</span>
+          <span class="stars">
+            <span *ngFor="let s of [1,2,3,4,5]" [class.filled]="s <= selectedCandidate.communication">★</span>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span>Problem Solving</span>
+          <span class="stars">
+            <span *ngFor="let s of [1,2,3,4,5]" [class.filled]="s <= selectedCandidate.problemSolving">★</span>
+          </span>
+        </div>
+
+        <div class="ai-summary">{{ selectedCandidate.summary }}</div>
+
+        <button class="offer-btn" (click)="goToOfferLetter()" [disabled]="offerSent">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 2L11 13"/>
+            <path d="M22 2L15 22 11 13 2 9l20-7z"/>
+          </svg>
+          {{ offerSent ? 'Offer Sent!' : 'Send Offer Letter' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

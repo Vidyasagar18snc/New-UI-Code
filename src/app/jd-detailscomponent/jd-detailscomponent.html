@@ -1,61 +1,434 @@
+<div class="jd-page">
 
-<div class="table-container" *ngIf="jobs.length > 0; else noJobs">
+  <!-- ── Toast Notification ── -->
+  <div class="toast-container" *ngIf="toast.visible" [ngClass]="'toast-' + toast.type">
+    <svg *ngIf="toast.type === 'success'" width="16" height="16" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    <svg *ngIf="toast.type === 'error'" width="16" height="16" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <span>{{ toast.message }}</span>
+  </div>
 
+  <!-- ── Page Header ── -->
+  <div class="page-header">
+    <div>
+      <h1>Job listings</h1>
+      <p class="subtitle">AI-analyzed job descriptions — ready for candidate matching</p>
+    </div>
+    <span class="ai-badge">
+      <span class="ai-dot"></span>
+      AI analysis active
+    </span>
+  </div>
 
-  <h2>📊 Job Details Table</h2>
-  
-  <table class="job-table"> 
-    <thead>
-      <tr>  
-        <th>Title</th>
-        <th>Experience</th>  
-        <th>Location</th>
-        <th>Skills</th>    
-        <th>Description</th>  
-        <th>Actions</th>   
-      </tr>    
-    </thead>   
-    
-    <tbody>
-      <tr *ngFor="let job of jobs">
+  <!-- ── Stat Cards ── -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-label">Total JDs</span>
+      <span class="stat-value">{{ totalJobs }}</span>
+      <span class="stat-sub">Uploaded</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Analyzed</span>
+      <span class="stat-value">{{ analyzedCount }}</span>
+      <span class="stat-sub">By AI engine</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Open positions</span>
+      <span class="stat-value">{{ openPositions }}</span>
+      <span class="stat-sub">Actively hiring</span>
+    </div>
+  </div>
 
-        <td>{{ job.title }}</td>
+  <!-- ── Table Card ── -->
+  <div class="table-card">
 
-        <td>{{ job.experience }} Years</td>
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span class="toolbar-title">Job listings</span>
+        <span class="count-pill">
+          {{ filteredJobs.length }} position{{ filteredJobs.length !== 1 ? 's' : '' }}
+        </span>
+      </div>
+      <div class="toolbar-right">
+        <div class="search-wrap">
+          <svg class="search-icon" width="13" height="13" viewBox="0 0 16 16"
+               fill="none" stroke="#94a3b8" stroke-width="1.8">
+            <circle cx="7" cy="7" r="5"/>
+            <path d="M12 12l2.5 2.5"/>
+          </svg>
+          <input class="search-input"
+                 placeholder="Search title, location, skill…"
+                 [(ngModel)]="searchQuery"
+                 (ngModelChange)="filterJobs()" />
+        </div>
+      </div>
+    </div>
 
-        <td>{{ job.location }}</td>
+    <!-- Loading shimmer -->
+    <div *ngIf="loading" class="loading-rows">
+      <div class="shimmer" *ngFor="let i of [1,2,3,4]"></div>
+    </div>
 
-        <td>
-          <span class="skill" *ngFor="let skill of job.skills">
-            {{ skill }}
-          </span>
-        </td>
+    <!-- Table -->
+    <div class="tbl-scroll" *ngIf="!loading">
+      <table *ngIf="filteredJobs.length > 0">
+        <thead>
+          <tr>
+            <th class="col-title">Job title</th>
+            <th class="col-exp">Experience</th>
+            <th class="col-loc">Location</th>
+            <th class="col-skills">Skills</th>
+            <th class="col-desc">Description</th>
+            <th class="col-act">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let job of filteredJobs; trackBy: trackByJob">
 
-        <td>
-          {{
-            job.isExpanded
-              ? job.description
-              : (job.description | slice:0:60) + '...'
-          }}
+            <!-- Title -->
+            <td class="col-title">
+              <div class="job-title-text">{{ job.title }}</div>
+              <div class="job-meta">
+                <span class="status-dot" [ngClass]="statusClass(job.status ?? 'active')"></span>
+                {{ statusLabel(job.status ?? 'active') }}
+                <span *ngIf="job.department"> · {{ job.department }}</span>
+              </div>
+            </td>
 
-          <br>
+            <!-- Experience -->
+            <td class="col-exp">
+              <span class="exp-badge">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                     stroke="#854F0B" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                {{ job.experience }}+ yrs
+              </span>
+            </td>
 
-          <span class="read-more" (click)="toggleDescription(job)">
-            {{ job.isExpanded ? 'Less ▲' : 'More ▼' }}
-          </span>
-        </td>
+            <!-- Location -->
+            <td class="col-loc">
+              <div class="loc-cell">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                     stroke="#534AB7" stroke-width="2" stroke-linecap="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                {{ job.location }}
+              </div>
+            </td>
 
-        <td>
-          <button class="edit-btn">Edit</button>
-          <button class="apply-btn">Proceed</button>
-        </td>
+            <!-- Skills -->
+            <td class="col-skills">
+              <div class="skills-wrap">
+                <span class="s-pill" *ngFor="let skill of job.skills">{{ skill }}</span>
+              </div>
+            </td>
 
-      </tr>
-    </tbody>
-  </table>
+            <!-- Description -->
+            <td class="col-desc">
+              <div class="desc-preview">{{ job.description | slice:0:60 }}…</div>
+              <button class="eye-btn" (click)="openModal(job)" title="View full details">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                View
+              </button>
+            </td>
 
+            <!-- Actions -->
+            <td class="col-act">
+              <div class="actions">
+                <button class="btn-edit-row" (click)="openEditModal(job)" title="Edit JD">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                  Edit
+                </button>
+                <button class="btn-delete-row" (click)="confirmDelete(job)" title="Delete JD">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                    <path d="M10 11v6"/><path d="M14 11v6"/>
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                  </svg>
+                  Delete
+                </button>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty state -->
+      <div *ngIf="filteredJobs.length === 0" class="empty-state">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+             stroke="#cbd5e1" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <p>No jobs found matching your search.</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="table-footer" *ngIf="!loading && filteredJobs.length > 0">
+      <span class="footer-info">Showing {{ filteredJobs.length }} of {{ totalJobs }} positions</span>
+      <span class="footer-info">Auto-refreshes every 30s</span>
+    </div>
+
+  </div>
 </div>
 
-<ng-template #noJobs>
-  <p>No jobs available</p>
-</ng-template>
+<!-- ── JD Detail Modal ── -->
+<div class="modal-backdrop" *ngIf="selectedJob" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+               stroke="#534AB7" stroke-width="2" stroke-linecap="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="modal-title">{{ selectedJob.title }}</h2>
+          <div class="modal-meta">
+            <span class="status-dot" [ngClass]="statusClass(selectedJob.status ?? 'active')"></span>
+            {{ statusLabel(selectedJob.status ?? 'active') }}
+            <span *ngIf="selectedJob.department"> · {{ selectedJob.department }}</span>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close" (click)="closeModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-info-row">
+        <div class="modal-info-chip">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+               stroke="#854F0B" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>{{ selectedJob.experience }}+ years experience</span>
+        </div>
+        <div class="modal-info-chip loc">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+               stroke="#534AB7" stroke-width="2" stroke-linecap="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span>{{ selectedJob.location }}</span>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <p class="modal-section-label">Required skills</p>
+        <div class="skills-wrap">
+          <span class="s-pill" *ngFor="let skill of selectedJob.skills">{{ skill }}</span>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <p class="modal-section-label">Job description</p>
+        <p class="modal-description">{{ selectedJob.description }}</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-edit" (click)="openEditModal(selectedJob); closeModal()">Edit JD</button>
+      <button class="btn-proceed" (click)="proceedJob(selectedJob); closeModal()">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+             stroke="#fff" stroke-width="2" stroke-linecap="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+        Proceed to matching
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Edit JD Modal ── -->
+<div class="modal-backdrop" *ngIf="editingJob" (click)="closeEditModal()">
+  <div class="modal-card modal-card--edit" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-icon modal-icon--edit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+               stroke="#854F0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="modal-title">Edit Job Description</h2>
+          <div class="modal-meta">Update the details for this position</div>
+        </div>
+      </div>
+      <button class="modal-close" (click)="closeEditModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body edit-form-body">
+
+      <!-- Row 1: Title + Department -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Job Title <span class="required">*</span></label>
+          <input class="form-input"
+                 [(ngModel)]="editForm.title"
+                 placeholder="e.g. Senior Angular Developer"
+                 [class.input-error]="editErrors.title" />
+          <span class="error-msg" *ngIf="editErrors.title">Title is required</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Department</label>
+          <input class="form-input"
+                 [(ngModel)]="editForm.department"
+                 placeholder="e.g. Engineering" />
+        </div>
+      </div>
+
+      <!-- Row 2: Experience + Location -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Experience (years) <span class="required">*</span></label>
+          <input class="form-input"
+                 type="number"
+                 min="0"
+                 [(ngModel)]="editForm.experience"
+                 placeholder="e.g. 3"
+                 [class.input-error]="editErrors.experience" />
+          <span class="error-msg" *ngIf="editErrors.experience">Valid experience is required</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Location <span class="required">*</span></label>
+          <input class="form-input"
+                 [(ngModel)]="editForm.location"
+                 placeholder="e.g. Remote / Bangalore"
+                 [class.input-error]="editErrors.location" />
+          <span class="error-msg" *ngIf="editErrors.location">Location is required</span>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-input form-select" [(ngModel)]="editForm.status">
+          <option value="active">Active</option>
+          <option value="draft">Draft</option>
+          <option value="closed">Closed</option>
+        </select>
+      </div>
+
+      <!-- Skills -->
+      <div class="form-group">
+        <label class="form-label">Skills (comma-separated) <span class="required">*</span></label>
+        <input class="form-input"
+               [(ngModel)]="editForm.skillsRaw"
+               placeholder="e.g. Angular, TypeScript, RxJS"
+               [class.input-error]="editErrors.skills" />
+        <span class="error-msg" *ngIf="editErrors.skills">At least one skill is required</span>
+        <!-- Live skill pill preview -->
+        <div class="skills-preview" *ngIf="editForm.skillsRaw">
+          <span class="s-pill" *ngFor="let s of previewSkills">{{ s }}</span>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label class="form-label">Job Description <span class="required">*</span></label>
+        <textarea class="form-input form-textarea"
+                  [(ngModel)]="editForm.description"
+                  placeholder="Describe the role, responsibilities, and requirements…"
+                  rows="5"
+                  [class.input-error]="editErrors.description"></textarea>
+        <span class="error-msg" *ngIf="editErrors.description">Description is required</span>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeEditModal()" [disabled]="saving">Cancel</button>
+      <button class="btn-save" (click)="saveEdit()" [disabled]="saving">
+        <span *ngIf="saving" class="spinner"></span>
+        <svg *ngIf="!saving" width="12" height="12" viewBox="0 0 24 24" fill="none"
+             stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        {{ saving ? 'Saving…' : 'Save Changes' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Delete Confirmation Modal ── -->
+<div class="modal-backdrop modal-backdrop--danger" *ngIf="jobToDelete" (click)="cancelDelete()">
+  <div class="modal-card modal-card--confirm" (click)="$event.stopPropagation()">
+
+    <div class="confirm-icon-wrap">
+      <div class="confirm-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+             stroke="#E24B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6"/><path d="M14 11v6"/>
+          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        </svg>
+      </div>
+    </div>
+
+    <h3 class="confirm-title">Delete Job Description?</h3>
+    <p class="confirm-body">
+      Are you sure you want to delete
+      <strong>{{ jobToDelete.title }}</strong>?
+      This action cannot be undone.
+    </p>
+
+    <div class="confirm-footer">
+      <button class="btn-cancel" (click)="cancelDelete()" [disabled]="deleting">Cancel</button>
+      <button class="btn-danger" (click)="executeDelete()" [disabled]="deleting">
+        <span *ngIf="deleting" class="spinner spinner--white"></span>
+        <svg *ngIf="!deleting" width="13" height="13" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </svg>
+        {{ deleting ? 'Deleting…' : 'Confirm Delete' }}
+      </button>
+    </div>
+
+  </div>
+</div>

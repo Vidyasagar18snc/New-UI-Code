@@ -1,0 +1,223 @@
+<!-- slot-selection-component.html -->
+
+<!-- ═══════════════════════════════════════════════
+     SLOT SELECTION PAGE
+════════════════════════════════════════════════ -->
+<div class="page-wrap" *ngIf="!isInterviewScheduled">
+
+  <div class="card" role="main">
+
+    <!-- Brand bar -->
+    <div class="card__brand" aria-label="AI Recruiter">
+      <span class="brand-dot" aria-hidden="true"></span>
+      AI Recruiter
+    </div>
+
+    <!-- Header -->
+    <header class="card__header">
+      <h1>Schedule Your Interview</h1>
+      <p *ngIf="candidateName">
+        Hello <strong>{{ candidateName }}</strong>, please select a time slot that works best for you.
+      </p>
+      <p *ngIf="!candidateName">
+        Select a time slot that works best for you.
+      </p>
+    </header>
+
+    <!-- ── Loading skeletons ──────────────────────────────── -->
+    <div
+      *ngIf="loadingSlots && availableSlots.length === 0"
+      class="skeleton-list"
+      aria-busy="true"
+      aria-label="Loading available slots"
+    >
+      <div class="skeleton-item" *ngFor="let n of [1,2,3,4]"></div>
+    </div>
+
+    <!-- ── Confirming spinner (reusing loading after slots fetched) ── -->
+    <div
+      *ngIf="submitting"
+      class="status-bar status-bar--loading"
+      role="status"
+      aria-live="polite"
+    >
+      <span class="spinner" aria-hidden="true"></span>
+      <span>Confirming your slot&hellip;</span>
+    </div>
+
+    <!-- ── Error banner ───────────────────────────────────── -->
+    <div
+      *ngIf="errorMessage"
+      class="status-bar status-bar--error"
+      role="alert"
+      aria-live="assertive"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 4.5v4M8 10.5v1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="status-bar__text">{{ errorMessage }}</span>
+      <button
+        class="retry-btn"
+        (click)="retryLoad()"
+        type="button"
+        aria-label="Retry loading slots"
+      >
+        Retry
+      </button>
+    </div>
+
+    <!-- ── Slot grid ──────────────────────────────────────── -->
+    <div
+      class="slot-grid"
+      *ngIf="availableSlots.length > 0 && !loadingSlots"
+      role="listbox"
+      aria-label="Available interview slots"
+      aria-multiselectable="false"
+    >
+      <button
+        *ngFor="let slot of availableSlots; let i = index"
+        class="slot-btn"
+        [class.slot-btn--selected]="selectedSlot === slot"
+        (click)="selectSlot(slot)"
+        type="button"
+        role="option"
+        [attr.aria-selected]="selectedSlot === slot"
+        [style.animation-delay]="(i * 60) + 'ms'"
+      >
+        <!-- Calendar icon -->
+        <span class="slot-btn__icon" aria-hidden="true">
+          <svg width="17" height="17" viewBox="0 0 16 16" fill="none">
+            <rect x="1.75" y="2.75" width="12.5" height="11.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M1.75 6h12.5M5 1.5v2.5M11 1.5v2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+
+        <span class="slot-btn__label">{{ slot }}</span>
+
+        <!-- Checkmark (visible only when selected) -->
+        <span class="slot-btn__check" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="6.25" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M4 7l2.5 2.5 4-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <!-- ── Empty state ────────────────────────────────────── -->
+    <div
+      class="empty-state"
+      *ngIf="!loadingSlots && availableSlots.length === 0 && !errorMessage"
+      role="status"
+    >
+      <svg width="36" height="36" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect x="3" y="5" width="26" height="24" rx="3" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M3 12h26M10 3v4M22 3v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M10 18h4M10 22h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <p>No slots available right now</p>
+      <span>Please check back later or contact HR.</span>
+    </div>
+
+    <!-- ── Selected slot summary ──────────────────────────── -->
+    <div class="slot-summary" *ngIf="selectedSlot && !submitting" aria-live="polite">
+      <span class="slot-summary__label">Selected</span>
+      <span class="slot-summary__value">{{ selectedSlot }}</span>
+    </div>
+
+    <!-- ── Confirm button ─────────────────────────────────── -->
+    <button
+      class="confirm-btn"
+      [class.confirm-btn--ready]="selectedSlot && !loadingSlots && !submitting"
+      [disabled]="!selectedSlot || loadingSlots || submitting"
+      (click)="confirmSlot()"
+      type="button"
+      [attr.aria-busy]="submitting"
+    >
+      <ng-container *ngIf="!submitting">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Confirm Selected Slot
+      </ng-container>
+      <ng-container *ngIf="submitting">
+        <span class="spinner spinner--white" aria-hidden="true"></span>
+        Confirming&hellip;
+      </ng-container>
+    </button>
+
+  </div><!-- /card -->
+</div><!-- /page-wrap (slot selection) -->
+
+
+<!-- ═══════════════════════════════════════════════
+     SUCCESS PAGE
+════════════════════════════════════════════════ -->
+<div class="page-wrap page-wrap--success" *ngIf="isInterviewScheduled" role="main">
+
+  <div class="success-card">
+
+    <!-- Animated checkmark -->
+    <div class="success-card__anim" aria-hidden="true">
+      <div class="checkmark-ring"></div>
+      <svg class="checkmark-icon" viewBox="0 0 52 52" fill="none">
+        <path
+          class="checkmark-path"
+          d="M14 26l9 9 15-16"
+          stroke="white"
+          stroke-width="3.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+
+    <h1>Interview Slot Confirmed!</h1>
+    <p class="success-sub" role="status">
+      Thank you for selecting your interview slot. Your schedule has been confirmed
+      and further details will be shared via email.
+    </p>
+
+    <!-- Confirmed slot -->
+    <div class="confirmed-slot-box" aria-label="Confirmed slot">
+      <div class="confirmed-slot-box__label">Your confirmed slot</div>
+      <div class="confirmed-slot-box__value">{{ confirmedSlot }}</div>
+    </div>
+
+    <!-- Next steps -->
+    <ol class="success-steps" aria-label="Next steps">
+      <li class="success-step">
+        <span class="success-step__num" aria-hidden="true">1</span>
+        <span>A confirmation email with the meeting link has been sent to your registered address.</span>
+      </li>
+      <li class="success-step">
+        <span class="success-step__num" aria-hidden="true">2</span>
+        <span>Add the interview to your calendar and keep the link accessible.</span>
+      </li>
+      <li class="success-step">
+        <span class="success-step__num" aria-hidden="true">3</span>
+        <span>Our recruitment team will reach out if any changes arise before the interview.</span>
+      </li>
+    </ol>
+
+    <!-- Auto-close notice -->
+    <div class="auto-close-notice" *ngIf="!cannotAutoClose" aria-live="polite" role="status">
+      <span class="auto-close-notice__icon" aria-hidden="true">⏱</span>
+      This window will close automatically in
+      <strong class="countdown">{{ countdown }}</strong>
+      second{{ countdown !== 1 ? 's' : '' }}.
+    </div>
+
+    <!-- Fallback when browser blocks auto-close -->
+    <div class="auto-close-notice auto-close-notice--manual" *ngIf="cannotAutoClose" role="status">
+      <span aria-hidden="true">✓</span>
+      You may now safely close this window.
+    </div>
+
+    <button class="exit-btn" (click)="closePage()" type="button">
+      Close Window
+    </button>
+
+  </div><!-- /success-card -->
+</div><!-- /page-wrap (success) -->

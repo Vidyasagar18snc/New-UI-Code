@@ -1,52 +1,110 @@
 <div class="dashboard">
-
-  <h2>📊 AI Resume Screening Dashboard</h2>
-
-  <!-- 🔄 Loader -->
-  <div *ngIf="loading">Loading candidates...</div>
- 
-  <!-- Cards -->
-  <div class="card-container" *ngIf="!loading">
-    <div class="card" *ngFor="let stat of stats"> 
-      <div class="icon">{{ stat.icon }}</div> 
-      <div>       
-        <h3>{{ stat.value }}</h3>      
-        <p>{{ stat.title }}</p>    
-      </div> 
+  <div class="db-header">
+    <div class="db-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+      <h2>AI resume screening</h2>
     </div>
-  </div>      
-   
-  <!-- Table --> 
-  <div class="table-section" *ngIf="!loading">
-    <h3>Recent Candidates</h3>
-
-    <table *ngIf="candidates.length > 0">
-      <thead>
-        <tr> 
-          <th>Name</th>
-          <th>Score</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let c of candidates">
-          <td>{{ c?.name }}</td>
-          <td>{{ c?.score }}%</td>
-          <td>
-            <span [ngClass]="c?.status?.toLowerCase()">
-              {{ c?.status }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- ❗ No Data Message -->
-    <div *ngIf="candidates.length === 0">
-      No candidates found
+    <div class="header-right">
+      <span class="last-updated">Last updated: just now</span>
+      <div class="live-badge">
+        <span class="live-dot"></span>Live
+      </div>
     </div>
-
   </div>
 
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <span>Loading candidates...</span>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <div class="stat-grid">
+      <div class="stat-card" *ngFor="let stat of stats">
+        <div class="stat-icon" [ngClass]="stat.colorClass">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            [innerHTML]="stat.svgPath"></svg>
+        </div>
+        <div>
+          <div class="stat-label">{{ stat.title }}</div>
+          <div class="stat-value">{{ stat.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Recent candidates</h3>
+        <div class="filter-row">
+          <button class="filter-btn" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">All</button>
+          <button class="filter-btn" [class.active]="activeFilter === 'Shortlisted'"
+            (click)="setFilter('Shortlisted')">Shortlisted</button>
+          <button class="filter-btn" [class.active]="activeFilter === 'Pending'"
+            (click)="setFilter('Pending')">Pending</button>
+          <button class="filter-btn" [class.active]="activeFilter === 'Rejected'"
+            (click)="setFilter('Rejected')">Rejected</button>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="filteredCandidates.length === 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <p>No candidates found</p>
+      </div>
+
+      <table *ngIf="filteredCandidates.length > 0">
+        <thead>
+          <tr>   
+            <th>Candidate</th>   
+            <th>Role</th>
+            <th>Score</th>  
+            <th>Status</th>
+             <th>Matched Skills</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of filteredCandidates; let i = index">
+            <td>
+              <div class="name-cell">
+                <div class="avatar" [style.background]="getAvatarBg(i)" [style.color]="getAvatarColor(i)">
+                  {{ getInitials(c.name) }}
+                </div>
+                {{ c.name }}
+              </div>
+            </td>
+            <td><span class="role-tag">{{ c.role }}</span></td>
+            <td>
+              <div class="score-wrap">
+                <div class="score-bar">
+                  <div class="score-fill" [style.width.%]="c.score" [style.background]="getScoreColor(c.score)"></div>
+                </div>
+                <span class="score-num" [style.color]="getScoreColor(c.score)">{{ c.score }}%</span>
+              </div>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="getBadgeClass(c.status)">
+                <span class="badge-dot" [ngClass]="getDotClass(c.status)"></span>
+                {{ c.status }}
+              </span>
+            </td>
+            <td>
+              <div class="skills-wrap">
+                <span class="skill-chip" *ngFor="let skill of c.matchedSkills">
+                  {{ skill }}
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
 </div>

@@ -1,30 +1,69 @@
 <div class="upload-container">
-
-  <h2>📤 Upload Resume</h2>
-
- <select [(ngModel)]="jobRole">
-  <option value="">Select Role</option>
-  <option *ngFor="let role of roles" [value]="role">
-    {{ role }}
-  </option>
-</select>
-
-  <div class="form-group">
-    <label>Language</label>
-    <select [(ngModel)]="language">
-      <option value="auto">Auto</option>
-      <option value="english">English</option>
-      <option value="hindi">Hindi</option>
-    </select>
+  <div class="upload-header">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+    </svg>
+    <h2>Upload resume</h2>
   </div>
 
-  <input type="file" multiple (change)="onFileSelect($event)">
-
-  <div *ngFor="let file of selectedFiles; let i=index">
-    {{ file.name }}
-    <button (click)="removeFile(i)">❌</button>
+  <div class="form-row">
+    <div class="form-group">
+      <label>Job role</label>
+      <select [(ngModel)]="jobRole">
+        <option value="">Select role</option>
+        <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Language</label>
+      <select [(ngModel)]="language">
+        <option value="auto">Auto detect</option>
+        <option value="english">English</option>
+        <option value="hindi">Hindi</option>
+      </select>
+    </div>
   </div>
 
-  <button (click)="upload()">Upload</button>
+  <div class="drop-zone" (dragover)="$event.preventDefault()" (drop)="onDrop($event)">
+    <input type="file" multiple (change)="onFileSelect($event)" accept=".pdf,.doc,.docx">
+    <div class="drop-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+        <polyline points="16 16 12 12 8 16"/>
+        <line x1="12" y1="12" x2="12" y2="21"/>
+        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+      </svg>
+    </div>
+    <p>Drag &amp; drop resumes here</p>
+    <span>or click to browse · PDF, DOC, DOCX</span>
+  </div>
 
+  <div class="file-list">
+    <div class="file-item" *ngFor="let file of selectedFiles; let i = index">
+      <div class="file-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+      </div>
+      <div class="file-info">
+        <div class="file-name">{{ file.name }}</div>
+        <div class="file-size">{{ formatSize(file.size) }}</div>
+      </div>
+      <button class="remove-btn" (click)="removeFile(i)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <button class="upload-btn" (click)="upload()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="16 16 12 12 8 16"/>
+      <line x1="12" y1="12" x2="12" y2="21"/>
+      <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+    </svg>
+    Upload resumes
+  </button>
 </div>

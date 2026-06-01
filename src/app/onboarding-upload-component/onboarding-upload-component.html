@@ -1,0 +1,144 @@
+<!-- onboarding-upload.component.html -->
+
+<div class="upload-container">
+
+  <div class="upload-card">
+
+    <h1>
+      Candidate Onboarding
+    </h1>
+
+    <p>
+      Upload your onboarding documents
+    </p>
+
+    <!-- NAME -->
+
+   <!-- NAME -->
+
+<div class="form-group">
+
+  <label>
+    Candidate Name
+  </label>
+
+  <input
+    type="text"
+    [(ngModel)]="candidateName"
+    placeholder="Enter your name"
+  />
+
+</div>
+
+<!-- REQUIRED DOCUMENTS -->
+
+<div class="required-documents">
+
+  <h3>
+    Required Documents
+  </h3>
+
+  <ul>
+
+    <li>
+      Aadhaar Card
+    </li>
+
+    <li>
+      PAN Card
+    </li>
+
+    <li>
+      Resume
+    </li>
+
+    <li>
+      Passport Size Photo
+    </li>
+
+    <li>
+      Educational Certificates
+    </li>
+
+    <li>
+      Bank Passbook / Cancelled Cheque
+    </li>
+
+  </ul>
+
+</div>
+
+<!-- FILES -->
+
+<div class="form-group">
+
+  <label>
+    Upload Documents
+  </label>
+
+  <input
+    type="file"
+    multiple
+    (change)="onFileChange($event)"
+  />
+
+
+    <!-- FILE PREVIEW -->
+
+    <div
+      class="file-list"
+      *ngIf="selectedFiles.length > 0"
+    >
+
+      <p>
+        Selected Files:
+      </p>
+
+      <ul>
+
+        <li
+          *ngFor="let file of selectedFiles"
+        >
+          {{ file.name }}
+        </li>
+
+      </ul>
+
+    </div>
+
+    <!-- BUTTON -->
+
+    <button
+      (click)="uploadDocuments()"
+      [disabled]="loading"
+    >
+
+      {{
+        loading
+          ? 'Uploading...'
+          : 'Upload Documents'
+      }}
+
+    </button>
+
+    <!-- SUCCESS -->
+
+    <div
+      class="success-msg"
+      *ngIf="successMessage"
+    >
+      {{ successMessage }}
+    </div>
+
+    <!-- ERROR -->
+
+    <div
+      class="error-msg"
+      *ngIf="errorMessage"
+    >
+      {{ errorMessage }}
+    </div>
+
+  </div>
+
+</div>

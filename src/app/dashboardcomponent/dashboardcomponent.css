@@ -1,74 +1,90 @@
-.dashboard {
-  padding: 10px;
-}
+.dashboard { padding: 1.5rem; font-family: 'Inter', Arial, sans-serif; }
 
-/* Cards */
-.card-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-top: 20px;
-}
+.db-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.db-title { display: flex; align-items: center; gap: 10px; }
+.db-title svg { width: 20px; height: 20px; }
+.db-title h2 { font-size: 17px; font-weight: 500; margin: 0; color: #1a1a1a; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.last-updated { font-size: 12px; color: #888; }
+.live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #0F6E56; background: #E1F5EE; border-radius: 20px; padding: 4px 10px; font-weight: 500; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #1D9E75; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-.card {
+.loading-state { display: flex; align-items: center; gap: 10px; color: #888; padding: 2rem; }
+.spinner { width: 18px; height: 18px; border: 2px solid #e2e8f0; border-top-color: #534AB7; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+.stat-card { background: #fff; border: 0.5px solid rgba(0,0,0,0.1); border-radius: 12px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 14px; }
+.stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.stat-icon svg { width: 20px; height: 20px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.si-purple { background: #EEEDFE; } .si-purple svg { stroke: #534AB7; }
+.si-green  { background: #EAF3DE; } .si-green svg  { stroke: #3B6D11; }
+.si-red    { background: #FCEBEB; } .si-red svg    { stroke: #A32D2D; }
+.si-amber  { background: #FAEEDA; } .si-amber svg  { stroke: #854F0B; }
+.stat-label { font-size: 12px; color: #666; margin-bottom: 3px; }
+.stat-value { font-size: 22px; font-weight: 500; color: #1a1a1a; }
+
+.table-card { background: #fff; border: 0.5px solid rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden; }
+.table-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 0.5px solid rgba(0,0,0,0.08); }
+.table-header h3 { font-size: 15px; font-weight: 500; color: #1a1a1a; margin: 0; }
+.filter-row { display: flex; gap: 6px; }
+.filter-btn { font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid rgba(0,0,0,0.15); background: transparent; color: #666; cursor: pointer; transition: background .15s; }
+.filter-btn.active { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; }
+
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+thead tr { background: #f7f8fa; }
+th { padding: 10px 16px; font-size: 12px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.04em; text-align: left; }
+th:nth-child(2), th:nth-child(3), th:nth-child(4) { text-align: center; }
+td { padding: 12px 16px; font-size: 13px; color: #1a1a1a; border-bottom: 0.5px solid rgba(0,0,0,0.07); text-align: left; }
+td:nth-child(2), td:nth-child(3), td:nth-child(4) { text-align: center; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafafa; }
+
+.name-cell { display: flex; align-items: center; gap: 8px; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+.role-tag { font-size: 11px; color: #666; background: #f1f1f1; border-radius: 4px; padding: 2px 7px; }
+.score-wrap { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.score-bar { width: 60px; height: 5px; border-radius: 3px; background: #e8e8e8; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 3px; }
+.score-num { font-size: 12px; font-weight: 500; min-width: 30px; }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+.b-green { background: #EAF3DE; color: #27500A; }
+.b-red   { background: #FCEBEB; color: #791F1F; }
+.b-amber { background: #FAEEDA; color: #633806; }
+.b-purple{ background: #EEEDFE; color: #3C3489; }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.bd-green  { background: #1D9E75; }
+.bd-red    { background: #E24B4A; }
+.bd-amber  { background: #BA7517; }
+.bd-purple { background: #7F77DD; }
+
+.empty-state { padding: 3rem; text-align: center; color: #888; }
+.empty-state svg { width: 32px; height: 32px; stroke: #ccc; margin-bottom: 8px; }
+.empty-state p { font-size: 14px; }
+/* 🔹 Skills container */
+.skills-wrap {
   display: flex;
-  gap: 15px;
-  align-items: center;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 250px;
 }
 
-.icon {
-  font-size: 28px;
+/* 🔹 Skill chip */
+.skill-chip {
+  background: #e8f0fe;
+  color: #1a73e8;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid #d2e3fc;
+  transition: all 0.2s ease;
 }
 
-/* Table */
-.table-section {
-  margin-top: 30px;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  background: #f1f5f9;
-  padding: 10px;
-}
-
-td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Status Colors */
-.shortlisted {
-  color: green;
-  font-weight: bold;
-}
-
-.rejected {
-  color: red;
-  font-weight: bold;
-}
-
-.pending {
-  color: orange;
-  font-weight: bold;
-}
-th, td {
-  text-align: left;
-}
-
-td:nth-child(2),
-td:nth-child(3),
-th:nth-child(2),
-th:nth-child(3) {
-  text-align: center;
+/* 🔹 Hover effect */
+.skill-chip:hover {
+  background: #d2e3fc;
+  transform: scale(1.05);
 }

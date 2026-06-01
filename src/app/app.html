@@ -1,7 +1,16 @@
-<div class="layout">
-  <app-sidebarcomponent></app-sidebarcomponent>
+<!-- HIDE SIDEBAR ON LOGIN PAGES -->
 
-  <div class="main-content">
-    <router-outlet></router-outlet>
-  </div>
+<app-sidebarcomponent
+  *ngIf="showSidebar">
+</app-sidebarcomponent>
+
+<!-- MAIN CONTENT -->
+
+<div
+  class="main-content"
+
+  [class.full-width]="!showSidebar">
+
+  <router-outlet></router-outlet>
+
 </div>

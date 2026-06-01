@@ -1,21 +1,72 @@
-.layout {
-  display: flex;
+/* =========================================
+   GLOBAL RESET
+========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 240px;
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100vh;
-}
-
-/* ✅ THIS IS THE REAL FIX */
-.main-content {
-  margin-left: 240px;              /* pushes entire page */
-  width: calc(100% - 240px);
+html,
+body {
+  width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
   background: #f8fafc;
-  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* =========================================
+   APP LAYOUT
+========================================= */
+
+app-root {
+  display: block;
+  width: 100%;
+}
+
+/* Sidebar fixed width */
+app-sidebarcomponent {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  margin-left: 260px;
+  width: calc(100% - 260px);
+
+  min-height: 100vh;
+
+  padding: 0;
+
+  background: #f8fafc;
+
+  overflow-x: hidden;
+
+  transition: all 0.3s ease;
+}
+
+/* LOGIN PAGE FULL WIDTH */
+.full-width {
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+  app-sidebarcomponent {
+    display: none;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 0;
+  }
 }

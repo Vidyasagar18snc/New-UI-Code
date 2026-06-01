@@ -1,0 +1,89 @@
+<div class="analytics-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="recruiter">Recruitment analytics</h1>
+      <p class="subtitle">AI-powered insights across your hiring pipeline</p>
+    </div>
+    <span class="live-badge">Live · Apr 2026</span>
+  </div>
+
+  <!-- Metric Cards -->
+  <div class="metrics-grid">
+    <div class="metric-card" *ngFor="let m of metrics">
+      <div class="metric-label">{{ m.label }}</div>
+      <div class="metric-value">{{ m.value }}</div>
+      <div class="metric-delta" [class.up]="m.trend === 'up'" [class.down]="m.trend === 'down'">
+        {{ m.delta }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 1: Funnel + Trend -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Candidate funnel</div>
+      <div class="chart-wrap h220">
+        <canvas #funnelCanvas role="img" aria-label="Candidate funnel chart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Weekly upload &amp; match trend</div>
+      <div class="legend">
+        <span><span class="dot" style="background:#378ADD"></span>Uploads</span>
+        <span><span class="dot" style="background:#1D9E75"></span>Matches</span>
+      </div>
+      <div class="chart-wrap h190">
+        <canvas #trendCanvas role="img" aria-label="Weekly trend chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: Fake + Score Distribution + Interview -->
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Fake detection</div>
+      <div class="chart-wrap h160">
+        <canvas #fakeCanvas role="img" aria-label="Fake detection donut chart"></canvas>
+      </div>
+      <div class="legend mt10">
+        <span><span class="dot" style="background:#1D9E75"></span>Genuine 82%</span>
+        <span><span class="dot" style="background:#EF9F27"></span>Suspicious 11%</span>
+        <span><span class="dot" style="background:#E24B4A"></span>Flagged 7%</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Match score distribution</div>
+      <div class="chart-wrap h160">
+        <canvas #scoreCanvas role="img" aria-label="Match score histogram"></canvas>
+      </div> 
+    </div>
+
+    <div class="card">
+      <div class="card-title">Interview conversion</div>
+      <div class="chart-wrap h160">
+        <canvas #interviewCanvas role="img" aria-label="Interview outcomes donut chart"></canvas>
+      </div>
+      <div class="legend mt10">
+        <span><span class="dot" style="background:#378ADD"></span>Shortlisted 38%</span>
+        <span><span class="dot" style="background:#888780"></span>Pending 29%</span>
+        <span><span class="dot" style="background:#E24B4A"></span>Rejected 33%</span>
+      </div>
+    </div>  
+  </div>
+
+  <!-- Row 3: Skills Gap -->
+  <div class="card">
+    <div class="card-title">Top skills gap — required vs available</div>
+    <div class="legend">
+      <span><span class="dot" style="background:#7F77DD"></span>Required in JDs</span>
+      <span><span class="dot" style="background:#5DCAA5"></span>Found in resumes</span>
+    </div>
+    <div class="chart-wrap h240">
+      <canvas #skillsCanvas role="img" aria-label="Skills gap bar chart"></canvas>
+    </div>
+  </div>
+
+</div>
