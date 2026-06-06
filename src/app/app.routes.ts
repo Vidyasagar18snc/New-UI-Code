@@ -23,9 +23,11 @@ import { AssetDashboardComponent } from './asset-dashboard-component/asset-dashb
 import { Employeedetails } from './employeedetails/employeedetails';
 import { EmployeeAssetTrackingComponent } from './employee-asset-tracking-component/employee-asset-tracking-component';
 import { DeboardingDashboardComponent } from './deboarding-dashboard-component/deboarding-dashboard-component';
+import { PanelManagement } from './pages/panel-management/panel-management';
 
 export const routes: Routes = [
   // PUBLIC ROUTES
+
   {
     path: '',
     redirectTo: 'PortalLogin',
@@ -35,7 +37,7 @@ export const routes: Routes = [
     path: 'PortalLogin',
     component: EmployeeLoginComponent
   },
-   {
+  {
     path: 'test',
     component: TestComponent
   },
@@ -54,6 +56,10 @@ export const routes: Routes = [
   {
     path: 'slots',
     component: SlotSelectionComponent
+  },
+  {
+    path: 'panel-management',
+    component: PanelManagement
   },
   {
     path: 'deboarding-dashboard',
@@ -100,7 +106,7 @@ export const routes: Routes = [
         path: 'interview-dashboard',
         component: InterviewDashboardComponent
       },
-      
+
     ]
   },
 
@@ -145,6 +151,7 @@ export const routes: Routes = [
         path: 'interviewFeedback',
         component: InterviewComponent
       },
+
       {
         path: 'interview-dashboard',
         component: InterviewDashboardComponent
@@ -157,7 +164,7 @@ export const routes: Routes = [
         path: 'Analytics',
         component: AnalyticsComponent
       },
-     
+
       {
         path: 'offer-letter',
         component: OfferLetterComponent

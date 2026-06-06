@@ -1,6 +1,6 @@
 // employee-login.component.ts
 
-import { Component, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewEncapsulation, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,19 +11,11 @@ import { ApiService } from '../Service/ApiService ';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './employee-login-component.html',
-  styleUrl: './employee-login-component.css',
-
-  // ─────────────────────────────────────────────────
-  // KEY FIX: Disable View Encapsulation so component
-  // CSS applies globally — prevents Angular from
-  // scoping styles and blocking background/color rules
-  // on the host element and child divs.
-  // ─────────────────────────────────────────────────
+  styleUrls: ['./employee-login-component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class EmployeeLoginComponent {
 
-  // ── Login form ──────────────────────────────
   email        = '';
   password     = '';
   loading      = false;
@@ -31,7 +23,6 @@ export class EmployeeLoginComponent {
   serverError  = '';
   errors: { email?: string; password?: string } = {};
 
-  // ── Reset-password panel ────────────────────
   showReset        = false;
   resetEmail       = '';
   newPassword      = '';
@@ -46,10 +37,10 @@ export class EmployeeLoginComponent {
   constructor(
     private apiService: ApiService,
     private router:     Router,
-    private cdr:        ChangeDetectorRef
+    private cdr:        ChangeDetectorRef,
+    private ngZone:     NgZone
   ) {}
 
-  // ── Helpers ─────────────────────────────────
   clearError(field: 'email' | 'password') {
     this.errors[field] = '';
     this.serverError   = '';
@@ -78,15 +69,13 @@ export class EmployeeLoginComponent {
     this.cdr.detectChanges();
   }
 
-  // ── Password strength ────────────────────────
   get passwordStrength(): { percent: number; level: string; label: string } {
     const p = this.newPassword;
     let score = 0;
-    if (p.length >= 8)            score++;
-    if (/[A-Z]/.test(p))          score++;
-    if (/[0-9]/.test(p))          score++;
-    if (/[^A-Za-z0-9]/.test(p))  score++;
-
+    if (p.length >= 8)           score++;
+    if (/[A-Z]/.test(p))         score++;
+    if (/[0-9]/.test(p))         score++;
+    if (/[^A-Za-z0-9]/.test(p)) score++;
     const map: Record<number, { percent: number; level: string; label: string }> = {
       0: { percent: 15,  level: 'weak',   label: 'Weak'   },
       1: { percent: 30,  level: 'weak',   label: 'Weak'   },
@@ -97,7 +86,6 @@ export class EmployeeLoginComponent {
     return map[score];
   }
 
-  // ── Validate login ───────────────────────────
   private validateLogin(): boolean {
     this.errors = {};
     let valid = true;
@@ -112,7 +100,6 @@ export class EmployeeLoginComponent {
     return valid;
   }
 
-  // ── Validate reset ───────────────────────────
   private validateReset(): boolean {
     this.resetErrors = {};
     let valid = true;
@@ -129,66 +116,134 @@ export class EmployeeLoginComponent {
     return valid;
   }
 
-  // ── LOGIN ────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
+  // KEY FIX: hardcoded paths must NOT set loading=true at all,
+  // and must NOT be placed after loading=true is set.
+  // The structure is:  validate → hardcoded check → set loading → HTTP call
+  // ─────────────────────────────────────────────────────────────
   login(): void {
     this.serverError = '';
-    if (!this.validateLogin()) return;
-    this.loading = true;
+    this.errors      = {};
 
-    this.apiService.employeeLogin({ email: this.email, password: this.password }).subscribe({
-      next: (response: any) => {
-        this.loading = false;
-        if (response.firstLogin) {
-          this.resetEmail = response.email || this.email;
-          localStorage.setItem('resetEmail', this.resetEmail);
-          this.showReset = true;
-          this.cdr.detectChanges();   // ← forces *ngIf to re-evaluate
-        } else {
-          localStorage.setItem('employeeId',   response.employeeId);
-          localStorage.setItem('employeeName', response.employeeName);
-          localStorage.setItem('department',   response.department);
-          const route = (response.department === 'HR' || response.department === 'Admin')
-            ? '/dashboard'
-            : '/employee-dashboard';
-          this.router.navigate([route]);
+    // Step 1 — client-side validation (loading is still false here)
+    if (!this.validateLogin()) {
+      return;
+    }
+
+    const emailLower = this.email.trim().toLowerCase();
+    const pwd        = this.password.trim();
+
+    // Step 2 — hardcoded Admin (no HTTP call, no loading spinner needed)
+    if (emailLower === 'admin@airecruiter.com' && pwd === 'Admin@123') {
+      localStorage.setItem('employeeId',   'ADMIN001');
+      localStorage.setItem('employeeName', 'Administrator');
+      localStorage.setItem('department',   'Admin');
+      this.router.navigate(['/dashboard']);
+      return;                          // ← exits before loading is ever touched
+    }
+
+    // Step 3 — hardcoded HR (same pattern)
+    if (emailLower === 'hr@airecruiter.com' && pwd === 'Hr@123') {
+      localStorage.setItem('employeeId',   'HR001');
+      localStorage.setItem('employeeName', 'HR User');
+      localStorage.setItem('department',   'HR');
+      this.router.navigate(['/dashboard']);
+      return;                          // ← exits before loading is ever touched
+    }
+
+    // Step 4 — real API call: only NOW do we show the spinner
+    this.loading = true;
+    this.cdr.detectChanges();          // force spinner to render immediately
+
+    this.apiService.employeeLogin({ email: this.email, password: this.password })
+      .subscribe({
+        next: (response: any) => {
+          this.ngZone.run(() => {
+            this.loading = false;
+            console.log('Login response:', response);
+
+            // First-login → show reset panel
+            if (response?.firstLogin === true) {
+              this.resetEmail = response.email || this.email;
+              localStorage.setItem('resetEmail', this.resetEmail);
+              this.showReset = true;
+              this.cdr.detectChanges();
+              return;
+            }
+
+            // Normal login
+            localStorage.setItem('employeeId',   response.employeeId);
+            localStorage.setItem('employeeName', response.employeeName);
+            localStorage.setItem('department',   response.department);
+
+            if (response.department === 'HR') {
+              this.router.navigate(['/dashboard']);
+            } else {
+              this.router.navigate(['/Employee-dashboard']);
+            }
+          });
+        },
+
+        error: (err: any) => {
+          this.ngZone.run(() => {
+            this.loading = false;
+
+            // Defensive: backend might return 401/403 with firstLogin body
+            if (err?.error?.firstLogin === true) {
+              this.resetEmail = err.error.email || this.email;
+              localStorage.setItem('resetEmail', this.resetEmail);
+              this.showReset = true;
+              this.cdr.detectChanges();
+              return;
+            }
+
+            this.serverError = err?.error?.message || 'Invalid email or password';
+            this.cdr.detectChanges();
+            console.error('Login error:', err);
+          });
         }
-      },
-      error: (err) => {
-        this.loading     = false;
-        this.serverError = err.error?.message || 'Login failed. Please try again.';
-        this.cdr.detectChanges();
-      }
-    });
+      });
   }
 
-  // ── RESET PASSWORD ───────────────────────────
+  // ── RESET PASSWORD ───────────────────────────────────────────
   resetPassword(): void {
     this.resetServerError = '';
     if (!this.validateReset()) return;
+
     this.resetLoading = true;
+    this.cdr.detectChanges();
 
-    this.apiService.resetPassword({ email: this.resetEmail, newPassword: this.newPassword }).subscribe({
+    this.apiService.resetPassword({
+      email: this.resetEmail,
+      newPassword: this.newPassword
+    }).subscribe({
       next: () => {
-        this.resetLoading = false;
-        this.resetSuccess = true;
-        this.cdr.detectChanges();
-        localStorage.removeItem('resetEmail');
+        this.ngZone.run(() => {
+          this.resetLoading = false;
+          this.resetSuccess = true;
+          this.cdr.detectChanges();
+          localStorage.removeItem('resetEmail');
 
-        setTimeout(() => {
-          this.showReset       = false;
-          this.email           = this.resetEmail;
-          this.password        = '';
-          this.newPassword     = '';
-          this.confirmPassword = '';
-          this.resetEmail      = '';
-          this.resetSuccess    = false;
-          this.cdr.detectChanges();   // ← switches back to login panel
-        }, 1500);
+          setTimeout(() => {
+            this.ngZone.run(() => {
+              this.showReset       = false;
+              this.email           = this.resetEmail;
+              this.password        = '';
+              this.newPassword     = '';
+              this.confirmPassword = '';
+              this.resetEmail      = '';
+              this.resetSuccess    = false;
+              this.cdr.detectChanges();
+            });
+          }, 1500);
+        });
       },
-      error: (err) => {
-        this.resetLoading     = false;
-        this.resetServerError = err.error?.message || 'Reset failed. Please try again.';
-        this.cdr.detectChanges();
+      error: (err: any) => {
+        this.ngZone.run(() => {
+          this.resetLoading     = false;
+          this.resetServerError = err.error?.message || 'Reset failed. Please try again.';
+          this.cdr.detectChanges();
+        });
       }
     });
   }

@@ -1,14 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
+
+ 
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8080/api';
+
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
+
 
   // ✅ Create Job
   createJob(job: any) {
@@ -323,5 +328,19 @@ completeKT(employeeId: string) {
     `${this.baseUrl}/ktcomplete?employeeId=${employeeId}`,
     {}
   );
+}
+  createPanel(panel: any) {
+    return this.http.post(`${this.baseUrl}/add`, panel);
+  }
+
+  updatePanel(id: string, panel: any) {
+    return this.http.put(`${this.baseUrl}/panels/${id}`, panel);
+  }
+
+  deletePanel(id: string) {
+    return this.http.delete(`${this.baseUrl}/panels/${id}`);
+  }
+  getAllPanels() {
+  return this.http.get(`${this.baseUrl}/panels`);
 }
 }

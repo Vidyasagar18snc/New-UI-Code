@@ -485,45 +485,162 @@ app-root {
   height: 18px;
 }
 
-@media (max-width: 900px) {
-  .side-panel {
-    display: none;
-  }
-
-  .form-area {
-    padding: 20px;
-  }
-
-  .panel {
-    max-width: 100%;
-    padding: 32px 24px;
-    border-radius: 24px;
-  }
-
-  .panel-head h1 {
-    font-size: 42px;
-  }
+/* ── Spinner ─────────────────────────────────── */
+.spinner-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-@media (max-width: 480px) {
-  .panel-head h1 {
-    font-size: 34px;
-  }
-
-  .panel {
-    padding: 26px 18px;
-  }
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
 }
 
-@media (max-height: 700px) {
-  .form-area {
-    align-items: flex-start;
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
+
+/* ── Alerts ─────────────────────────────────── */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.alert svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.alert-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.alert-success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #14532d;
+}
+
+/* ── Strength bar ───────────────────────────── */
+.strength-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.strength-segments {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.seg {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  transition: background 0.3s;
+}
+
+.seg.filled.seg-weak   { background: #ef4444; }
+.seg.filled.seg-fair   { background: #f97316; }
+.seg.filled.seg-good   { background: #3b82f6; }
+.seg.filled.seg-strong { background: #22c55e; }
+
+.strength-label {
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 44px;
+  text-align: right;
+}
+
+.strength-weak   { color: #ef4444; }
+.strength-fair   { color: #f97316; }
+.strength-good   { color: #3b82f6; }
+.strength-strong { color: #22c55e; }
+
+/* ── Password requirements ──────────────────── */
+.pwd-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.req {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #94a3b8;
+  transition: color 0.2s;
+}
+
+.req.met {
+  color: #22c55e;
+}
+
+.req svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+}
+
+.req.met svg {
+  opacity: 1;
+}
+
+/* ── Match indicator ────────────────────────── */
+.match-indicator {
+  font-size: 13px;
+}
+
+.match-ok {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #22c55e;
+}
+
+.match-fail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ef4444;
+}
+
+.match-ok svg,
+.match-fail svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
 /* =========================================
-   RESET PASSWORD REALTIME RESPONSIVE FIX
+   RESET PASSWORD PANEL
 ========================================= */
 
 .reset-panel {
@@ -531,7 +648,6 @@ app-root {
   width: 100%;
 }
 
-/* Reduce huge top icon */
 .reset-hero {
   display: flex;
   justify-content: center;
@@ -551,9 +667,14 @@ app-root {
 .reset-icon svg {
   width: 42px;
   height: 42px;
+  color: #3b82f6;
 }
 
-/* User badge responsive */
+.panel-head.centered {
+  text-align: center;
+}
+
+/* User badge */
 .user-badge {
   display: flex;
   align-items: center;
@@ -599,15 +720,83 @@ app-root {
   color: #64748b;
 }
 
+/* ── FIX: user-badge-lock MUST be at top level, NOT inside a media query ── */
+.user-badge-lock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
-/* Better responsive heading */
+.user-badge-lock svg {
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+}
+
+/* ── FIX: back-link MUST be at top level, NOT inside a media query ── */
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.back-link:hover:not(:disabled) {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.back-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.back-link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
 .reset-panel .panel-head h1 {
   font-size: 42px;
 }
 
-/* MOBILE FIX */
-@media (max-width: 768px) {
+/* =========================================
+   RESPONSIVE
+========================================= */
 
+@media (max-width: 900px) {
+  .side-panel {
+    display: none;
+  }
+
+  .form-area {
+    padding: 20px;
+  }
+
+  .panel {
+    max-width: 100%;
+    padding: 32px 24px;
+    border-radius: 24px;
+  }
+
+  .panel-head h1 {
+    font-size: 42px;
+  }
+}
+
+@media (max-width: 768px) {
   .form-area {
     padding: 14px;
     align-items: center;
@@ -656,11 +845,13 @@ app-root {
   }
 }
 
-/* EXTRA SMALL DEVICE */
 @media (max-width: 480px) {
-
   .panel {
     padding: 20px 14px;
+  }
+
+  .panel-head h1 {
+    font-size: 34px;
   }
 
   .reset-panel .panel-head h1 {
@@ -680,52 +871,12 @@ app-root {
     height: 38px;
     font-size: 14px;
   }
-
-  /* ── FIX 1: User badge lock icon ── */
-.user-badge-lock {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
 }
 
-.user-badge-lock svg {
-  width: 20px;
-  height: 20px;
-  color: #64748b;
-}
-
-/* ── FIX 2: Back to login button ── */
-.back-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 10px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: #64748b;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 10px;
-  transition: color 0.2s, background 0.2s;
-}
-
-.back-link:hover:not(:disabled) {
-  color: #3b82f6;
-  background: rgba(59, 130, 246, 0.06);
-}
-
-.back-link:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.back-link svg {
-  width: 16px;       /* ← constrain the arrow SVG */
-  height: 16px;
-  flex-shrink: 0;
-}
+@media (max-height: 700px) {
+  .form-area {
+    align-items: flex-start;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
 }

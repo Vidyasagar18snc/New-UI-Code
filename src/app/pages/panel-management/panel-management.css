@@ -1,0 +1,109 @@
+.panel-container {
+  padding: 25px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  margin: 0;
+  color: #222;
+}
+
+.header p {
+  color: #666;
+}
+
+.panel-form {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.form-group input {
+  padding: 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+}
+
+.save-btn {
+  grid-column: span 2;
+  padding: 12px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.save-btn:hover {
+  opacity: .9;
+}
+
+.table-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f4f4f4;
+}
+
+th,
+td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #ffe5e5;
+  color: #d32f2f;
+  font-size: 13px;
+}
+
+.status.active {
+  background: #e7f8ea;
+  color: #2e7d32;
+}
+
+.delete-btn {
+  background: #ef4444;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  opacity: .9;
+}

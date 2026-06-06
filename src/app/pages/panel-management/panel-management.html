@@ -1,0 +1,96 @@
+<div class="panel-container">
+
+  <div class="header">
+    <h2>Panel Management</h2>
+    <p>Add and manage interview panels</p>
+  </div>
+
+  <div class="panel-form">
+
+    <div class="form-group">
+      <label>Panel Name</label>
+      <input
+        type="text"
+        [(ngModel)]="panel.name"
+        placeholder="Enter panel name">
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        type="email"
+        [(ngModel)]="panel.email"
+        placeholder="Enter email">
+    </div>
+
+    <div class="form-group">
+      <label>Role</label>
+      <input
+        type="text"
+        [(ngModel)]="panel.role"
+        placeholder="Java / Angular / Full Stack">
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input
+        type="password"
+        [(ngModel)]="panel.password"
+        placeholder="Enter password">
+    </div>
+
+    <button class="save-btn" (click)="savePanel()">
+      Add Panel
+    </button>
+
+  </div>
+
+  <div class="table-card">
+
+    <h3>Available Panels</h3>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let p of panels">
+
+          <td>{{ p.name }}</td>
+          <td>{{ p.email }}</td>
+          <td>{{ p.role }}</td>
+
+          <td>
+            <span
+              class="status"
+              [class.active]="p.available">
+              {{ p.available ? 'Available' : 'Busy' }}
+            </span>
+          </td>
+
+          <td>
+            <button
+              class="delete-btn"
+              (click)="deletePanel(p.id)">
+              Delete
+            </button>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>    
+
+  </div>
+
+</div> 
