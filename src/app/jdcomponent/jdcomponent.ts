@@ -13,11 +13,12 @@ import { Router } from '@angular/router';
 })
 export class Jdcomponent {
 
-  constructor(private api: ApiService,private router: Router ) {}
+  constructor(private api: ApiService, private router: Router) { }
 
   jobTitle = '';
   experience: number | null = null;
   location = '';
+  budget  = '';
   description = '';
   skillInput = '';
   skills: string[] = [];
@@ -45,11 +46,12 @@ export class Jdcomponent {
       next: (res: any) => {
         console.log('Parsed JD:', res);
 
-        this.jobTitle    = res.title       || '';
-        this.experience  = res.experience  || null;
-        this.location    = res.location    || '';
+        this.jobTitle = res.title || '';
+        this.experience = res.experience || null;
+        this.location = res.location || '';
         this.description = res.description || '';
-        this.skills      = res.skills      || [];
+        this.skills = res.skills || [];
+        this.budget = res.budget || '';
 
         this.updateCharCount();
         this.loading = false;
@@ -76,24 +78,25 @@ export class Jdcomponent {
     this.skills.splice(index, 1);
   }
 
-  
+
   updateCharCount() {
     this.charCount = this.description.length;
   }
 
-  
+
   resetForm() {
-    this.jobTitle     = '';
-    this.experience   = null;
-    this.location     = '';
-    this.description  = '';
-    this.skills       = [];
-    this.skillInput   = '';
+    this.jobTitle = '';
+    this.experience = null;
+    this.location = '';
+    this.budget = '';
+    this.description = '';
+    this.skills = [];
+    this.skillInput = '';
     this.selectedFile = null;
-    this.charCount    = 0;
+    this.charCount = 0;
   }
 
-  
+
   submitJob() {
     if (!this.jobTitle.trim()) {
       alert('Job title is required');
@@ -101,10 +104,11 @@ export class Jdcomponent {
     }
 
     const jobData = {
-      title:       this.jobTitle.trim(),
-      experience:  this.experience ? Number(this.experience) : 0,
-      skills:      this.skills,
-      location:    this.location.trim(),
+      title: this.jobTitle.trim(),
+      experience: this.experience ? Number(this.experience) : 0,
+       budget:      this.budget.trim(),
+      skills: this.skills,
+      location: this.location.trim(),
       description: this.description.trim()
     };
 
@@ -115,7 +119,7 @@ export class Jdcomponent {
         console.log('Saved:', res);
         alert('Job created successfully ✅');
         this.resetForm();
-         this.router.navigate(['/jd-details']);
+        this.router.navigate(['/jd-details']);
       },
       error: (err) => {
         console.error('Error:', err);

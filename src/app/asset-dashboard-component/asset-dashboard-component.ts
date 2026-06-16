@@ -31,17 +31,17 @@ export class AssetDashboardComponent implements OnInit, OnDestroy {
     serialNumber: '',
   };
 
-  assignData = {
-    assetId: '',
+ assignData = {
+  assetId: '',
+  employeeId: '',
+  assetType: '',
+  condition: '',
+  remarks: '',
 
-    employeeId: '',
-
-    location: '',
-
-    condition: '',
-
-    remarks: '',
-  };
+  mouse: false,
+  headphone: false,
+  keyboard: false
+};
   returnData = { assetId: '', employeeId: '' };
 
   toast: {
@@ -51,34 +51,31 @@ export class AssetDashboardComponent implements OnInit, OnDestroy {
 
     type: 'success' | 'error';
   } = {
-    show: false,
+      show: false,
 
-    message: '',
+      message: '',
 
-    type: 'success',
-  };
+      type: 'success',
+    };
   private toastTimer: any;
 
   constructor(
     private apiService: ApiService,
-    private cdr: ChangeDetectorRef, // ← FIX: inject ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef, 
+  ) { }
 
   ngOnInit(): void {
-    // FIX: wrapped in setTimeout(0) to ensure the component is fully
-    // initialized in the Angular zone before triggering HTTP calls.
-    // This resolves the "data only shows after saving" issue caused by
-    // change detection not running on the initial API response.
+  
     setTimeout(() => {
       this.getAllAssets();
     }, 0);
 
-    // Live clock
+    
     this.clockInterval = setInterval(() => {
       this.currentTime = new Date();
     }, 1000);
 
-    // Auto-refresh every 30 seconds (real-time feel)
+    
     this.refreshInterval = setInterval(() => {
       this.getAllAssets(true);
     }, 30000);
@@ -89,7 +86,7 @@ export class AssetDashboardComponent implements OnInit, OnDestroy {
     clearInterval(this.refreshInterval);
   }
 
-  // ── HELPERS ─────────────────────────────────────────────────────────────
+
 
   get filteredAssets(): any[] {
     if (!this.searchQuery.trim()) return this.assets;
@@ -134,7 +131,7 @@ export class AssetDashboardComponent implements OnInit, OnDestroy {
     }, 3000);
   }
 
-  // ── GET ALL ASSETS ───────────────────────────────────────────────────────
+
 
   getAllAssets(silent = false): void {
     if (!silent) this.loadingAssets = true;
@@ -143,7 +140,7 @@ export class AssetDashboardComponent implements OnInit, OnDestroy {
       next: (response: any) => {
         this.assets = response;
         this.loadingAssets = false;
-        this.cdr.detectChanges(); // ← FIX: force Angular to pick up changes
+        this.cdr.detectChanges(); 
       },
       error: (err) => {
         console.error('Failed to load assets', err);
@@ -153,7 +150,7 @@ export class AssetDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ── CREATE / UPDATE ──────────────────────────────────────────────────────
+  
 
   createAsset(): void {
     if (!this.asset.assetId || !this.asset.assetName) {
@@ -193,92 +190,84 @@ export class AssetDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ── ASSIGN ───────────────────────────────────────────────────────────────
 
   assignAsset(): void {
-    if (!this.assignData.assetId || !this.assignData.employeeId) {
-      this.showToast(
-        'Asset ID and Employee ID are required',
-
-        'error',
-      );
-
-      return;
-    }
-
-    // FETCH LOGGED-IN HR
-
-    const assignedBy = localStorage.getItem('employeeName') || 'HR';
-
-    this.apiService
-      .assignAsset(
-        this.assignData.assetId,
-
-        this.assignData.employeeId,
-
-        assignedBy,
-
-        this.assignData.location,
-
-        this.assignData.condition,
-
-        this.assignData.remarks,
-      )
-      .subscribe({
-        next: () => {
-          this.showToast('Asset assigned successfully');
-
-          this.assignData = {
-            assetId: '',
-
-            employeeId: '',
-
-            location: '',
-
-            condition: '',
-
-            remarks: '',
-          };
-
-          this.getAllAssets();
-        },
-
-        error: (err) => {
-          console.log('FULL ERROR = ', err);
-
-          let errorMessage = 'Assignment failed';
-
-          // OBJECT RESPONSE
-
-          if (err.error && typeof err.error === 'object') {
-            errorMessage = err.error.message;
-          }
-
-          // STRING RESPONSE
-          else if (typeof err.error === 'string') {
-            try {
-              const parsed = JSON.parse(err.error);
-
-              errorMessage = parsed.message;
-            } catch {
-              errorMessage = err.error;
-            }
-          }
-
-          this.showToast(
-            errorMessage,
-
-            'error',
-          );
-
-          // IMPORTANT
-
-          this.cdr.detectChanges();
-        },
-      });
+  if (!this.assignData.assetId || !this.assignData.employeeId) {
+    this.showToast(
+      'Asset ID and Employee ID are required',
+      'error'
+    );
+    return;
   }
 
-  // ── RETURN ───────────────────────────────────────────────────────────────
+  const assignedBy =
+    localStorage.getItem('employeeName') || 'HR';
+
+  const accessories: string[] = [];
+
+  if (this.assignData.mouse) {
+    accessories.push('Mouse');
+  }
+
+  if (this.assignData.headphone) {
+    accessories.push('Headphone');
+  }
+
+  if (this.assignData.keyboard) {
+    accessories.push('Keyboard');
+  }
+
+  const accessoriesString = accessories.join(',');
+
+  this.apiService.assignAsset(
+    this.assignData.assetId,
+    this.assignData.employeeId,
+    assignedBy,
+    this.assignData.assetType,
+    this.assignData.condition,
+    this.assignData.remarks,
+    accessoriesString
+  ).subscribe({
+    next: () => {
+      this.showToast('Asset assigned successfully');
+
+      this.assignData = {
+        assetId: '',
+        employeeId: '',
+        assetType: '',
+        condition: '',
+        remarks: '',
+
+        mouse: false,
+        headphone: false,
+        keyboard: false
+      };
+
+      this.getAllAssets();
+    },
+
+    error: (err) => {
+      console.log('FULL ERROR = ', err);
+
+      let errorMessage = 'Assignment failed';
+
+      if (err.error && typeof err.error === 'object') {
+        errorMessage = err.error.message;
+      } else if (typeof err.error === 'string') {
+        try {
+          const parsed = JSON.parse(err.error);
+          errorMessage = parsed.message;
+        } catch {
+          errorMessage = err.error;
+        }
+      }
+
+      this.showToast(errorMessage, 'error');
+      this.cdr.detectChanges();
+    }
+  });
+}
+
 
   returnAsset(): void {
     if (!this.returnData.assetId || !this.returnData.employeeId) {
@@ -298,7 +287,7 @@ export class AssetDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ── EDIT ─────────────────────────────────────────────────────────────────
+ 
 
   editAsset(asset: any): void {
     console.log('EDIT ASSET = ', asset);
@@ -347,7 +336,7 @@ export class AssetDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  
+
 
   resetForm(): void {
     this.editing = false;

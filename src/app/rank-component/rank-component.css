@@ -2,38 +2,37 @@ body {
   margin: 0;
   background: #f0f4f8;
 }
-/* ── Design Tokens ──────────────────────────────────────────── */
 :host {
-  /* Brand */
+
   --rc-accent:          #2563eb;
   --rc-accent-hover:    #1d4ed8;
   --rc-accent-light:    #eff6ff;
   --rc-accent-mid:      #bfdbfe;
 
-  /* Surfaces */
+  
   --rc-page-bg:         #f0f4f8;
   --rc-surface:         #ffffff;
   --rc-surface-2:       #f8fafc;
   --rc-surface-3:       #f1f5f9;
 
-  /* Borders */
+ 
   --rc-border:          #e2e8f0;
   --rc-border-2:        #cbd5e1;
 
-  /* Text */
+  
   --rc-text-1:          #0f172a;
   --rc-text-2:          #334155;
   --rc-text-3:          #64748b;
   --rc-text-4:          #94a3b8;
 
-  /* Status */
+ 
   --rc-green:           #059669;
   --rc-green-bg:        #d1fae5;
   --rc-amber:           #d97706;
   --rc-amber-bg:        #fef3c7;
   --rc-slate-bg:        #f1f5f9;
 
-  /* Medal */
+  
   --rc-gold:            #f59e0b;
   --rc-gold-bg:         #fffbeb;
   --rc-silver:          #94a3b8;
@@ -41,17 +40,16 @@ body {
   --rc-bronze:          #c2855b;
   --rc-bronze-bg:       #fff7f3;
 
-  /* Shadows */
+ 
   --rc-shadow-sm:       0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
   --rc-shadow-md:       0 4px 16px rgba(15, 23, 42, 0.08), 0 1px 4px rgba(15, 23, 42, 0.04);
 
-  /* Radius */
+  
   --rc-radius-sm:       6px;
   --rc-radius-md:       10px;
   --rc-radius-lg:       14px;
   --rc-radius-xl:       18px;
 
-  /* Spacing */
   --rc-space-1:         4px;
   --rc-space-2:         8px;
   --rc-space-3:         12px;
@@ -60,10 +58,8 @@ body {
   --rc-space-6:         24px;
 }
 
-/* ── Base ───────────────────────────────────────────────────── */
 * { box-sizing: border-box; }
 
-/* ── Page Shell ─────────────────────────────────────────────── */
 .ranking-page {
   width: 100%;
   min-height: 100vh;
@@ -73,9 +69,6 @@ body {
   background: #f0f4f8;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   HEADER
-══════════════════════════════════════════════════════════════ */
 .page-header {
   display: flex;
   align-items: flex-end;
@@ -175,9 +168,6 @@ body {
 .spin { animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ══════════════════════════════════════════════════════════════
-   STAT CARDS
-══════════════════════════════════════════════════════════════ */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -273,9 +263,6 @@ body {
   font-weight: 500;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   TABLE CARD
-══════════════════════════════════════════════════════════════ */
 .table-card {
   background: var(--rc-surface);
   border: 1px solid var(--rc-border);
@@ -284,7 +271,6 @@ body {
   box-shadow: var(--rc-shadow-md);
 }
 
-/* ── Toolbar ─────────────────────────────────────────────── */
 .table-toolbar {
   display: flex;
   align-items: center;
@@ -397,7 +383,6 @@ body {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
-/* ── Shimmer ─────────────────────────────────────────────── */
 .loading-rows {
   padding: 16px 20px;
   display: flex;
@@ -426,7 +411,6 @@ body {
 .sh-score  { width: 120px; height: 10px; border-radius: 5px; }
 .sh-time   { width: 60px; height: 14px; }
 
-/* ── Table ───────────────────────────────────────────────── */
 .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -485,12 +469,10 @@ tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* ── Row tints ───────────────────────────────────────────── */
 .row-gold   > td { background: #fffdf5; }
 .row-silver > td { background: #fafbfc; }
 .row-bronze > td { background: #fffaf8; }
 
-/* ── Medals ──────────────────────────────────────────────── */
 .medal-badge {
   display: inline-flex;
   align-items: center;
@@ -534,7 +516,6 @@ tbody tr:last-child td {
   background: var(--rc-surface-3);
 }
 
-/* ── Candidate cell ──────────────────────────────────────── */
 .candidate-cell {
   display: flex;
   align-items: center;
@@ -576,7 +557,6 @@ tbody tr:last-child td {
   font-weight: 400;
 }
 
-/* ── Score cell ──────────────────────────────────────────── */
 .score-cell {
   display: flex;
   align-items: center;
@@ -617,7 +597,6 @@ tbody tr:last-child td {
 .fill-mid  { background: linear-gradient(90deg, #60a5fa, #2563eb); }
 .fill-low  { background: linear-gradient(90deg, #fcd34d, #f59e0b); }
 
-/* ── Time chip ───────────────────────────────────────────── */
 .time-chip {
   display: inline-flex;
   align-items: center;
@@ -631,7 +610,6 @@ tbody tr:last-child td {
   border: 1px solid var(--rc-border);
 }
 
-/* ── Empty state ─────────────────────────────────────────── */
 .empty-state {
   padding: 64px 24px;
   text-align: center;
@@ -646,7 +624,6 @@ tbody tr:last-child td {
   margin: 0;
 }
 
-/* ── Footer / Pagination ─────────────────────────────────── */
 .table-footer {
   display: flex;
   align-items: center;
@@ -704,10 +681,6 @@ tbody tr:last-child td {
   outline: 2px solid var(--rc-accent);
   outline-offset: 2px;
 }
-
-/* ══════════════════════════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

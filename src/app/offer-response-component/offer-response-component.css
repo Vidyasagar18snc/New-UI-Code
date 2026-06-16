@@ -1,8 +1,4 @@
-/* offer-response-component.css
-   Production-grade styles — refined, professional, accessible
-   ─────────────────────────────────────────────────────────── */
 
-/* ── Design tokens ────────────────────────────────────────── */
 :host {
   --clr-bg:           #f0f4f8;
   --clr-surface:      #ffffff;
@@ -32,7 +28,6 @@
   --transition-slow: 400ms cubic-bezier(.4,0,.2,1);
 }
 
-/* ── Base ─────────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -48,7 +43,6 @@
   position: relative;
 }
 
-/* ── Loading state ────────────────────────────────────────── */
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -91,7 +85,6 @@
   margin: 0;
 }
 
-/* ── Error state ──────────────────────────────────────────── */
 .error-state {
   display: flex;
   flex-direction: column;
@@ -122,7 +115,6 @@
   margin: 0;
 }
 
-/* ── Offer card ───────────────────────────────────────────── */
 .offer-card {
   max-width: 1080px;
   margin: 0 auto;
@@ -183,7 +175,6 @@
   font-family: system-ui, sans-serif;
 }
 
-/* ── Details grid ─────────────────────────────────────────── */
 .offer-details {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -225,7 +216,6 @@
   font-size: 1.2rem;
 }
 
-/* ── PDF viewer ───────────────────────────────────────────── */
 .pdf-viewer {
   padding: 28px;
   background: #f1f5f9;
@@ -239,7 +229,6 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* ── Action bar ───────────────────────────────────────────── */
 .action-bar {
   padding: 28px 40px;
   text-align: center;
@@ -259,7 +248,6 @@
   flex-wrap: wrap;
 }
 
-/* ── Responded banner ─────────────────────────────────────── */
 .responded-banner {
   margin: 0;
   padding: 20px 40px;
@@ -307,7 +295,6 @@
   color: var(--clr-text-muted);
 }
 
-/* ── Shared button styles ─────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -346,7 +333,6 @@
   font-weight: 900;
 }
 
-/* Spinner inside button */
 .btn__spinner {
   width: 16px;
   height: 16px;
@@ -408,7 +394,6 @@
   background: var(--clr-primary-dark);
 }
 
-/* ── Modal backdrop ───────────────────────────────────────── */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -515,7 +500,6 @@
   border-top: 1px solid var(--clr-border);
 }
 
-/* ── Form field ───────────────────────────────────────────── */
 .form-field {
   display: flex;
   flex-direction: column;
@@ -627,7 +611,6 @@
   margin: 0;
 }
 
-/* ── Result popup ─────────────────────────────────────────── */
 .popup-backdrop {
   position: fixed;
   inset: 0;
@@ -694,7 +677,6 @@
   min-width: 140px;
 }
 
-/* ── Toast ────────────────────────────────────────────────── */
 .toast {
   position: fixed;
   bottom: 24px;
@@ -731,7 +713,6 @@
   font-size: .8rem;
 }
 
-/* ── Animations ───────────────────────────────────────────── */
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -752,7 +733,6 @@
   }
 }
 
-/* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 768px) {
   .offer-container {
     padding: 16px 12px 40px;

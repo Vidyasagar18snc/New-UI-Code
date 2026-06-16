@@ -1,11 +1,7 @@
-/* ─────────────────────────────────────────
-   send-offer.component.scss
-   Production-level styles — Angular component
-   ───────────────────────────────────────── */
+
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap');
 
-/* ── CSS custom properties (design tokens) ── */
 :host {
   --blue-50:  #E6F1FB;
   --blue-100: #B5D4F4;
@@ -79,7 +75,6 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Two-column layout ── */
 .wrap {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -90,7 +85,6 @@
   background: #ffffff;
 }
 
-/* ─── LEFT PANEL ─────────────────────────── */
 .left-panel {
   padding: 28px 28px 24px;
   border-right: 0.5px solid rgba(0, 0, 0, 0.10);
@@ -330,7 +324,6 @@ select {
   to { transform: rotate(360deg); }
 }
 
-/* ─── RIGHT PANEL ────────────────────────── */
 .right-panel {
   padding: 28px 24px 24px;
   background: #f9fafb;

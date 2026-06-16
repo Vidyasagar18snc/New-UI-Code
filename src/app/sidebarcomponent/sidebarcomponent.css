@@ -1,35 +1,26 @@
-/* sidebarcomponent.css */
-/* AI Recruit — Professional HR Dashboard Sidebar */
-/* Color theme: Primary #2563EB · Hover #1D4ED8 · Neutral Dark */
+
 
 :host {
-  /* ── Brand tokens ──────────────────────────── */
   --sb-accent:          #2563EB;
   --sb-accent-hover:    #1D4ED8;
   --sb-accent-light:    rgba(37, 99, 235, 0.12);
   --sb-accent-glow:     rgba(37, 99, 235, 0.30);
   --sb-accent-text:     #93c5fd;   /* soft blue for active label */
 
-  /* ── Surface tokens ───────────────────────── */
   --sb-bg:              #0f1623;
   --sb-surface:         #151e2e;
   --sb-surface-2:       #1b2540;
   --sb-border:          rgba(255, 255, 255, 0.07);
 
-  /* ── Text tokens ──────────────────────────── */
   --sb-text-muted:      #4b5a7a;
   --sb-text:            #8fa3c0;
   --sb-text-bright:     #e2eaf6;
 
-  /* ── Layout tokens ────────────────────────── */
   --sb-width:           260px;
   --sb-radius:          10px;
   --sb-icon-size:       32px;
 }
 
-/* ══════════════════════════════════════════════
-   SHELL
-══════════════════════════════════════════════ */
 .sidebar {
   width: var(--sb-width);
   height: 100vh;
@@ -45,7 +36,7 @@
   font-family: 'DM Sans', 'Geist', 'Segoe UI', sans-serif;
 }
 
-/* Subtle gradient shimmer on the right edge */
+
 .sidebar::after {
   content: '';
   position: absolute;
@@ -63,9 +54,7 @@
   pointer-events: none;
 }
 
-/* ══════════════════════════════════════════════
-   LOGO
-══════════════════════════════════════════════ */
+
 .sidebar-logo {
   display: flex;
   align-items: center;
@@ -102,9 +91,6 @@
   color: #fff;
 }
 
-/* ══════════════════════════════════════════════
-   NAV LIST
-══════════════════════════════════════════════ */
 .nav-list {
   list-style: none;
   margin: 10px 0 0;
@@ -126,9 +112,6 @@
   border-radius: 4px;
 }
 
-/* ══════════════════════════════════════════════
-   NAV ITEM
-══════════════════════════════════════════════ */
 .nav-item {
   position: relative;
   display: flex;
@@ -158,7 +141,6 @@
   transform: translateX(1px);
 }
 
-/* ── Active state ─────────────────────────── */
 .nav-item.active {
   background: linear-gradient(
     90deg,
@@ -168,7 +150,6 @@
   color: #fff;
 }
 
-/* ── Active bar (left accent) ─────────────── */
 .active-bar {
   position: absolute;
   left: 0;
@@ -190,9 +171,6 @@
   transform: scaleY(1);
 }
 
-/* ══════════════════════════════════════════════
-   ICON WRAPPER
-══════════════════════════════════════════════ */
 .nav-icon {
   width: var(--sb-icon-size);
   height: var(--sb-icon-size);
@@ -231,10 +209,6 @@
 .nav-item:hover .nav-icon svg {
   transform: scale(1.08);
 }
-
-/* ══════════════════════════════════════════════
-   LABEL
-══════════════════════════════════════════════ */
 .nav-label {
   font-size: 13px;
   font-weight: 500;
@@ -249,10 +223,6 @@
   color: #eff6ff;
   font-weight: 600;
 }
-
-/* ══════════════════════════════════════════════
-   FOOTER / USER CARD
-══════════════════════════════════════════════ */
 .sidebar-footer {
   padding: 12px 10px 14px;
   border-top: 1px solid var(--sb-border);

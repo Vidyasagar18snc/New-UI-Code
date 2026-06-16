@@ -34,36 +34,36 @@ export class AnalyticsComponent implements AfterViewInit {
   metrics: MetricCard[] = [
     { label: 'Total resumes',    value: '1,284', delta: '↑ 18% this week',       trend: 'up'   },
     { label: 'Avg match score',  value: '72%',   delta: '↑ 4pts vs last month',  trend: 'up'   },
-    { label: 'Fake detected',    value: '9.3%',  delta: '↑ 1.2% flagged more',   trend: 'down' },
+    { label: 'Fake Profile detected',    value: '9.3%',  delta: '↑ 1.2% flagged more',   trend: 'down' },
     { label: 'Interview rate',   value: '34%',   delta: '↑ 6% conversion',       trend: 'up'   },
   ];
 
-  // ── Funnel data ───────────────────────────────────────────
+ 
   funnelLabels  = ['Uploaded','Parsed','Matched','Shortlisted','Interviewed','Hired'];
   funnelData    = [1284, 1201, 874, 412, 198, 67];
   funnelColors  = ['#378ADD','#378ADD','#1D9E75','#1D9E75','#7F77DD','#EF9F27'];
 
-  // ── Weekly trend ──────────────────────────────────────────
+ 
   weekLabels    = ['W1','W2','W3','W4','W5','W6','W7','W8'];
   uploadsData   = [120,145,132,178,165,201,188,234];
   matchesData   = [80, 95, 88, 120,115,148,132,171];
 
-  // ── Fake detection ────────────────────────────────────────
+
   fakeLabels    = ['Genuine','Suspicious','Flagged fake'];
   fakeData      = [82, 11, 7];
   fakeColors    = ['#1D9E75','#EF9F27','#E24B4A'];
 
-  // ── Match score distribution ──────────────────────────────
+  
   scoreLabels   = ['0-20','20-40','40-60','60-70','70-80','80-90','90-100'];
   scoreData     = [18, 54, 143, 212, 287, 198, 72];
   scoreColors   = ['#E24B4A','#E24B4A','#EF9F27','#378ADD','#1D9E75','#1D9E75','#7F77DD'];
 
-  // ── Interview conversion ──────────────────────────────────
+ 
   interviewLabels = ['Shortlisted','Pending','Rejected'];
   interviewData   = [38, 29, 33];
   interviewColors = ['#378ADD','#888780','#E24B4A'];
 
-  // ── Skills gap ────────────────────────────────────────────
+
   skillsData: SkillGap[] = [
     { skill: 'React',      required: 87, available: 72 },
     { skill: 'Python',     required: 92, available: 88 },
@@ -75,7 +75,7 @@ export class AnalyticsComponent implements AfterViewInit {
     { skill: 'ML/AI',      required: 83, available: 29 },
   ];
 
-  // ── Canvas refs ───────────────────────────────────────────
+  
   @ViewChild('funnelCanvas')    funnelCanvas!:    ElementRef<HTMLCanvasElement>;
   @ViewChild('trendCanvas')     trendCanvas!:     ElementRef<HTMLCanvasElement>;
   @ViewChild('fakeCanvas')      fakeCanvas!:      ElementRef<HTMLCanvasElement>;
@@ -107,7 +107,7 @@ export class AnalyticsComponent implements AfterViewInit {
     this.charts.forEach(c => c.destroy());
   }
 
-  // ── Chart builders ────────────────────────────────────────
+  
 
   private buildFunnelChart(): void {
     const chart = new Chart(this.funnelCanvas.nativeElement, {

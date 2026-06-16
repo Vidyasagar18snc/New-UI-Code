@@ -1,20 +1,11 @@
-<!-- ═══════════════════════════════════════════════════════════════
-     AI Recruiter — MCQ Exam Portal  |  testcomponent.html
-     ═══════════════════════════════════════════════════════════════ -->
+
 
 <div class="exam-wrap">
 
-  <!-- ══════════════════════════════════════════════════════════
-       LOADING STATE
-       ══════════════════════════════════════════════════════════ -->
   <div class="loading-screen" *ngIf="loading">
     <div class="spinner"></div>
     <span class="loading-label">Loading your assessment…</span>
   </div>
-
-  <!-- ══════════════════════════════════════════════════════════
-       ERROR STATE
-       ══════════════════════════════════════════════════════════ -->
   <div class="error-screen" *ngIf="!loading && !isValid">
     <div class="error-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round">
@@ -27,9 +18,6 @@
     <div class="error-sub">Please check your link and try again.</div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════════
-       INTRO SCREEN  (valid + not yet started)
-       ══════════════════════════════════════════════════════════ -->
   <div class="intro-screen" *ngIf="!loading && isValid && !examStarted && !submitted">
 
     <div class="intro-logo-row">
@@ -106,9 +94,6 @@
 
   </div>
 
-  <!-- ══════════════════════════════════════════════════════════
-       SUBMITTED / THANK YOU STATE
-       ══════════════════════════════════════════════════════════ -->
   <div class="submitted-screen" *ngIf="!loading && isValid && submitted">
     <div class="submitted-card">
 
@@ -165,12 +150,8 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════════
-       ACTIVE EXAM
-       ══════════════════════════════════════════════════════════ -->
   <div class="exam-inner" *ngIf="!loading && isValid && examStarted && !submitted">
 
-    <!-- ── Header ────────────────────────────────────────────── -->
     <div class="exam-header">
       <div class="hd-brand">
         <div class="hd-mark">
@@ -194,7 +175,6 @@
       </div>
     </div>
 
-    <!-- ── Progress ──────────────────────────────────────────── -->
     <div class="progress-section">
       <div class="progress-track">
         <div class="progress-fill" [style.width.%]="progressPercent"></div>
@@ -236,7 +216,6 @@
       </div>
     </div>
 
-    <!-- ── Question Navigator Dots ────────────────────────────── -->
     <div class="q-nav">
       <div
         *ngFor="let q of questions; let i = index"
@@ -250,7 +229,6 @@
       </div>
     </div>
 
-    <!-- ── Question Card ─────────────────────────────────────── -->
     <div class="q-card" *ngIf="currentQuestion" [@questionAnim]="currentIndex">
       <div class="q-card-header">
         <span class="q-badge">Q{{ currentIndex + 1 }}</span>
@@ -281,7 +259,6 @@
       </div>
     </div>
 
-    <!-- ── Unanswered Warning ────────────────────────────────── -->
     <div class="warn-box" *ngIf="showUnansweredWarning">
       <div class="warn-head">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
@@ -302,7 +279,6 @@
       </div>
     </div>
 
-    <!-- ── Nav Footer ────────────────────────────────────────── -->
     <div class="nav-footer">
       <div class="nav-footer-left">
         <button class="btn-nav" [disabled]="currentIndex === 0" (click)="navigate(-1)">

@@ -2,18 +2,19 @@
 
   <!-- ── Toast Notification ── -->
   <div class="toast-container" *ngIf="toast.visible" [ngClass]="'toast-' + toast.type">
-    <svg *ngIf="toast.type === 'success'" width="16" height="16" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="20 6 9 17 4 12"/>
+    <svg *ngIf="toast.type === 'success'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12" />
     </svg>
-    <svg *ngIf="toast.type === 'error'" width="16" height="16" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
-      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    <svg *ngIf="toast.type === 'error'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
     </svg>
     <span>{{ toast.message }}</span>
   </div>
-   
+
   <!-- ── Page Header ── -->
   <div class="page-header">
     <div>
@@ -58,15 +59,13 @@
       </div>
       <div class="toolbar-right">
         <div class="search-wrap">
-          <svg class="search-icon" width="13" height="13" viewBox="0 0 16 16"
-               fill="none" stroke="#94a3b8" stroke-width="1.8">
-            <circle cx="7" cy="7" r="5"/>
-            <path d="M12 12l2.5 2.5"/>
+          <svg class="search-icon" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#94a3b8"
+            stroke-width="1.8">
+            <circle cx="7" cy="7" r="5" />
+            <path d="M12 12l2.5 2.5" />
           </svg>
-          <input class="search-input"
-                 placeholder="Search title, location, skill…"
-                 [(ngModel)]="searchQuery"
-                 (ngModelChange)="filterJobs()" />
+          <input class="search-input" placeholder="Search title, location, skill…" [(ngModel)]="searchQuery"
+            (ngModelChange)="filterJobs()" />
         </div>
       </div>
     </div>
@@ -81,10 +80,11 @@
       <table *ngIf="filteredJobs.length > 0">
         <thead>
           <tr>
-            <th class="col-title">Job title</th>
+            <th class="col-title">Job Title</th>
             <th class="col-exp">Experience</th>
             <th class="col-loc">Location</th>
             <th class="col-skills">Skills</th>
+            <th class="col-budg">Budget</th>
             <th class="col-desc">Description</th>
             <th class="col-act">Actions</th>
           </tr>
@@ -105,10 +105,9 @@
             <!-- Experience -->
             <td class="col-exp">
               <span class="exp-badge">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
-                     stroke="#854F0B" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="12 6 12 12 16 14"/>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
                 </svg>
                 {{ job.experience }}+ yrs
               </span>
@@ -117,10 +116,10 @@
             <!-- Location -->
             <td class="col-loc">
               <div class="loc-cell">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                     stroke="#534AB7" stroke-width="2" stroke-linecap="round">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                  <circle cx="12" cy="10" r="3"/>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2"
+                  stroke-linecap="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
                 </svg>
                 {{ job.location }}
               </div>
@@ -132,15 +131,21 @@
                 <span class="s-pill" *ngFor="let skill of job.skills">{{ skill }}</span>
               </div>
             </td>
-
+            <td class="col-budg">
+              <div class="skills-wrap">
+                <span class="s-pill">
+                  {{ job.budget || 'Not specified' }}
+                </span>
+              </div>
+            </td>
             <!-- Description -->
             <td class="col-desc">
               <div class="desc-preview">{{ job.description | slice:0:60 }}…</div>
               <button class="eye-btn" (click)="openModal(job)" title="View full details">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                  <circle cx="12" cy="12" r="3"/>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
                 </svg>
                 View
               </button>
@@ -150,20 +155,21 @@
             <td class="col-act">
               <div class="actions">
                 <button class="btn-edit-row" (click)="openEditModal(job)" title="Edit JD">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                   </svg>
                   Edit
                 </button>
                 <button class="btn-delete-row" (click)="confirmDelete(job)" title="Delete JD">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="3 6 5 6 21 6"/>
-                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                    <path d="M10 11v6"/><path d="M14 11v6"/>
-                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6" />
+                    <path d="M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
                   </svg>
                   Delete
                 </button>
@@ -176,10 +182,10 @@
 
       <!-- Empty state -->
       <div *ngIf="filteredJobs.length === 0" class="empty-state">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
-             stroke="#cbd5e1" stroke-width="1.5" stroke-linecap="round">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="M21 21l-4.35-4.35"/>
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5"
+          stroke-linecap="round">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
         </svg>
         <p>No jobs found matching your search.</p>
       </div>
@@ -201,11 +207,11 @@
     <div class="modal-header">
       <div class="modal-header-left">
         <div class="modal-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-               stroke="#534AB7" stroke-width="2" stroke-linecap="round">
-            <rect x="2" y="3" width="20" height="14" rx="2"/>
-            <line x1="8" y1="21" x2="16" y2="21"/>
-            <line x1="12" y1="17" x2="12" y2="21"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2"
+            stroke-linecap="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
         </div>
         <div>
@@ -218,10 +224,10 @@
         </div>
       </div>
       <button class="modal-close" (click)="closeModal()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
       </button>
     </div>
@@ -229,18 +235,17 @@
     <div class="modal-body">
       <div class="modal-info-row">
         <div class="modal-info-chip">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-               stroke="#854F0B" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
           </svg>
           <span>{{ selectedJob.experience }}+ years experience</span>
         </div>
         <div class="modal-info-chip loc">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-               stroke="#534AB7" stroke-width="2" stroke-linecap="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2"
+            stroke-linecap="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
           </svg>
           <span>{{ selectedJob.location }}</span>
         </div>
@@ -262,9 +267,9 @@
     <div class="modal-footer">
       <button class="btn-edit" (click)="openEditModal(selectedJob); closeModal()">Edit JD</button>
       <button class="btn-proceed" (click)="proceedJob(selectedJob); closeModal()">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-             stroke="#fff" stroke-width="2" stroke-linecap="round">
-          <polyline points="9 18 15 12 9 6"/>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+          stroke-linecap="round">
+          <polyline points="9 18 15 12 9 6" />
         </svg>
         Proceed to matching
       </button>
@@ -280,10 +285,10 @@
     <div class="modal-header">
       <div class="modal-header-left">
         <div class="modal-icon modal-icon--edit">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-               stroke="#854F0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
           </svg>
         </div>
         <div>
@@ -292,10 +297,10 @@
         </div>
       </div>
       <button class="modal-close" (click)="closeEditModal()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
       </button>
     </div>
@@ -306,17 +311,13 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Job Title <span class="required">*</span></label>
-          <input class="form-input"
-                 [(ngModel)]="editForm.title"
-                 placeholder="e.g. Senior Angular Developer"
-                 [class.input-error]="editErrors.title" />
+          <input class="form-input" [(ngModel)]="editForm.title" placeholder="e.g. Senior Angular Developer"
+            [class.input-error]="editErrors.title" />
           <span class="error-msg" *ngIf="editErrors.title">Title is required</span>
         </div>
         <div class="form-group">
           <label class="form-label">Department</label>
-          <input class="form-input"
-                 [(ngModel)]="editForm.department"
-                 placeholder="e.g. Engineering" />
+          <input class="form-input" [(ngModel)]="editForm.department" placeholder="e.g. Engineering" />
         </div>
       </div>
 
@@ -324,20 +325,14 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Experience (years) <span class="required">*</span></label>
-          <input class="form-input"
-                 type="number"
-                 min="0"
-                 [(ngModel)]="editForm.experience"
-                 placeholder="e.g. 3"
-                 [class.input-error]="editErrors.experience" />
+          <input class="form-input" type="number" min="0" [(ngModel)]="editForm.experience" placeholder="e.g. 3"
+            [class.input-error]="editErrors.experience" />
           <span class="error-msg" *ngIf="editErrors.experience">Valid experience is required</span>
         </div>
         <div class="form-group">
           <label class="form-label">Location <span class="required">*</span></label>
-          <input class="form-input"
-                 [(ngModel)]="editForm.location"
-                 placeholder="e.g. Remote / Bangalore"
-                 [class.input-error]="editErrors.location" />
+          <input class="form-input" [(ngModel)]="editForm.location" placeholder="e.g. Remote / Bangalore"
+            [class.input-error]="editErrors.location" />
           <span class="error-msg" *ngIf="editErrors.location">Location is required</span>
         </div>
       </div>
@@ -355,10 +350,8 @@
       <!-- Skills -->
       <div class="form-group">
         <label class="form-label">Skills (comma-separated) <span class="required">*</span></label>
-        <input class="form-input"
-               [(ngModel)]="editForm.skillsRaw"
-               placeholder="e.g. Angular, TypeScript, RxJS"
-               [class.input-error]="editErrors.skills" />
+        <input class="form-input" [(ngModel)]="editForm.skillsRaw" placeholder="e.g. Angular, TypeScript, RxJS"
+          [class.input-error]="editErrors.skills" />
         <span class="error-msg" *ngIf="editErrors.skills">At least one skill is required</span>
         <!-- Live skill pill preview -->
         <div class="skills-preview" *ngIf="editForm.skillsRaw">
@@ -369,11 +362,9 @@
       <!-- Description -->
       <div class="form-group">
         <label class="form-label">Job Description <span class="required">*</span></label>
-        <textarea class="form-input form-textarea"
-                  [(ngModel)]="editForm.description"
-                  placeholder="Describe the role, responsibilities, and requirements…"
-                  rows="5"
-                  [class.input-error]="editErrors.description"></textarea>
+        <textarea class="form-input form-textarea" [(ngModel)]="editForm.description"
+          placeholder="Describe the role, responsibilities, and requirements…" rows="5"
+          [class.input-error]="editErrors.description"></textarea>
         <span class="error-msg" *ngIf="editErrors.description">Description is required</span>
       </div>
 
@@ -383,9 +374,9 @@
       <button class="btn-cancel" (click)="closeEditModal()" [disabled]="saving">Cancel</button>
       <button class="btn-save" (click)="saveEdit()" [disabled]="saving">
         <span *ngIf="saving" class="spinner"></span>
-        <svg *ngIf="!saving" width="12" height="12" viewBox="0 0 24 24" fill="none"
-             stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"/>
+        <svg *ngIf="!saving" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12" />
         </svg>
         {{ saving ? 'Saving…' : 'Save Changes' }}
       </button>
@@ -400,12 +391,13 @@
 
     <div class="confirm-icon-wrap">
       <div class="confirm-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
-             stroke="#E24B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-          <path d="M10 11v6"/><path d="M14 11v6"/>
-          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
         </svg>
       </div>
     </div>
@@ -421,10 +413,10 @@
       <button class="btn-cancel" (click)="cancelDelete()" [disabled]="deleting">Cancel</button>
       <button class="btn-danger" (click)="executeDelete()" [disabled]="deleting">
         <span *ngIf="deleting" class="spinner spinner--white"></span>
-        <svg *ngIf="!deleting" width="13" height="13" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        <svg *ngIf="!deleting" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
         </svg>
         {{ deleting ? 'Deleting…' : 'Confirm Delete' }}
       </button>

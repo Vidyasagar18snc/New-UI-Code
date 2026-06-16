@@ -73,7 +73,6 @@ implements OnInit {
 
   ){}
 
-  // ================= INIT =================
 
   ngOnInit():void{
 
@@ -96,7 +95,6 @@ implements OnInit {
     }
   }
 
-  // ================= LOAD ASSIGNED CANDIDATES =================
 
   loadMyCandidates(panelId:string){
 
@@ -137,7 +135,6 @@ implements OnInit {
         });
   }
 
-  // ================= HELPERS =================
 
   getInitials(name:string):string{
 
@@ -217,7 +214,6 @@ implements OnInit {
     });
   }
 
-  // ================= OPEN SCHEDULER =================
 
   openScheduler(candidate:any){
 
@@ -250,7 +246,6 @@ implements OnInit {
         ) || '';
   }
 
-  // ================= CHECK AVAILABILITY =================
 
   checkAvailability(){
 
@@ -338,7 +333,6 @@ implements OnInit {
         });
   }
 
-  // ================= SCHEDULE INTERVIEW =================
 
   scheduleInterview(){
 
@@ -447,7 +441,6 @@ implements OnInit {
         });
   }
 
-  // ================= CLOSE MODAL =================
 
   closeModal(){
 
@@ -455,7 +448,6 @@ implements OnInit {
         null;
   }
 
-  // ================= OVERLAY =================
 
   onOverlayClick(event:MouseEvent){
 

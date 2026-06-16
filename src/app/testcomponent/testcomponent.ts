@@ -1,26 +1,19 @@
-// ═══════════════════════════════════════════════════════════════
-//  AI Recruiter — MCQ Exam Portal  |  testcomponent.ts
-// ═══════════════════════════════════════════════════════════════
-
 import {
   Component,
   OnInit,
   OnDestroy,
   ChangeDetectorRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// add to imports[] — required for the question slide animation
 import {
   trigger,
   transition,
   style,
   animate,
-  query,
-  animateChild,
 } from '@angular/animations';
 import { ApiService } from '../Service/ApiService ';
 
@@ -28,8 +21,8 @@ export interface Question {
   id: string;
   question: string;
   options: string[];
-  category?: string;    // e.g. "JavaScript", "React", "System Design"
-  points?: number;      // defaults to 1
+  category?: string;
+  points?: number;
 }
 
 export interface SubmitPayload {
@@ -37,7 +30,6 @@ export interface SubmitPayload {
   answers: { questionId: string; selectedAnswer: string }[];
 }
 
-// ── Animation ────────────────────────────────────────────────────
 const QUESTION_ANIM = trigger('questionAnim', [
   transition(':increment', [
     style({ opacity: 0, transform: 'translateX(24px)' }),
@@ -49,7 +41,6 @@ const QUESTION_ANIM = trigger('questionAnim', [
   ]),
 ]);
 
-// ════════════════════════════════════════════════════════════════
 @Component({
   selector: 'app-testcomponent',
   standalone: true,
@@ -57,62 +48,51 @@ const QUESTION_ANIM = trigger('questionAnim', [
   templateUrl: './testcomponent.html',
   styleUrl: './testcomponent.css',
   animations: [QUESTION_ANIM],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestComponent implements OnInit, OnDestroy {
 
-  // ── Token & validity ─────────────────────────────────────────
   token!: string;
-  isValid   = false;
-  loading   = true;
+  isValid = false;
+  loading = true;
   errorMessage = '';
 
-  // ── Meta ─────────────────────────────────────────────────────
-  assessmentTitle = '';   // populated from API or kept blank for default
+  assessmentTitle = '';
 
-  // ── Questions & answers ──────────────────────────────────────
   questions: Question[] = [];
-  answers:  { [qId: string]: string  } = {};
-  flagged:  { [qId: string]: boolean } = {};
+  answers: { [qId: string]: string } = {};
+  flagged: { [qId: string]: boolean } = {};
 
   readonly letters = ['A', 'B', 'C', 'D', 'E'];
 
-  // ── Navigation ───────────────────────────────────────────────
   currentIndex = 0;
-  examStarted  = false;
+  examStarted = false;
 
-  // ── Timer ────────────────────────────────────────────────────
-  /** Total seconds for the exam — override via API response or adjust here */
-  timeSeconds  = 30 * 60;   // 30 minutes default
+  timeSeconds = 30 * 60;
   totalMinutes = 30;
 
   private timerRef!: ReturnType<typeof setInterval>;
-  private startedAt!: number;  // epoch ms when exam began
+  private startedAt!: number;
 
-  // ── Submission ───────────────────────────────────────────────
-  submitted            = false;
-  isSubmitting         = false;
+  submitted = false;
+  isSubmitting = false;
   showUnansweredWarning = false;
-  submittedAnswerCount  = 0;
-  completionTime        = '';     // e.g. "12 min 34 sec"
+  submittedAnswerCount = 0;
+  completionTime = '';
   lastSaved: number | null = null;
 
-  // ── Score ring ───────────────────────────────────────────────
-  scorePercent   = 0;
+  scorePercent = 0;
   scoreRingColor = '#1D9E75';
-  scoreRingDash  = '0 264';       // circumference ≈ 2π×42 ≈ 263.9
+  scoreRingDash = '0 264';
 
-  private readonly CIRCUMFERENCE = 2 * Math.PI * 42; // r=42
+  private readonly CIRCUMFERENCE = 2 * Math.PI * 42;
 
-  // ─────────────────────────────────────────────────────────────
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
     private cdr: ChangeDetectorRef,
   ) {}
 
-  // ══════════════════════════════════════════════════════════════
-  //  Lifecycle
-  // ══════════════════════════════════════════════════════════════
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
@@ -121,6 +101,7 @@ export class TestComponent implements OnInit, OnDestroy {
       } else {
         this.errorMessage = 'Invalid or missing assessment link.';
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -129,29 +110,28 @@ export class TestComponent implements OnInit, OnDestroy {
     this.clearTimer();
   }
 
-  // ══════════════════════════════════════════════════════════════
-  //  Token validation & question loading
-  // ══════════════════════════════════════════════════════════════
   private validateToken(): void {
     this.apiService.validateInterview(this.token).subscribe({
       next: (res: any) => {
         if (res.valid) {
           this.isValid = true;
-          // Optional: pick up title / duration from validation response
-          if (res.title)    this.assessmentTitle = res.title;
+          if (res.title) this.assessmentTitle = res.title;
           if (res.duration) {
-            this.timeSeconds  = res.duration * 60;
+            this.timeSeconds = res.duration * 60;
             this.totalMinutes = res.duration;
           }
+          this.cdr.markForCheck();
           this.loadQuestions();
         } else {
           this.errorMessage = res.message || 'This link is no longer valid.';
           this.loading = false;
+          this.cdr.markForCheck();
         }
       },
       error: () => {
         this.errorMessage = 'Server error. Please try again later.';
         this.loading = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -160,38 +140,33 @@ export class TestComponent implements OnInit, OnDestroy {
     this.apiService.getQuestions().subscribe({
       next: (data: any[]) => {
         this.questions = data;
-        this.loading   = false;
-        // Timer does NOT start here — it starts when the candidate
-        // clicks "Begin assessment" on the intro screen.
+        this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.errorMessage = 'Failed to load questions. Please refresh and try again.';
-        this.loading  = false;
-        this.isValid  = false;
+        this.loading = false;
+        this.isValid = false;
+        this.cdr.markForCheck();
       },
     });
   }
 
-  // ══════════════════════════════════════════════════════════════
-  //  Exam start (called by "Begin assessment" button)
-  // ══════════════════════════════════════════════════════════════
   beginExam(): void {
     this.examStarted = true;
     this.startTimer();
+    this.cdr.markForCheck();
   }
 
-  // ══════════════════════════════════════════════════════════════
-  //  Timer
-  // ══════════════════════════════════════════════════════════════
   private startTimer(): void {
     this.startedAt = Date.now();
-    this.timerRef  = setInterval(() => {
+    this.timerRef = setInterval(() => {
       if (this.timeSeconds > 0) {
         this.timeSeconds--;
         this.cdr.markForCheck();
       } else {
         this.clearTimer();
-        this.doSubmit();   // auto-submit on time-up
+        this.doSubmit();
       }
     }, 1000);
   }
@@ -213,9 +188,6 @@ export class TestComponent implements OnInit, OnDestroy {
     return m === 0 ? `${s} sec` : `${m} min ${s} sec`;
   }
 
-  // ══════════════════════════════════════════════════════════════
-  //  Progress / counts
-  // ══════════════════════════════════════════════════════════════
   get progressPercent(): number {
     if (!this.questions.length) return 0;
     return Math.round(((this.currentIndex + 1) / this.questions.length) * 100);
@@ -237,14 +209,10 @@ export class TestComponent implements OnInit, OnDestroy {
     return Object.values(this.flagged).filter(Boolean).length;
   }
 
-  /** Returns questions that have not been answered — used in the warning box */
   get unansweredQuestions(): Question[] {
     return this.questions.filter(q => !this.answers[q.id]);
   }
 
-  // ══════════════════════════════════════════════════════════════
-  //  Answer & flag helpers
-  // ══════════════════════════════════════════════════════════════
   isAnswered(qId: string): boolean {
     return !!this.answers[qId];
   }
@@ -255,7 +223,8 @@ export class TestComponent implements OnInit, OnDestroy {
 
   selectAnswer(qId: string, option: string): void {
     this.answers[qId] = option;
-    this.lastSaved    = Date.now();
+    this.lastSaved = Date.now();
+    this.cdr.markForCheck();
   }
 
   isFlagged(qId: string | undefined): boolean {
@@ -265,39 +234,36 @@ export class TestComponent implements OnInit, OnDestroy {
   toggleFlag(qId: string | undefined): void {
     if (!qId) return;
     this.flagged[qId] = !this.flagged[qId];
+    this.cdr.markForCheck();
   }
 
-  // ══════════════════════════════════════════════════════════════
-  //  Navigation
-  // ══════════════════════════════════════════════════════════════
   navigate(dir: 1 | -1): void {
     this.currentIndex = Math.max(
       0,
       Math.min(this.questions.length - 1, this.currentIndex + dir),
     );
     this.showUnansweredWarning = false;
+    this.cdr.markForCheck();
   }
 
   goTo(index: number): void {
     this.currentIndex = index;
     this.showUnansweredWarning = false;
+    this.cdr.markForCheck();
   }
 
-  // ══════════════════════════════════════════════════════════════
-  //  Submit flow
-  // ══════════════════════════════════════════════════════════════
-
-  /** Called by "Submit test" button */
   submitTest(): void {
     if (this.remainingCount > 0) {
       this.showUnansweredWarning = true;
     } else {
       this.doSubmit();
     }
+    this.cdr.markForCheck();
   }
 
   cancelSubmit(): void {
     this.showUnansweredWarning = false;
+    this.cdr.markForCheck();
   }
 
   confirmSubmit(): void {
@@ -306,51 +272,48 @@ export class TestComponent implements OnInit, OnDestroy {
   }
 
   private doSubmit(): void {
-    if (this.isSubmitting) return;   // prevent double-click
+    if (this.isSubmitting) return;
 
     this.isSubmitting = true;
     this.clearTimer();
 
-    // Snapshot stats before clearing state
     this.submittedAnswerCount = this.answeredCount;
-    this.completionTime       = this.buildCompletionTime();
+    this.completionTime = this.buildCompletionTime();
 
     const payload: SubmitPayload = {
       token: this.token,
       answers: this.questions.map(q => ({
-        questionId:     q.id,
+        questionId: q.id,
         selectedAnswer: this.answers[q.id] ?? '',
       })),
     };
 
     this.apiService.submitTest(payload).subscribe({
       next: (res: any) => {
-        // If the API returns a score, use it; otherwise leave 0
         if (typeof res?.score === 'number') {
           this.scorePercent = res.score;
         }
         this.buildScoreRing();
-        this.submitted    = true;
+        this.submitted = true;
         this.isSubmitting = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isSubmitting = false;
-        // Surface error inline — replace alert() with a toast/snackbar in production
+        this.cdr.markForCheck();
         alert('Error submitting test. Please check your connection and try again.');
       },
     });
   }
 
-  // ══════════════════════════════════════════════════════════════
-  //  Score ring helpers
-  // ══════════════════════════════════════════════════════════════
   private buildScoreRing(): void {
     const filled = Math.round((this.scorePercent / 100) * this.CIRCUMFERENCE);
-    this.scoreRingDash  = `${filled} ${this.CIRCUMFERENCE}`;
+    this.scoreRingDash = `${filled} ${this.CIRCUMFERENCE}`;
     this.scoreRingColor = this.scorePercent >= 70
-      ? '#1D9E75'   // teal  — good
+      ? '#1D9E75'
       : this.scorePercent >= 40
-        ? '#EF9F27' // amber — average
-        : '#E24B4A'; // red   — needs improvement
+        ? '#EF9F27'
+        : '#E24B4A';
   }
+
 }

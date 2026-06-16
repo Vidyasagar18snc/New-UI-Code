@@ -3,15 +3,16 @@
   <!-- Header -->
   <div class="jc-header">
     <div class="header-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="7" width="20" height="14" rx="2"/>
-        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-        <line x1="12" y1="12" x2="12" y2="16"/>
-        <line x1="10" y1="14" x2="14" y2="14"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2" />
+        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+        <line x1="12" y1="12" x2="12" y2="16" />
+        <line x1="10" y1="14" x2="14" y2="14" />
       </svg>
     </div>
     <h2>Create job description</h2>
+
   </div>
 
   <div class="jc-body">
@@ -22,11 +23,11 @@
 
       <label class="upload-card" for="jd-file" [class.has-file]="selectedFile">
         <div class="upload-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
           </svg>
         </div>
         <div class="upload-text">
@@ -39,10 +40,10 @@
       <!-- File selected state -->
       <div class="upload-actions" *ngIf="selectedFile">
         <span class="file-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
           </svg>
           {{ selectedFile.name }}
         </span>
@@ -61,40 +62,57 @@
     <hr class="divider">
 
     <!-- Job Title + Experience -->
-    <div class="row-2">
+    <div class="row-3">
+
+      <!-- Job Title -->
       <div class="form-group">
-        <label for="jobTitle">Job title</label>
+        <label for="jobTitle">Job Title</label>
         <div class="input-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
           </svg>
-          <input type="text" id="jobTitle" [(ngModel)]="jobTitle" placeholder="e.g. Senior Frontend Engineer">
+          <input type="text" id="jobTitle" [(ngModel)]="jobTitle" placeholder="Senior Frontend Engineer">
         </div>
       </div>
 
+      <!-- Experience -->
       <div class="form-group">
-        <label for="experience">Experience (years)</label>
+        <label for="experience">Experience</label>
         <div class="input-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="9"/>
-            <polyline points="12 7 12 12 15 15"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9" />
+            <polyline points="12 7 12 12 15 15" />
           </svg>
-          <input type="number" id="experience" [(ngModel)]="experience" min="0" max="30" placeholder="e.g. 3">
+          <input type="number" id="experience" [(ngModel)]="experience" placeholder="5">
         </div>
       </div>
+
+      <!-- Budget -->
+      <div class="form-group">
+        <label for="budget">Budget (LPA)</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2v20" />
+            <path d="M17 6c0-2-2-3-5-3s-5 1-5 3 2 3 5 3 5 1 5 3-2 3-5 3-5-1-5-3" />
+          </svg>
+          <input type="text" id="budget" [(ngModel)]="budget" placeholder="10 - 15 LPA">
+        </div>
+      </div>
+
     </div>
+
+
+
 
     <!-- Location -->
     <div class="form-group">
       <label for="location">Location</label>
       <div class="input-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-          <circle cx="12" cy="9" r="2.5"/>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+          <circle cx="12" cy="9" r="2.5" />
         </svg>
         <input type="text" id="location" [(ngModel)]="location" placeholder="e.g. Bengaluru, India · Remote">
       </div>
@@ -118,10 +136,10 @@
         <span class="skill-tag" *ngFor="let skill of skills; let i = index">
           {{ skill }}
           <button type="button" (click)="removeSkill(i)" title="Remove skill">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </span>
@@ -131,12 +149,8 @@
     <!-- Description -->
     <div class="form-group">
       <label for="description">Job description</label>
-      <textarea
-        id="description"
-        [(ngModel)]="description"
-        (input)="updateCharCount()"
-        placeholder="Describe the role, responsibilities, and requirements…"
-      ></textarea>
+      <textarea id="description" [(ngModel)]="description" (input)="updateCharCount()"
+        placeholder="Describe the role, responsibilities, and requirements…"></textarea>
       <div class="char-hint">{{ charCount }} characters</div>
     </div>
 
@@ -146,12 +160,12 @@
   <div class="action-buttons">
     <button type="button" class="btn-cancel" (click)="resetForm()">Cancel</button>
     <button type="button" class="btn-submit" (click)="submitJob()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="20 6 9 17 4 12"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12" />
       </svg>
       Create job
-    </button>      
+    </button>
   </div>
 
 </div>

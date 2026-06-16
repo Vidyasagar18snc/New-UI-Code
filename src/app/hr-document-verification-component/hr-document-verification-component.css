@@ -1,16 +1,8 @@
-/* ═══════════════════════════════════════════════════════════════
-   DOCUMENT VERIFICATION — FIXED RESPONSIVE STYLESHEET
-   Fixes: horizontal scroll, layout shift, sidebar interaction,
-          card overflow, mobile stacking, centering.
-   ═══════════════════════════════════════════════════════════════ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
-/* ── 1. GLOBAL OVERFLOW LOCK ──────────────────────────────────── */
-/*
-  Apply these two rules to your global styles.scss / styles.css.
-  They prevent ALL horizontal scroll regardless of sidebar width.
-*/
+
 html,
 body {
   overflow-x: hidden;
@@ -24,7 +16,6 @@ body {
   padding: 0;
 }
 
-/* ── 2. DESIGN TOKENS ─────────────────────────────────────────── */
 :root {
   --bg-base:        #0C0E14;
   --bg-card:        #13161F;
@@ -57,13 +48,7 @@ body {
   --shadow-btn-hover: 0 6px 20px rgba(99,102,241,.55);
 }
 
-/* ── 3. ROOT WRAPPER ──────────────────────────────────────────── */
-/*
-  .dv-root wraps the ENTIRE component.
-  width:100% + overflow-x:hidden contains everything inside the
-  viewport even when a sidebar is present, because the sidebar
-  pushes the HOST element — not the inner content.
-*/
+
 .dv-root {
   width: 100%;
   min-width: 0;          /* ← critical: allows flexbox child to shrink */
@@ -74,12 +59,7 @@ body {
   color: var(--text-primary);
 }
 
-/* ── 4. INNER CONTAINER ───────────────────────────────────────── */
-/*
-  max-width keeps the content readable on ultra-wide screens.
-  padding uses clamp() so it breathes on desktop and stays
-  comfortable on narrow viewports without needing media queries.
-*/
+
 .dv-container {
   width: 100%;
   max-width: 1400px;
@@ -87,7 +67,6 @@ body {
   padding: clamp(20px, 4vw, 40px) clamp(16px, 3vw, 36px) 80px;
 }
 
-/* ── 5. HEADER ────────────────────────────────────────────────── */
 .dv-header {
   display: flex;
   align-items: center;
@@ -172,14 +151,7 @@ body {
 .dv-stat-dot--pending  { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
 .dv-stat-dot--rejected { background: var(--red);   box-shadow: 0 0 6px var(--red);   }
 
-/* ── 6. GRID ──────────────────────────────────────────────────── */
-/*
-  KEY FIX: minmax(0, 1fr) instead of minmax(360px, 1fr)
-  The "0" minimum means grid tracks can shrink below 360 px,
-  which is what you want so the grid NEVER overflows its container.
-  auto-fill + clamp for the min gives us a responsive breakpoint
-  without any media queries.
-*/
+
 .dv-grid {
   display: grid;
   grid-template-columns: repeat(
@@ -191,7 +163,6 @@ body {
   min-width: 0;
 }
 
-/* ── 7. SKELETON ──────────────────────────────────────────────── */
 .dv-skeleton-card {
   background: var(--bg-card);
   border-radius: var(--radius-card);
@@ -254,7 +225,6 @@ body {
 
 .pulse { animation: shimmer 1.8s ease-in-out infinite; }
 
-/* ── 8. EMPTY STATE ───────────────────────────────────────────── */
 .dv-empty {
   text-align: center;
   padding: 100px 24px;
@@ -286,7 +256,6 @@ body {
   line-height: 1.7;
 }
 
-/* ── 9. CANDIDATE CARD ────────────────────────────────────────── */
 .dv-card {
   background: var(--bg-card);
   border-radius: var(--radius-card);
@@ -350,7 +319,6 @@ body {
 .dv-card--pending::after  { background: var(--amber); }
 .dv-card--rejected::after { background: var(--red);   }
 
-/* ── 10. CARD HEADER ──────────────────────────────────────────── */
 .dv-card__header {
   display: flex;
   align-items: center;
@@ -487,12 +455,7 @@ body {
   margin-bottom: 2px;
 }
 
-/* ── 13. DOCUMENT ITEM ────────────────────────────────────────── */
-/*
-  KEY FIX: min-width:0 on the item prevents it from overflowing
-  the card. flex children don't shrink below content size by
-  default, which causes overflow. This resets that.
-*/
+
 .dv-doc {
   display: flex;
   align-items: center;
@@ -674,7 +637,6 @@ body {
 @keyframes spin { to { transform: rotate(360deg); } }
 .spin { animation: spin .75s linear infinite; }
 
-/* ── 16. PAGE ANIMATIONS ──────────────────────────────────────── */
 @keyframes dvFadeDown {
   from { opacity: 0; transform: translateY(-12px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -685,9 +647,7 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── 17. RESPONSIVE BREAKPOINTS ───────────────────────────────── */
 
-/* ── Tablet: 768px ── */
 @media (max-width: 768px) {
   .dv-header {
     flex-direction: column;
@@ -706,7 +666,6 @@ body {
   }
 }
 
-/* ── Mobile: 480px ── */
 @media (max-width: 480px) {
   .dv-container {
     padding: 16px 14px 60px;
@@ -730,7 +689,6 @@ body {
     justify-content: center;
   }
 
-  /* Let doc actions wrap if truly tiny */
   .dv-doc {
     flex-wrap: wrap;
   }
@@ -743,7 +701,6 @@ body {
   }
 }
 
-/* ── Ultra-wide: prevent over-stretching ── */
 @media (min-width: 1600px) {
   .dv-container {
     padding-inline: 48px;

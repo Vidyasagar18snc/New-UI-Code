@@ -1,11 +1,6 @@
-/* ═══════════════════════════════════════════════════════════════
-   AI Recruiter — MCQ Exam Portal  |  testcomponent.css
-   ═══════════════════════════════════════════════════════════════ */
 
-/* ── Google Fonts ─────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
 
-/* ── Host ─────────────────────────────────────────────────────── */
 :host {
   display: block;
   width: 100%;
@@ -44,7 +39,6 @@
   --mono:         'DM Mono', monospace;
 }
 
-/* ── Wrapper ──────────────────────────────────────────────────── */
 .exam-wrap {
   min-height: 100vh;
   background: var(--page-bg);
@@ -57,9 +51,6 @@
   padding: 2rem 1.5rem 4rem;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   INTRO SCREEN
-   ══════════════════════════════════════════════════════════════ */
 .intro-screen {
   display: flex;
   flex-direction: column;
@@ -273,9 +264,6 @@
   fill: none;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   EXAM HEADER
-   ══════════════════════════════════════════════════════════════ */
 .exam-header {
   background: var(--surface);
   border: 0.5px solid var(--border);
@@ -366,9 +354,6 @@
   50%       { opacity: 0.45; }
 }
 
-/* ══════════════════════════════════════════════════════════════
-   PROGRESS BAR
-   ══════════════════════════════════════════════════════════════ */
 .progress-section {
   margin-bottom: 1rem;
 }
@@ -431,9 +416,6 @@
 .pill-flagged   { background: var(--amber-light);  color: var(--amber-dark); border-color: var(--amber); }
 .pill-saved     { background: var(--teal-light);   color: var(--teal-dark);  border-color: var(--teal-mid); }
 
-/* ══════════════════════════════════════════════════════════════
-   QUESTION NAVIGATOR DOTS
-   ══════════════════════════════════════════════════════════════ */
 .q-nav {
   display: flex;
   flex-wrap: wrap;
@@ -489,9 +471,6 @@
   background: var(--amber);
 }
 
-/* ══════════════════════════════════════════════════════════════
-   QUESTION CARD
-   ══════════════════════════════════════════════════════════════ */
 .q-card {
   background: var(--surface);
   border: 0.5px solid var(--border);
@@ -647,9 +626,6 @@
   line-height: 1.5;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   WARNING BOX
-   ══════════════════════════════════════════════════════════════ */
 .warn-box {
   background: var(--amber-light);
   border: 0.5px solid var(--amber);
@@ -724,10 +700,6 @@
 }
 
 .btn-warn-confirm:hover { background: var(--teal-dark); }
-
-/* ══════════════════════════════════════════════════════════════
-   NAVIGATION FOOTER
-   ══════════════════════════════════════════════════════════════ */
 .nav-footer {
   display: flex;
   align-items: center;
@@ -844,9 +816,6 @@
   box-shadow: none;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   LOADING STATE
-   ══════════════════════════════════════════════════════════════ */
 .loading-screen {
   display: flex;
   flex-direction: column;
@@ -872,9 +841,6 @@
   color: var(--text-faint);
 }
 
-/* ══════════════════════════════════════════════════════════════
-   ERROR STATE
-   ══════════════════════════════════════════════════════════════ */
 .error-screen {
   display: flex;
   flex-direction: column;
@@ -914,9 +880,6 @@
   color: var(--text-faint);
 }
 
-/* ══════════════════════════════════════════════════════════════
-   SUBMITTED / THANK YOU STATE
-   ══════════════════════════════════════════════════════════════ */
 .submitted-screen {
   display: flex;
   align-items: center;
@@ -1029,9 +992,6 @@
   fill: none;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   RESPONSIVE
-   ══════════════════════════════════════════════════════════════ */
 @media (max-width: 540px) {
   .exam-inner        { padding: 1rem 0.875rem 3rem; }
   .intro-stats       { grid-template-columns: repeat(3,1fr); gap: 8px; }

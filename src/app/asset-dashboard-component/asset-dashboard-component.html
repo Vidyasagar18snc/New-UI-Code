@@ -186,19 +186,47 @@
     </div>
 
     <div class="input-group">
+  <label>Asset Type</label>
 
-      <label>
-        Location
-      </label>
+  <select [(ngModel)]="assignData.assetType">
+    <option value="">Select Asset Type</option>
+    <option value="LAPTOP">Laptop</option>
+    <option value="MONITOR">Monitor</option>
+  </select>
+</div>
 
+<div
+  class="input-group accessory-section"
+  *ngIf="assignData.assetType === 'LAPTOP'"
+>
+  <label>Accessories</label>
+
+  <div class="checkbox-container">
+    <label class="checkbox-item">
       <input
-        type="text"
-        placeholder="e.g. Bangalore Office"
-        [(ngModel)]="assignData.location"
+        type="checkbox"
+        [(ngModel)]="assignData.mouse"
       />
+      Mouse
+    </label>
 
-    </div>
+    <label class="checkbox-item">
+      <input
+        type="checkbox"
+        [(ngModel)]="assignData.headphone"
+      />
+      Headphone
+    </label>
 
+    <label class="checkbox-item">
+      <input
+        type="checkbox"
+        [(ngModel)]="assignData.keyboard"
+      />
+      Keyboard
+    </label>
+  </div>
+</div>
     <div class="input-group">
 
       <label>
@@ -221,11 +249,6 @@
 
         </option>
 
-        <option value="DAMAGED">
-
-          DAMAGED
-
-        </option>
 
         <option value="NEW">
 

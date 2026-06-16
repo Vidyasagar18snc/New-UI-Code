@@ -18,7 +18,7 @@ export interface CandidateFeedback {
   experience: number;
   round: string;
   score: number;
-  decision: string;       // API may return any casing — we normalize in normalizeDecision()
+  decision: string;      
   summary: string;
   technical: number;
   communication: number;
@@ -43,8 +43,7 @@ export interface MetricCard {
 })
 export class FeedbackDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  // FIX: static: false (default) — canvas only exists after *ngIf="!loading" is true,
-  //      so we never access this in ngAfterViewInit directly.
+
   @ViewChild('distChart') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
   candidates: CandidateFeedback[] = [];
@@ -56,7 +55,6 @@ export class FeedbackDashboardComponent implements OnInit, AfterViewInit, OnDest
   offerSent = false;
   activeFilter = 'All';
 
-  // FIX: filter labels must exactly match normalized decision values
   filterOptions = ['All', 'Strong Hire', 'Hire', 'Hold', 'Reject'];
   metrics: MetricCard[] = [];
 
@@ -79,8 +77,7 @@ export class FeedbackDashboardComponent implements OnInit, AfterViewInit, OnDest
   }
 
   ngAfterViewInit(): void {
-    // Chart canvas may not exist yet if still loading — renderChart() is called
-    // after loading = false + cdr.detectChanges() inside loadFeedback()
+    
   }
 
   ngOnDestroy(): void {
@@ -95,7 +92,7 @@ export class FeedbackDashboardComponent implements OnInit, AfterViewInit, OnDest
     this.loading = true;
     this.api.getDashboard().subscribe({
       next: (res: any) => {
-        // FIX: normalize decision casing from API before using
+       
         this.candidates = (Array.isArray(res) ? res : []).map(c => ({
           ...c,
           decision: this.normalizeDecision(c.decision)
@@ -104,8 +101,7 @@ export class FeedbackDashboardComponent implements OnInit, AfterViewInit, OnDest
         this.buildMetrics();
         this.loading = false;
 
-        // FIX: run change detection first so *ngIf="!loading" renders the canvas,
-        //      then initialize the chart on the next microtask tick
+        
         this.cdr.detectChanges();
         Promise.resolve().then(() => this.renderChart());
       },

@@ -44,7 +44,6 @@ export class Employeedetails {
     this.getAllEmployees();
   }
 
-  // GET ALL EMPLOYEES — FIX: trigger change detection after data loads
   getAllEmployees(): void {
     this.isLoading = true;
     this.apiService.getAllEmployees().subscribe({

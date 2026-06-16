@@ -24,6 +24,7 @@ import { Employeedetails } from './employeedetails/employeedetails';
 import { EmployeeAssetTrackingComponent } from './employee-asset-tracking-component/employee-asset-tracking-component';
 import { DeboardingDashboardComponent } from './deboarding-dashboard-component/deboarding-dashboard-component';
 import { PanelManagement } from './pages/panel-management/panel-management';
+import { BackgroundVerification } from './background-verification/background-verification';
 
 export const routes: Routes = [
   // PUBLIC ROUTES
@@ -37,6 +38,7 @@ export const routes: Routes = [
     path: 'PortalLogin',
     component: EmployeeLoginComponent
   },
+
   {
     path: 'test',
     component: TestComponent
@@ -130,6 +132,10 @@ export const routes: Routes = [
       {
         path: 'upload',
         component: Uploadcomponent
+      },
+      {
+        path: 'bg-verification',
+        component: BackgroundVerification
       },
       {
         path: 'job',

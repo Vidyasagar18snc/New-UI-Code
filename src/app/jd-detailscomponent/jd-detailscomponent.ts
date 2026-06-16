@@ -16,6 +16,7 @@ interface Toast {
 interface EditForm {
   title: string;
   department: string;
+  budget: string;
   experience: number | null;
   location: string;
   status: string;
@@ -29,6 +30,7 @@ interface EditErrors {
   location: boolean;
   skills: boolean;
   description: boolean;
+  budget: boolean;
 }
 
 @Component({
@@ -39,7 +41,6 @@ interface EditErrors {
   styleUrls: ['./jd-detailscomponent.css'],
 })
 export class JdDetailscomponent implements OnInit {
-  // ── Data ──────────────────────────────────────────────────────────────────
   jobs: Job[] = [];
   filteredJobs: Job[] = [];
 
@@ -64,7 +65,7 @@ export class JdDetailscomponent implements OnInit {
     private api: ApiService,
     private cdr: ChangeDetectorRef,
     private zone: NgZone,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadJobs();
@@ -103,6 +104,7 @@ export class JdDetailscomponent implements OnInit {
           : [...job.skills]
         : [],
       location: job.location || 'Not provided',
+      budget: job.budget || 'Not specified',
       description: job.description || 'No description available.',
       status: job.status ?? 'active',
       aiMatchScore: job.aiMatchScore ?? null,
@@ -117,12 +119,12 @@ export class JdDetailscomponent implements OnInit {
 
     this.filteredJobs = q
       ? this.jobs.filter(
-          (j: any) =>
-            j.title?.toLowerCase().includes(q) ||
-            j.location?.toLowerCase().includes(q) ||
-            (j.department ?? '').toLowerCase().includes(q) ||
-            j.skills?.some((s: any) => s.toLowerCase().includes(q)),
-        )
+        (j: any) =>
+          j.title?.toLowerCase().includes(q) ||
+          j.location?.toLowerCase().includes(q) ||
+          (j.department ?? '').toLowerCase().includes(q) ||
+          j.skills?.some((s: any) => s.toLowerCase().includes(q)),
+      )
       : [...this.jobs];
 
     this.cdr.detectChanges();
@@ -157,10 +159,10 @@ export class JdDetailscomponent implements OnInit {
     this.editErrors = this.blankEditErrors();
     this.saving = false;
 
-    // Deep-copy the job data into the edit form so we don't mutate the list item
     this.editForm = {
       title: job.title ?? '',
       department: (job as any).department ?? '',
+      budget: (job as any).budget ?? '',
       experience: job.experience ?? null,
       location: job.location ?? '',
       status: job.status ?? 'active',
@@ -176,7 +178,6 @@ export class JdDetailscomponent implements OnInit {
     document.body.style.overflow = '';
   }
 
-  /** Live-preview computed skill pills while the user types */
   get previewSkills(): string[] {
     return this.editForm.skillsRaw
       .split(',')
@@ -189,6 +190,8 @@ export class JdDetailscomponent implements OnInit {
       title: !this.editForm.title.trim(),
       experience: this.editForm.experience === null || this.editForm.experience < 0,
       location: !this.editForm.location.trim(),
+      budget: !this.editForm.budget.trim(),
+
       skills: this.previewSkills.length === 0,
       description: !this.editForm.description.trim(),
     };
@@ -207,6 +210,7 @@ export class JdDetailscomponent implements OnInit {
       department: this.editForm.department.trim() || undefined,
       experience: Number(this.editForm.experience),
       location: this.editForm.location.trim(),
+      budget: this.editForm.budget.trim(),
       status: this.editForm.status,
       skills: this.previewSkills,
       description: this.editForm.description.trim(),
@@ -217,7 +221,6 @@ export class JdDetailscomponent implements OnInit {
     this.api.updateJob(id, payload).subscribe({
       next: (updated: any) => {
         this.zone.run(() => {
-          // Merge the response (or our payload) back into the in-memory lists
           const normalized = this.normalizeJob({
             ...this.editingJob,
             ...payload,
@@ -284,15 +287,13 @@ export class JdDetailscomponent implements OnInit {
           document.body.style.overflow = '';
           this.deleting = false;
 
-          // 4. Schedule toast auto-dismiss AFTER a clean tick,
-          //    so the toast render isn't stomped by the modal destruction
+         
           clearTimeout(this.toastTimer);
           this.toastTimer = setTimeout(() => {
             this.toast.visible = false;
             this.cdr.detectChanges();
           }, 3500);
 
-          // 5. Force a single CD pass that sees both modal=gone and toast=visible
           this.cdr.detectChanges();
         });
       },
@@ -302,7 +303,6 @@ export class JdDetailscomponent implements OnInit {
           console.error('Delete Error:', err);
           this.deleting = false;
 
-          // Same order: set toast first, then close modal
           this.toast = {
             visible: true,
             message: err?.error?.message || err?.error || 'Failed to delete job.',
@@ -356,6 +356,7 @@ export class JdDetailscomponent implements OnInit {
     return {
       title: '',
       department: '',
+      budget: '',
       experience: null,
       location: '',
       status: 'active',
@@ -365,6 +366,6 @@ export class JdDetailscomponent implements OnInit {
   }
 
   private blankEditErrors(): EditErrors {
-    return { title: false, experience: false, location: false, skills: false, description: false };
+    return { title: false, experience: false, location: false, skills: false, description: false, budget: false, };
   }
 }

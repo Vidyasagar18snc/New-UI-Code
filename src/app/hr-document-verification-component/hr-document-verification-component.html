@@ -1,7 +1,6 @@
 <div class="dv-root">
   <div class="dv-container">
 
-    <!-- ══════════════ HEADER ══════════════ -->
     <header class="dv-header">
       <div class="dv-header__left">
         <div class="dv-header__icon">
@@ -36,7 +35,6 @@
       </div>
     </header>
 
-    <!-- ══════════════ SKELETON ══════════════ -->
     <div *ngIf="loading" class="dv-grid">
       <div class="dv-skeleton-card" *ngFor="let i of [1,2,3]">
         <div class="dv-skeleton__header">
@@ -53,7 +51,6 @@
       </div>
     </div>
 
-    <!-- ══════════════ EMPTY STATE ══════════════ -->
     <div *ngIf="!loading && candidates.length === 0" class="dv-empty">
       <div class="dv-empty__icon">
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -66,7 +63,6 @@
       <p class="dv-empty__desc">Candidates submitted for document verification will appear here.</p>
     </div>
 
-    <!-- ══════════════ CANDIDATE GRID ══════════════ -->
     <div class="dv-grid" *ngIf="!loading && candidates.length > 0">
 
       <article class="dv-card"
@@ -105,7 +101,7 @@
           </span>
         </div>
 
-        <!-- PROGRESS -->
+        
         <div class="dv-progress">
           <div class="dv-progress__label">
             <span>Document completion</span>
@@ -121,7 +117,7 @@
           </div>
         </div>
 
-        <!-- DOCUMENTS -->
+       
         <div class="dv-docs">
           <div class="dv-docs__label">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -235,7 +231,7 @@
         </div>
 
       </article>
-    </div><!-- /dv-grid -->
+    </div>
 
-  </div><!-- /dv-container -->
-</div><!-- /dv-root -->
+  </div>
+</div>

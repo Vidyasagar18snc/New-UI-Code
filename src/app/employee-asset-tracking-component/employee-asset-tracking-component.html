@@ -92,6 +92,7 @@
                         <th>Employee Name</th>
                         <th>Employee ID</th>
                         <th>Asset Name</th>
+                         <th>Accessories</th>
                         <th>Category</th>
                         <th>Brand</th>
                         <th>Assigned Date</th>
@@ -100,26 +101,67 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of filteredAssets; let i = index">
-                        <td class="row-num">{{ i + 1 }}</td>
-                        <td class="employee-name">{{ item.employeeName }}</td>
-                        <td class="emp-id">{{ item.employeeId }}</td>
-                        <td class="asset-name">{{ item.assetName }}</td>
-                        <td>{{ item.category }}</td>
-                        <td>{{ item.brand }}</td>
-                        <td>{{ item.assignedDate }}</td>
-                        <td>{{ item.returnedDate || '—' }}</td>
-                        <td>
-                            <span class="status-badge" [class.status-assigned]="item.status === 'ASSIGNED'"
-                                [class.status-returned]="item.status === 'RETURNED'">
-                                {{ item.status }}
-                            </span>
-                        </td>
-                    </tr>
-                    <tr *ngIf="filteredAssets.length === 0">
-                        <td colspan="9" class="empty-row">No records found.</td>
-                    </tr>
-                </tbody>
+    <tr *ngFor="let item of filteredAssets; let i = index">
+        <td class="row-num">{{ i + 1 }}</td>
+
+        <td class="employee-name">
+            {{ item.employeeName }}
+        </td>
+
+        <td class="emp-id">
+            {{ item.employeeId }}
+        </td>
+
+        <td class="asset-name">
+            {{ item.assetName }}
+        </td>
+
+        <!-- Accessories Column -->
+        <td>
+            <div
+                class="accessories-container"
+                *ngIf="item.accessories"
+            >
+                <span
+                    class="accessory-chip"
+                    *ngFor="let accessory of item.accessories.split(',')"
+                >
+                    {{ accessory }}
+                </span>
+            </div>
+
+            <span *ngIf="!item.accessories">
+                —
+            </span>
+        </td>
+
+        <td>{{ item.category }}</td>
+
+        <td>{{ item.brand }}</td>
+
+        <td>{{ item.assignedDate }}</td>
+
+        <td>
+            {{ item.returnedDate || '—' }}
+        </td>
+
+        <td>
+            <span
+                class="status-badge"
+                [class.status-assigned]="item.status === 'ASSIGNED'"
+                [class.status-returned]="item.status === 'RETURNED'"
+            >
+                {{ item.status }}
+            </span>
+        </td>
+    </tr>
+
+    <tr *ngIf="filteredAssets.length === 0">
+        <td colspan="10" class="empty-row">
+            No records found.
+        </td>
+    </tr>
+</tbody>
             </table>
         </div>
     </div>

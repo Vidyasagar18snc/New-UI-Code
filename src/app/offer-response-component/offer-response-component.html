@@ -2,9 +2,7 @@
 
 <div class="offer-container">
 
-  <!-- ═══════════════════════════════════════════════════
-       TOAST NOTIFICATION
-  ════════════════════════════════════════════════════ -->
+
   <div
     class="toast"
     [class.toast--visible]="showToast"
@@ -19,9 +17,7 @@
     <span class="toast__message">{{ toastMessage }}</span>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════
-       LOADING STATE
-  ════════════════════════════════════════════════════ -->
+  
   <div *ngIf="loading" class="loading-state" aria-busy="true" aria-label="Loading offer letter">
     <div class="loading-state__ring">
       <div class="loading-state__ring-inner"></div>
@@ -30,9 +26,7 @@
     <p class="loading-state__sub">This will only take a moment.</p>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════
-       ERROR STATE
-  ════════════════════════════════════════════════════ -->
+
   <div *ngIf="!loading && loadError" class="error-state">
     <div class="error-state__icon">⚠</div>
     <h2 class="error-state__title">Link Unavailable</h2>
@@ -42,9 +36,7 @@
     </p>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════
-       OFFER CARD
-  ════════════════════════════════════════════════════ -->
+
   <div *ngIf="offer && !loading && !loadError" class="offer-card">
 
     <!-- Header -->
@@ -132,9 +124,6 @@
   </div><!-- /offer-card -->
 
 
-  <!-- ═══════════════════════════════════════════════════
-       REJECT MODAL
-  ════════════════════════════════════════════════════ -->
   <div
     class="modal-backdrop"
     *ngIf="showRejectPopup"

@@ -1,12 +1,7 @@
-/* ============================================
-   EMPLOYEE DASHBOARD — Production UI
-   Font: Sora (display) + DM Sans (body)
-   Theme: Dark navy + Electric cyan accent
-   ============================================ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
 
-/* ── CSS Variables ───────────────────────── */
 :root {
   --bg:           #f0f4f8;
   --surface:      #ffffff;
@@ -50,7 +45,6 @@
   --font-body:    'DM Sans', sans-serif;
 }
 
-/* ── Base ────────────────────────────────── */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -63,7 +57,6 @@ body {
   color: var(--ink);
 }
 
-/* ── Dashboard Shell ─────────────────────── */
 .employee-dashboard {
   padding: 36px 40px 60px;
   background: var(--bg);
@@ -72,7 +65,6 @@ body {
   margin: 0 auto;
 }
 
-/* ── Header ──────────────────────────────── */
 .dashboard-header {
   display: flex;
   align-items: flex-end;
@@ -167,7 +159,6 @@ body {
   font-weight: 500;
 }
 
-/* ── Stats Grid ──────────────────────────── */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -260,7 +251,6 @@ body {
 .stat-trend.up      { background: var(--green-soft); color: var(--green-text); }
 .stat-trend.neutral { background: var(--surface-2);  color: var(--muted); }
 
-/* ── Toolbar ─────────────────────────────── */
 .toolbar {
   display: flex;
   align-items: center;
@@ -337,7 +327,6 @@ body {
   border-color: var(--accent);
 }
 
-/* ── Table Card ──────────────────────────── */
 .card {
   background: var(--surface);
   border-radius: var(--radius);
@@ -376,7 +365,6 @@ body {
   color: var(--accent);
 }
 
-/* ── Table ───────────────────────────────── */
 .table-wrapper {
   overflow-x: auto;
 }
@@ -527,7 +515,6 @@ tbody td {
   white-space: nowrap;
 }
 
-/* ── Skeleton Loader ─────────────────────── */
 .loading-state {
   padding: 8px 0;
 }
@@ -558,7 +545,6 @@ tbody td {
   100% { background-position: -200% 0; }
 }
 
-/* ── Empty State ─────────────────────────── */
 .empty-state-cell {
   padding: 0 !important;
 }
@@ -590,7 +576,6 @@ tbody td {
   color: var(--muted);
 }
 
-/* ── Responsive ──────────────────────────── */
 @media (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);

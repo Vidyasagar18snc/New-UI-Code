@@ -99,7 +99,6 @@ export class OfferResponseComponent implements OnInit, OnDestroy {
     if (this.toastTimer) clearTimeout(this.toastTimer);
   }
 
-  // ─── Accept ──────────────────────────────────────────────────────────────
 
   respondOffer(action: string): void {
     if (action !== 'accept' || this.isAccepting || this.offerAccepted) return;
@@ -144,8 +143,6 @@ export class OfferResponseComponent implements OnInit, OnDestroy {
         },
       });
   }
-
-  // ─── Reject modal ────────────────────────────────────────────────────────
 
   openRejectPopup(): void {
     this.showRejectPopup = true;
@@ -230,7 +227,6 @@ export class OfferResponseComponent implements OnInit, OnDestroy {
       });
   }
 
-  // ─── Popup / Toast helpers ────────────────────────────────────────────────
 
   closePopup(): void {
     this.showPopup = false;

@@ -1,8 +1,4 @@
-/* slot-selection-component.css
-   Production-grade · Refined Corporate · Accessible
-   ─────────────────────────────────────────────────── */
 
-/* ── Design tokens ──────────────────────────────────────── */
 :host {
   --clr-bg:             #eef1f8;
   --clr-surface:        #ffffff;
@@ -42,10 +38,8 @@
   --ts: 380ms;
 }
 
-/* ── Reset ──────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Page wrap ──────────────────────────────────────────── */
 .page-wrap {
   min-height: 100vh;
   display: flex;
@@ -66,7 +60,6 @@
     #f0f7f2;
 }
 
-/* ── Main card ──────────────────────────────────────────── */
 .card {
   width: 100%;
   max-width: 600px;
@@ -83,7 +76,6 @@
   to   { opacity: 1; transform: none; }
 }
 
-/* ── Brand bar ──────────────────────────────────────────── */
 .card__brand {
   display: inline-flex;
   align-items: center;
@@ -114,7 +106,6 @@
   50%       { opacity: .45; transform: scale(.75); }
 }
 
-/* ── Card header ────────────────────────────────────────── */
 .card__header {
   margin-bottom: 2rem;
   border-bottom: 1px solid var(--clr-border);
@@ -142,7 +133,6 @@
   font-weight: 600;
 }
 
-/* ── Skeleton loading ───────────────────────────────────── */
 .skeleton-list {
   display: flex;
   flex-direction: column;
@@ -163,7 +153,6 @@
   to   { background-position: -200% 0; }
 }
 
-/* ── Status bars ────────────────────────────────────────── */
 .status-bar {
   display: flex;
   align-items: center;
@@ -193,7 +182,6 @@
   flex: 1;
 }
 
-/* ── Spinner ────────────────────────────────────────────── */
 .spinner {
   display: inline-block;
   width: 16px;
@@ -212,7 +200,6 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Retry button ───────────────────────────────────────── */
 .retry-btn {
   margin-left: auto;
   padding: 4px 14px;
@@ -234,7 +221,6 @@
   border-color: var(--clr-danger);
 }
 
-/* ── Slot grid ──────────────────────────────────────────── */
 .slot-grid {
   display: flex;
   flex-direction: column;
@@ -318,7 +304,6 @@
   transform: scale(1.1);
 }
 
-/* ── Empty state ────────────────────────────────────────── */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -333,7 +318,6 @@
 .empty-state p { font-size: 1rem; font-weight: 600; color: var(--clr-text-mid); }
 .empty-state span { font-family: system-ui, sans-serif; font-size: .83rem; }
 
-/* ── Selected slot summary ──────────────────────────────── */
 .slot-summary {
   display: flex;
   align-items: center;
@@ -363,7 +347,6 @@
   color: var(--clr-primary-dark);
 }
 
-/* ── Confirm button ─────────────────────────────────────── */
 .confirm-btn {
   width: 100%;
   display: flex;
@@ -403,9 +386,6 @@
   outline-offset: 3px;
 }
 
-/* ═══════════════════════════════════════════════
-   SUCCESS CARD
-═══════════════════════════════════════════════ */
 
 .success-card {
   width: 100%;
@@ -597,13 +577,11 @@
   outline-offset: 3px;
 }
 
-/* ── Utility ─────────────────────────────────────────────── */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-/* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 480px) {
   .card,
   .success-card {

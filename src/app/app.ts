@@ -32,7 +32,7 @@ const hiddenRoutes=[
 
 ];
 
-this.showSidebar=!hiddenRoutes.includes(event.url);
+this.showSidebar = !hiddenRoutes.some(route => event.url.startsWith(route));
 
 }
 

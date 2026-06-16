@@ -209,42 +209,26 @@ return this.http.get(`${this.baseUrl}/assets`);
 }
 
 assignAsset(
-
   assetId: string,
-
   employeeId: string,
-
   assignedBy: string,
-
-  location: string,
-
+  assetType: string,
   condition: string,
-
-  remarks: string
-
+  remarks: string,
+  accessories: string
 ) {
-
   return this.http.post(
-
     `${this.baseUrl}/assign`,
-
     {},
-
     {
-
       params: {
-
         assetId,
-
         employeeId,
-
         assignedBy,
-
-        location,
-
+        assetType,
         condition,
-
-        remarks
+        remarks,
+        accessories
       }
     }
   );
@@ -312,14 +296,13 @@ getAllDeboarding() {
   );
 }
 
-// ==============================
-// KNOWLEDGE TRANSFER APIs
-// ==============================
 
-initiateKT(data: any) {
+
+initiateKT(formData: FormData) {
+
   return this.http.post(
     `${this.baseUrl}/ktinitiate`,
-    data
+    formData
   );
 }
 
@@ -342,5 +325,73 @@ completeKT(employeeId: string) {
   }
   getAllPanels() {
   return this.http.get(`${this.baseUrl}/panels`);
+}
+// Forgot Password - Send OTP
+forgotPassword(email: string) {
+  return this.http.post(
+    `${this.baseUrl}/forgot-password?email=${email}`,
+    {},
+    { responseType: 'text' }
+  );
+}
+
+// Verify OTP and Reset Password
+ verifyOtpAndResetPassword(
+  email: string,
+  otp: string,
+  newPassword: string
+) {
+  return this.http.post(
+    `${this.baseUrl}/forgot-password/reset?email=${email}&otp=${otp}&newPassword=${newPassword}`,
+    {},
+    { responseType: 'text' }
+  );
+}
+deleteCandidate(id: string) {
+  return this.http.delete(
+    `${this.baseUrl}/resume/${id}`,
+    { responseType: 'text' }
+  );
+}
+// updateCandidate(id: string, payload: any) {
+//   return this.http.put<any>(
+//     `${this.baseUrl}/update-dashboard/${id}`,
+//     payload
+//   );
+// }
+updateCandidate(id: string, candidate: any): Observable<any> {
+  return this.http.put(`${this.baseUrl}/candidates/${id}`, {
+    name:   candidate.name,
+    role:   candidate.role,
+    score:  candidate.score,
+    status: candidate.status
+  });
+}
+getDocumentUrl(s3Key: string) {
+  return this.http.get(
+    `${this.baseUrl}/onboarding/document/view?s3Key=${encodeURIComponent(s3Key)}`,
+    { responseType: 'text' }
+  );
+}
+getAllOnboardingCandidates() {
+  return this.http.get(
+    `${this.baseUrl}/onboarding/all`
+  );
+}
+
+sendBackgroundVerification(
+  id: string,
+  hrEmail: string
+) {
+  return this.http.post(
+    `${this.baseUrl}/onboarding/background-verification`,
+    {},
+    {
+      params: {
+        id,
+        hrEmail
+      }
+    }
+  );
 }
 }

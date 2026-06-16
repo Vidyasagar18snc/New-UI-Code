@@ -1,8 +1,4 @@
-<!-- slot-selection-component.html -->
 
-<!-- ═══════════════════════════════════════════════
-     SLOT SELECTION PAGE
-════════════════════════════════════════════════ -->
 <div class="page-wrap" *ngIf="!isInterviewScheduled">
 
   <div class="card" role="main">
@@ -24,7 +20,6 @@
       </p>
     </header>
 
-    <!-- ── Loading skeletons ──────────────────────────────── -->
     <div
       *ngIf="loadingSlots && availableSlots.length === 0"
       class="skeleton-list"
@@ -34,7 +29,6 @@
       <div class="skeleton-item" *ngFor="let n of [1,2,3,4]"></div>
     </div>
 
-    <!-- ── Confirming spinner (reusing loading after slots fetched) ── -->
     <div
       *ngIf="submitting"
       class="status-bar status-bar--loading"
@@ -45,7 +39,6 @@
       <span>Confirming your slot&hellip;</span>
     </div>
 
-    <!-- ── Error banner ───────────────────────────────────── -->
     <div
       *ngIf="errorMessage"
       class="status-bar status-bar--error"
@@ -67,7 +60,6 @@
       </button>
     </div>
 
-    <!-- ── Slot grid ──────────────────────────────────────── -->
     <div
       class="slot-grid"
       *ngIf="availableSlots.length > 0 && !loadingSlots"
@@ -105,7 +97,6 @@
       </button>
     </div>
 
-    <!-- ── Empty state ────────────────────────────────────── -->
     <div
       class="empty-state"
       *ngIf="!loadingSlots && availableSlots.length === 0 && !errorMessage"
@@ -120,13 +111,11 @@
       <span>Please check back later or contact HR.</span>
     </div>
 
-    <!-- ── Selected slot summary ──────────────────────────── -->
     <div class="slot-summary" *ngIf="selectedSlot && !submitting" aria-live="polite">
       <span class="slot-summary__label">Selected</span>
       <span class="slot-summary__value">{{ selectedSlot }}</span>
     </div>
 
-    <!-- ── Confirm button ─────────────────────────────────── -->
     <button
       class="confirm-btn"
       [class.confirm-btn--ready]="selectedSlot && !loadingSlots && !submitting"
@@ -150,10 +139,6 @@
   </div><!-- /card -->
 </div><!-- /page-wrap (slot selection) -->
 
-
-<!-- ═══════════════════════════════════════════════
-     SUCCESS PAGE
-════════════════════════════════════════════════ -->
 <div class="page-wrap page-wrap--success" *ngIf="isInterviewScheduled" role="main">
 
   <div class="success-card">

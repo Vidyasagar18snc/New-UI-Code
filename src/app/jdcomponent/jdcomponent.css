@@ -1,13 +1,8 @@
-/* ─────────────────────────────────────────
-   Base reset & font
-───────────────────────────────────────── */
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* ─────────────────────────────────────────
-   Container
-───────────────────────────────────────── */
 .job-container {
   max-width: 700px;
   margin: 2rem auto;
@@ -18,9 +13,7 @@
   font-family: 'Inter', system-ui, Arial, sans-serif;
 }
 
-/* ─────────────────────────────────────────
-   Header
-───────────────────────────────────────── */
+
 .jc-header {
   display: flex;
   align-items: center;
@@ -55,9 +48,6 @@
   letter-spacing: -0.01em;
 }
 
-/* ─────────────────────────────────────────
-   Body
-───────────────────────────────────────── */
 .jc-body {
   padding: 1.5rem 1.75rem;
   display: flex;
@@ -65,27 +55,20 @@
   gap: 1.25rem;
 }
 
-/* ─────────────────────────────────────────
-   Divider
-───────────────────────────────────────── */
+
 .divider {
   border: none;
   border-top: 0.5px solid rgba(0, 0, 0, 0.08);
   margin: 0;
 }
 
-/* ─────────────────────────────────────────
-   Two-column row
-───────────────────────────────────────── */
+
 .row-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
 
-/* ─────────────────────────────────────────
-   Form group & label
-───────────────────────────────────────── */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -101,9 +84,7 @@ label {
   display: block;
 }
 
-/* ─────────────────────────────────────────
-   Input with icon
-───────────────────────────────────────── */
+
 .input-wrap {
   position: relative;
 }
@@ -124,9 +105,7 @@ label {
   padding-left: 32px;
 }
 
-/* ─────────────────────────────────────────
-   Inputs & Textarea
-───────────────────────────────────────── */
+
 input[type="text"],
 input[type="number"],
 textarea {
@@ -169,9 +148,7 @@ textarea {
   margin-top: 2px;
 }
 
-/* ─────────────────────────────────────────
-   Upload card
-───────────────────────────────────────── */
+
 .upload-card {
   display: flex;
   flex-direction: column;
@@ -230,9 +207,6 @@ textarea {
   margin: 3px 0 0;
 }
 
-/* ─────────────────────────────────────────
-   Upload actions (after file selected)
-───────────────────────────────────────── */
 .upload-actions {
   display: flex;
   align-items: center;
@@ -287,9 +261,6 @@ textarea {
   color: #888888;
 }
 
-/* ─────────────────────────────────────────
-   Loading pill
-───────────────────────────────────────── */
 .loading-pill {
   display: inline-flex;
   align-items: center;
@@ -318,9 +289,7 @@ textarea {
   to { transform: rotate(360deg); }
 }
 
-/* ─────────────────────────────────────────
-   Skills
-───────────────────────────────────────── */
+
 .skill-input-row {
   display: flex;
   gap: 8px;
@@ -389,9 +358,7 @@ textarea {
   color: #A32D2D;
 }
 
-/* ─────────────────────────────────────────
-   Action buttons footer
-───────────────────────────────────────── */
+
 .action-buttons {
   display: flex;
   justify-content: flex-end;
@@ -450,9 +417,6 @@ textarea {
   transform: scale(0.98);
 }
 
-/* ─────────────────────────────────────────
-   Responsive — tablet & mobile
-───────────────────────────────────────── */
 @media (max-width: 600px) {
   .job-container {
     margin: 1rem;
@@ -502,4 +466,10 @@ textarea {
   .upload-card {
     padding: 1.125rem 1rem;
   }
+}
+.row-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 16px;
+  align-items: end;
 }

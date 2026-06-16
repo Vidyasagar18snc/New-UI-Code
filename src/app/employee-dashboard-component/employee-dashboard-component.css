@@ -1,11 +1,7 @@
-/* ============================================================
-   employee-dashboard.component.css
-   Production-grade. Sidebar-aware. No overflow. No reload.
-   ============================================================ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 
-/* ── CSS Variables ────────────────────────────────────────── */
 :host {
   --sidebar-w:     260px;
   --content-pad:   36px;
@@ -36,18 +32,7 @@
   color: var(--text-primary);
 }
 
-/* ── ROOT CONTAINER ────────────────────────────────────────────
-   KEY FIX: The dashboard renders INSIDE the sidebar shell.
-   The shell is: display:flex; height:100vh; overflow:hidden
-   The sidebar takes 260px. This component fills the remaining
-   space via flex:1 on its wrapper (.main-content in the shell).
-
-   .db-root handles its OWN scroll — the document never scrolls.
-   This is why you had width overflow issues: the container was
-   ignoring the sidebar width. Use min-width:0 on flex children.
-──────────────────────────────────────────────────────────────── */
 .db-root {
-  /* Fill whatever space the shell's flex gives us */
   width: 100%;
   min-width: 0;        /* critical: prevents flex blowout */
   min-height: 100vh;
@@ -58,7 +43,6 @@
   overflow-y: auto;
 }
 
-/* ── TOAST ─────────────────────────────────────────────────── */
 .toast {
   position: fixed;
   top: 24px;
@@ -105,7 +89,6 @@
 .toast--success .toast-icon { background: var(--green-light); color: var(--green); }
 .toast--error   .toast-icon { background: var(--red-light);   color: var(--red); }
 
-/* ── HEADER ────────────────────────────────────────────────── */
 .db-header {
   display: flex;
   align-items: flex-start;
@@ -224,7 +207,6 @@
   color: var(--text-faint);
 }
 
-/* ── STAT CARDS ────────────────────────────────────────────── */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -321,7 +303,6 @@
 .stat-card--purple .stat-card__label { color: var(--purple); }
 .stat-card--purple::after { background: var(--purple); }
 
-/* ── SKELETON SHIMMER ──────────────────────────────────────── */
 @keyframes shimmer {
   0%   { background-position: -400px 0; }
   100% { background-position:  400px 0; }
@@ -338,14 +319,12 @@
 .stat-skeleton { height: 96px; }
 .card-skeleton  { height: 280px; }
 
-/* ── CARDS GRID ─────────────────────────────────────────────── */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 22px;
 }
 
-/* ── CARD BASE ─────────────────────────────────────────────── */
 .card {
   background: var(--surface);
   border-radius: var(--card-radius);
@@ -383,10 +362,8 @@
   color: var(--text-faint);
 }
 
-/* ── ATTENDANCE CARD ───────────────────────────────────────── */
 .attendance-card {
-  /* Span both columns on wide screens for prominence */
-  /* Remove this if you want the default 2-col layout */
+  
 }
 
 .status-badge {
@@ -542,7 +519,6 @@
   box-shadow: 0 4px 16px rgba(0,0,0,0.20);
 }
 
-/* Confirmed state — visually distinct from disabled */
 .att-btn--done.att-btn--in {
   background: var(--green-light);
   color: var(--green);
@@ -562,7 +538,6 @@
   box-shadow: none !important;
 }
 
-/* Override: confirmed/done buttons stay visible even when disabled */
 .att-btn--done:disabled {
   opacity: 1 !important;
 }
@@ -581,7 +556,6 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── ASSETS ────────────────────────────────────────────────── */
 .asset-list {
   display: flex;
   flex-direction: column;
@@ -652,7 +626,6 @@
   color: #92400e;
 }
 
-/* ── ANNOUNCEMENTS ─────────────────────────────────────────── */
 .announcement-list {
   display: flex;
   flex-direction: column;
@@ -692,7 +665,6 @@
   line-height: 1.5;
 }
 
-/* ── ACTIVITY ──────────────────────────────────────────────── */
 .activity-list {
   display: flex;
   flex-direction: column;
@@ -735,7 +707,6 @@
   color: var(--text-faint);
 }
 
-/* ── EMPTY STATE ───────────────────────────────────────────── */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -751,23 +722,17 @@
   font-size: 14px;
 }
 
-/* ════════════════════════════════════════════════════════════
-   RESPONSIVE
-   ════════════════════════════════════════════════════════════ */
 
-/* Large desktop — 4 stat columns is fine */
 @media (max-width: 1400px) {
   :host { --content-pad: 28px; }
 }
 
-/* Medium — laptop (1024px–1280px): sidebar + content still works */
 @media (max-width: 1280px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Tablet breakpoint */
 @media (max-width: 960px) {
   :host { --content-pad: 22px; }
 
@@ -783,7 +748,7 @@
   }
 }
 
-/* Mobile */
+
 @media (max-width: 640px) {
   :host { --content-pad: 16px; }
 

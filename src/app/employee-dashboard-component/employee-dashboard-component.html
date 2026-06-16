@@ -1,8 +1,7 @@
-<!-- employee-dashboard.component.html -->
+
 
 <div class="db-root">
 
-  <!-- ── TOAST NOTIFICATION (replaces alert()) ───────────────────────────── -->
   <div class="toast"
        [class.toast--success]="toast?.type === 'success'"
        [class.toast--error]="toast?.type === 'error'"
@@ -15,7 +14,6 @@
     {{ toast?.message }}
   </div>
 
-  <!-- ── HEADER ────────────────────────────────────────────────────────────── -->
   <header class="db-header">
     <div class="db-header__left">
       <div class="db-header__eyebrow">EMPLOYEE PORTAL</div>
@@ -44,7 +42,6 @@
     </div>
   </header>
 
-  <!-- ── SKELETON (initial load) ───────────────────────────────────────────── -->
   <ng-container *ngIf="initialLoading; else loaded">
     <div class="stats-grid">
       <div class="stat-skeleton" *ngFor="let i of [1,2,3,4]"></div>
@@ -54,10 +51,8 @@
     </div>
   </ng-container>
 
-  <!-- ── MAIN CONTENT ───────────────────────────────────────────────────────── -->
   <ng-template #loaded>
 
-    <!-- ── STAT CARDS ─────────────────────────────────────────────────────── -->
     <div class="stats-grid">
 
       <div class="stat-card stat-card--blue">
@@ -124,16 +119,14 @@
 
     </div>
 
-    <!-- ── MAIN CARDS GRID ────────────────────────────────────────────────── -->
     <div class="cards-grid">
 
-      <!-- ATTENDANCE ───────────────────────────────────────────────────────── -->
       <div class="card attendance-card">
         <div class="card__header">
           <div>
             <h2 class="card__title">Today's Attendance</h2>
 <p class="card__sub">{{ todayAttendance?.checkInTime | date:'EEEE, MMMM d' }}</p>          </div>
-          <!-- STATUS BADGE — driven by computed attendanceStatus getter -->
+  
           <span class="status-badge"
             [class.status-badge--none]="attendanceStatus === 'NOT_CHECKED_IN'"
             [class.status-badge--in]="attendanceStatus === 'CHECKED_IN'"
@@ -145,7 +138,6 @@
           </span>
         </div>
 
-        <!-- TIME ROWS ─────────────────────────────────────────────────────── -->
         <div class="time-rows" *ngIf="todayAttendance">
           <div class="time-row" *ngIf="todayAttendance.checkInTime">
             <div class="time-row__left">
@@ -175,7 +167,6 @@
           </div>
         </div>
 
-        <!-- EMPTY STATE WHEN NOT CHECKED IN ──────────────────────────────── -->
         <div class="no-checkin" *ngIf="!todayAttendance">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
@@ -185,12 +176,7 @@
           <p>No check-in recorded today</p>
         </div>
 
-        <!-- BUTTONS ─────────────────────────────────────────────────────────
-          Three-state logic using computed getter:
-          NOT_CHECKED_IN → checkIn enabled,  checkOut disabled
-          CHECKED_IN     → checkIn disabled, checkOut enabled
-          CHECKED_OUT    → both disabled
-        ───────────────────────────────────────────────────────────────────── -->
+        
         <div class="attendance-btns">
 
           <!-- CHECK IN BUTTON -->
@@ -234,7 +220,6 @@
         </div>
       </div>
 
-      <!-- MY ASSETS ────────────────────────────────────────────────────────── -->
       <div class="card">
         <div class="card__header">
           <div>
@@ -276,7 +261,6 @@
         </div>
       </div>
 
-      <!-- ANNOUNCEMENTS ────────────────────────────────────────────────────── -->
       <div class="card">
         <div class="card__header">
           <div>
@@ -303,7 +287,6 @@
         </div>
       </div>
 
-      <!-- RECENT ACTIVITY ───────────────────────────────────────────────────── -->
       <div class="card">
         <div class="card__header">
           <div>
@@ -358,6 +341,3 @@
   </ng-template>
 
 </div>
-
-<!-- today getter used in template -->
-<!-- Add this to the component class: get today() { return new Date(); } -->

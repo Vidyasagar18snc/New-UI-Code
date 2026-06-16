@@ -14,8 +14,8 @@
 
 /* Push content right */
 .main-content {
-  margin-left: 240px;             /* ✅ SAME as sidebar width */
-  width: calc(100% - 240px);      /* ✅ prevent overflow */
+  margin-left: 240px;             
+  width: calc(100% - 240px);      
   min-height: 100vh;
   background: #f8fafc;
 }

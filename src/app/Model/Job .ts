@@ -11,4 +11,6 @@ export interface Job {
   aiSkillScore?: number;
   aiExpScore?: number;
   isExpanded?: boolean;
+  budget:string;
+
 }

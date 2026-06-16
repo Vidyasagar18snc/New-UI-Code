@@ -34,6 +34,29 @@ export class EmployeeLoginComponent {
   resetServerError = '';
   resetErrors: { newPassword?: string; confirmPassword?: string } = {};
 
+  showForgotPassword   = false;
+  otpSent              = false;
+
+  forgotEmail          = '';
+  forgotOtp            = '';
+  forgotNewPassword    = '';
+  forgotConfirmPassword = '';
+
+  forgotLoading        = false;
+  forgotSuccess        = false;
+  forgotOtpLoading     = false;
+
+  showForgotNewPwd     = false;
+  showForgotConfirmPwd = false;
+
+  forgotServerError    = '';
+  forgotErrors: {
+    email?:           string;
+    otp?:             string;
+    newPassword?:     string;
+    confirmPassword?: string;
+  } = {};
+
   constructor(
     private apiService: ApiService,
     private router:     Router,
@@ -86,17 +109,48 @@ export class EmployeeLoginComponent {
     return map[score];
   }
 
+  get forgotPasswordStrength(): { percent: number; level: string; label: string } {
+    const p = this.forgotNewPassword;
+    let score = 0;
+    if (p.length >= 8)           score++;
+    if (/[A-Z]/.test(p))         score++;
+    if (/[0-9]/.test(p))         score++;
+    if (/[^A-Za-z0-9]/.test(p)) score++;
+    const map: Record<number, { percent: number; level: string; label: string }> = {
+      0: { percent: 15,  level: 'weak',   label: 'Weak'   },
+      1: { percent: 30,  level: 'weak',   label: 'Weak'   },
+      2: { percent: 55,  level: 'fair',   label: 'Fair'   },
+      3: { percent: 78,  level: 'good',   label: 'Good'   },
+      4: { percent: 100, level: 'strong', label: 'Strong' },
+    };
+    return map[score];
+  }
+
   private validateLogin(): boolean {
     this.errors = {};
     let valid = true;
-    if (!this.email.trim()) {
-      this.errors.email = 'Email is required.'; valid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
-      this.errors.email = 'Enter a valid email address.'; valid = false;
+
+    const rawEmail = this.email?.trim() ?? '';
+
+    if (!rawEmail) {
+      this.errors.email = 'Email is required.';
+      valid = false;
+    } else if (rawEmail.startsWith('@')) {
+      this.errors.email = "Email address cannot start with '@'.";
+      valid = false;
+    } else if (/^[^a-zA-Z0-9]/.test(rawEmail)) {
+      this.errors.email = 'Email address cannot start with special characters.';
+      valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawEmail)) {
+      this.errors.email = 'Enter a valid email address.';
+      valid = false;
     }
+
     if (!this.password) {
-      this.errors.password = 'Password is required.'; valid = false;
+      this.errors.password = 'Password is required.';
+      valid = false;
     }
+
     return valid;
   }
 
@@ -116,96 +170,130 @@ export class EmployeeLoginComponent {
     return valid;
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // KEY FIX: hardcoded paths must NOT set loading=true at all,
-  // and must NOT be placed after loading=true is set.
-  // The structure is:  validate → hardcoded check → set loading → HTTP call
-  // ─────────────────────────────────────────────────────────────
+  validateForgotEmail(): boolean {
+    this.forgotErrors = {};
+    const raw = this.forgotEmail?.trim() ?? '';
+
+    if (!raw) {
+      this.forgotErrors.email = 'Email is required.';
+      return false;
+    }
+    if (raw.startsWith('@')) {
+      this.forgotErrors.email = "Email address cannot start with '@'.";
+      return false;
+    }
+    if (/^[^a-zA-Z0-9]/.test(raw)) {
+      this.forgotErrors.email = 'Email address cannot start with special characters.';
+      return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)) {
+      this.forgotErrors.email = 'Enter a valid email address.';
+      return false;
+    }
+    return true;
+  }
+
+  validateForgotReset(): boolean {
+    this.forgotErrors = {};
+    let valid = true;
+
+    if (!this.forgotOtp?.trim()) {
+      this.forgotErrors.otp = 'OTP is required.';
+      valid = false;
+    }
+    if (!this.forgotNewPassword) {
+      this.forgotErrors.newPassword = 'New password is required.';
+      valid = false;
+    } else if (this.forgotNewPassword.length < 8) {
+      this.forgotErrors.newPassword = 'Password must be at least 8 characters.';
+      valid = false;
+    }
+    if (!this.forgotConfirmPassword) {
+      this.forgotErrors.confirmPassword = 'Please confirm your password.';
+      valid = false;
+    } else if (this.forgotNewPassword !== this.forgotConfirmPassword) {
+      this.forgotErrors.confirmPassword = 'Passwords do not match.';
+      valid = false;
+    }
+    return valid;
+  }
+
   login(): void {
     this.serverError = '';
     this.errors      = {};
 
-    // Step 1 — client-side validation (loading is still false here)
-    if (!this.validateLogin()) {
-      return;
-    }
+    if (!this.validateLogin()) return;
 
     const emailLower = this.email.trim().toLowerCase();
     const pwd        = this.password.trim();
 
-    // Step 2 — hardcoded Admin (no HTTP call, no loading spinner needed)
-    if (emailLower === 'admin@airecruiter.com' && pwd === 'Admin@123') {
+    // Admin Login
+    if (emailLower === 'vidyasagar914863@gmail.com' && pwd === 'Admin@123') {
       localStorage.setItem('employeeId',   'ADMIN001');
       localStorage.setItem('employeeName', 'Administrator');
       localStorage.setItem('department',   'Admin');
       this.router.navigate(['/dashboard']);
-      return;                          // ← exits before loading is ever touched
+      return;
     }
 
-    // Step 3 — hardcoded HR (same pattern)
+    // HR Login
     if (emailLower === 'hr@airecruiter.com' && pwd === 'Hr@123') {
       localStorage.setItem('employeeId',   'HR001');
       localStorage.setItem('employeeName', 'HR User');
       localStorage.setItem('department',   'HR');
       this.router.navigate(['/dashboard']);
-      return;                          // ← exits before loading is ever touched
+      return;
     }
 
-    // Step 4 — real API call: only NOW do we show the spinner
     this.loading = true;
-    this.cdr.detectChanges();          // force spinner to render immediately
+    this.cdr.detectChanges();
 
-    this.apiService.employeeLogin({ email: this.email, password: this.password })
-      .subscribe({
-        next: (response: any) => {
-          this.ngZone.run(() => {
-            this.loading = false;
-            console.log('Login response:', response);
+    this.apiService.employeeLogin({
+      email:    this.email,
+      password: this.password
+    }).subscribe({
+      next: (response: any) => {
+        this.ngZone.run(() => {
+          this.loading = false;
 
-            // First-login → show reset panel
-            if (response?.firstLogin === true) {
-              this.resetEmail = response.email || this.email;
-              localStorage.setItem('resetEmail', this.resetEmail);
-              this.showReset = true;
-              this.cdr.detectChanges();
-              return;
-            }
-
-            // Normal login
-            localStorage.setItem('employeeId',   response.employeeId);
-            localStorage.setItem('employeeName', response.employeeName);
-            localStorage.setItem('department',   response.department);
-
-            if (response.department === 'HR') {
-              this.router.navigate(['/dashboard']);
-            } else {
-              this.router.navigate(['/Employee-dashboard']);
-            }
-          });
-        },
-
-        error: (err: any) => {
-          this.ngZone.run(() => {
-            this.loading = false;
-
-            // Defensive: backend might return 401/403 with firstLogin body
-            if (err?.error?.firstLogin === true) {
-              this.resetEmail = err.error.email || this.email;
-              localStorage.setItem('resetEmail', this.resetEmail);
-              this.showReset = true;
-              this.cdr.detectChanges();
-              return;
-            }
-
-            this.serverError = err?.error?.message || 'Invalid email or password';
+          if (response?.firstLogin === true) {
+            this.resetEmail = response.email || this.email;
+            localStorage.setItem('resetEmail', this.resetEmail);
+            this.showReset = true;
             this.cdr.detectChanges();
-            console.error('Login error:', err);
-          });
-        }
-      });
+            return;
+          }
+
+          localStorage.setItem('employeeId',   response.employeeId);
+          localStorage.setItem('employeeName', response.employeeName);
+          localStorage.setItem('department',   response.department);
+
+          if (response.department === 'HR') {
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.router.navigate(['/Employee-dashboard']);
+          }
+        });
+      },
+      error: (err: any) => {
+        this.ngZone.run(() => {
+          this.loading = false;
+
+          if (err?.error?.firstLogin === true) {
+            this.resetEmail = err.error.email || this.email;
+            localStorage.setItem('resetEmail', this.resetEmail);
+            this.showReset = true;
+            this.cdr.detectChanges();
+            return;
+          }
+
+          this.serverError = err?.error?.message || 'Invalid email or password';
+          this.cdr.detectChanges();
+        });
+      }
+    });
   }
 
-  // ── RESET PASSWORD ───────────────────────────────────────────
   resetPassword(): void {
     this.resetServerError = '';
     if (!this.validateReset()) return;
@@ -214,7 +302,7 @@ export class EmployeeLoginComponent {
     this.cdr.detectChanges();
 
     this.apiService.resetPassword({
-      email: this.resetEmail,
+      email:       this.resetEmail,
       newPassword: this.newPassword
     }).subscribe({
       next: () => {
@@ -242,6 +330,103 @@ export class EmployeeLoginComponent {
         this.ngZone.run(() => {
           this.resetLoading     = false;
           this.resetServerError = err.error?.message || 'Reset failed. Please try again.';
+          this.cdr.detectChanges();
+        });
+      }
+    });
+  }
+
+  openForgotPassword(): void {
+    this.showForgotPassword    = true;
+    this.otpSent               = false;
+    this.forgotEmail           = '';
+    this.forgotOtp             = '';
+    this.forgotNewPassword     = '';
+    this.forgotConfirmPassword = '';
+    this.forgotErrors          = {};
+    this.forgotServerError     = '';
+    this.forgotSuccess         = false;
+    this.forgotLoading         = false;
+    this.forgotOtpLoading      = false;
+    this.showForgotNewPwd      = false;
+    this.showForgotConfirmPwd  = false;
+    this.cdr.detectChanges();
+  }
+
+  backToLogin(): void {
+    this.showForgotPassword    = false;
+    this.otpSent               = false;
+    this.forgotEmail           = '';
+    this.forgotOtp             = '';
+    this.forgotNewPassword     = '';
+    this.forgotConfirmPassword = '';
+    this.forgotErrors          = {};
+    this.forgotServerError     = '';
+    this.forgotSuccess         = false;
+    this.forgotLoading         = false;
+    this.forgotOtpLoading      = false;
+    this.cdr.detectChanges();
+  }
+
+  clearForgotError(field: keyof typeof this.forgotErrors): void {
+    this.forgotErrors[field]  = '';
+    this.forgotServerError    = '';
+  }
+
+  sendOtp(): void {
+    this.forgotServerError = '';
+    if (!this.validateForgotEmail()) return;
+
+    this.forgotOtpLoading = true;
+    this.cdr.detectChanges();
+
+    this.apiService.forgotPassword(this.forgotEmail.trim()).subscribe({
+      next: () => {
+        this.ngZone.run(() => {
+          this.forgotOtpLoading = false;
+          this.otpSent          = true;
+          this.cdr.detectChanges();
+        });
+      },
+      error: (err: any) => {
+        this.ngZone.run(() => {
+          this.forgotOtpLoading  = false;
+          this.forgotServerError = err?.error?.message || 'Failed to send OTP. Please try again.';
+          this.cdr.detectChanges();
+        });
+      }
+    });
+  }
+
+  forgotPasswordReset(): void {
+    this.forgotServerError = '';
+    if (!this.validateForgotReset()) return;
+
+    this.forgotLoading = true;
+    this.cdr.detectChanges();
+
+    this.apiService.verifyOtpAndResetPassword(
+      this.forgotEmail.trim(),
+      this.forgotOtp.trim(),
+      this.forgotNewPassword
+    ).subscribe({
+      next: () => {
+        this.ngZone.run(() => {
+          this.forgotLoading  = false;
+          this.forgotSuccess  = true;
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+            this.ngZone.run(() => {
+              this.backToLogin();
+            });
+          }, 2000);
+        });
+      },
+      error: (err: any) => {
+        this.ngZone.run(() => {
+          this.forgotLoading     = false;
+          this.forgotServerError = err?.error?.message || 'Password reset failed. Please try again.';
           this.cdr.detectChanges();
         });
       }
