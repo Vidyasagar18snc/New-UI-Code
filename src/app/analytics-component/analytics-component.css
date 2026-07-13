@@ -1,65 +1,234 @@
+/* =============================================
+   RECRUITMENT ANALYTICS — Light Lavender Theme
+   Matches Feedback Dashboard & Application Style
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:host {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  background: #f8f7fc;
+  min-height: 100vh;
+  color: #1a1530;
+}
+
 .analytics-page {
   padding: 28px 32px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
-.page-header {
+/* ─────────────────────────────
+   HEADER
+   ───────────────────────────── */
+.fdb-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-.page-header h1 { font-size: 22px; font-weight: 600; color: #f1f5f9; }
-.subtitle       { font-size: 13px; color: #64748b; margin-top: 4px; }
-.live-badge     { font-size: 11px; padding: 4px 12px; background: rgba(29,158,117,0.15);
-                  color: #34d399; border-radius: 20px; border: 1px solid rgba(29,158,117,0.3); }
 
-/* Metric cards */
-.metrics-grid {
+.fdb-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f0a23;
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+}
+
+.fdb-subtitle {
+  font-size: 13px;
+  color: #6b6b8d;
+  margin: 0;
+}
+
+.fdb-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-badge {
+  font-size: 11px;
+  padding: 5px 12px;
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border-radius: 20px;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  font-weight: 600;
+}
+
+/* ─────────────────────────────
+   METRIC CARDS
+   ───────────────────────────── */
+.fdb-metrics {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
   margin-bottom: 20px;
 }
-.metric-card   { background: #1e293b; border-radius: 12px; padding: 16px 18px; }
-.metric-label  { font-size: 12px; color: #64748b; margin-bottom: 8px; }
-.metric-value  { font-size: 24px; font-weight: 600; color: #f1f5f9; }
-.metric-delta  { font-size: 11px; margin-top: 6px; }
-.up            { color: #34d399; }
-.down          { color: #f87171; }
 
-/* Cards */
-.card { background: #1e293b; border-radius: 12px; padding: 18px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.06); }
-.card-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; margin-bottom: 14px; }
-
-/* Grids */
-.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin-bottom: 16px; }
-.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; margin-bottom: 16px; }
-
-/* Chart wrappers */
-.chart-wrap          { position: relative; width: 100%; }
-.h160                { height: 160px; }
-.h190                { height: 190px; }
-.h220                { height: 220px; }
-.h240                { height: 240px; }
-
-/* Legend */
-.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; font-size: 12px; color: #94a3b8; }
-.legend span { display: flex; align-items: center; gap: 5px; }
-.dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-.mt10 { margin-top: 10px; margin-bottom: 0; }
-
-/* Responsive */
-@media (max-width: 900px) {
-  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+.fdb-metric-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #ede9fe;
+  box-shadow: 0 2px 8px rgba(109, 40, 217, 0.05);
+  transition: box-shadow 0.2s, transform 0.2s;
 }
-.recruiter {
-  font-size: 28px;
-  font-weight: 700;
-  background: linear-gradient(90deg, #6366f1, #22c55e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+
+.fdb-metric-card:hover {
+  box-shadow: 0 6px 20px rgba(109, 40, 217, 0.1);
+  transform: translateY(-2px);
+}
+
+.fmc-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.fmc-icon-wrap svg {
+  width: 18px;
+  height: 18px;
+}
+
+.fmc-purple  { background: #ede9fe; color: #7c3aed; }
+.fmc-green   { background: #dcfce7; color: #16a34a; }
+.fmc-orange  { background: #fef3c7; color: #d97706; }
+.fmc-trophy  { background: #f3e8ff; color: #9333ea; }
+
+.fmc-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.fmc-label {
+  font-size: 10px;
+  font-weight: 600;
   letter-spacing: 0.5px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.fmc-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.1;
+  margin-bottom: 3px;
+}
+
+.metric-delta {
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+.metric-delta.up { color: #16a34a; }
+.metric-delta.down { color: #dc2626; }
+
+/* ─────────────────────────────
+   GRID LAYOUTS & CARDS (PANELS)
+   ───────────────────────────── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.fdb-panel {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #ede9fe;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(109, 40, 217, 0.04);
+  margin-bottom: 20px;
+}
+
+.fdb-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.fdb-panel-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: #374151;
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────
+   CHART WRAPPERS & LEGEND
+   ───────────────────────────── */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+}
+.h160 { height: 160px; }
+.h190 { height: 190px; }
+.h220 { height: 220px; }
+.h240 { height: 240px; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: #6b7280;
+}
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.mt10 {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+/* ─────────────────────────────
+   RESPONSIVE DESIGN
+   ───────────────────────────── */
+@media (max-width: 1200px) {
+  .fdb-metrics { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .fdb-metrics { grid-template-columns: repeat(2, 1fr); }
+  .analytics-page { padding: 20px 16px; }
+}
+
+@media (max-width: 600px) {
+  .fdb-metrics { grid-template-columns: 1fr; }
 }

@@ -15,7 +15,9 @@ import {
   style,
   animate,
 } from '@angular/animations';
+import { Subscription } from 'rxjs';
 import { ApiService } from '../Service/ApiService ';
+import { ProctoringService, ViolationState } from '../Service/ProctoringService';
 
 export interface Question {
   id: string;
@@ -68,8 +70,8 @@ export class TestComponent implements OnInit, OnDestroy {
   currentIndex = 0;
   examStarted = false;
 
-  timeSeconds = 30 * 60;
-  totalMinutes = 30;
+  timeSeconds = 5 * 60;
+  totalMinutes = 5;
 
   private timerRef!: ReturnType<typeof setInterval>;
   private startedAt!: number;
@@ -85,11 +87,20 @@ export class TestComponent implements OnInit, OnDestroy {
   scoreRingColor = '#1D9E75';
   scoreRingDash = '0 264';
 
+  // --- Proctoring / violation state ---
+  warningCount = 0;
+  violationMessage = '';
+  showViolationBanner = false;
+  isBlocked = false;
+  private violationSub?: Subscription;
+  private bannerHideTimer?: ReturnType<typeof setTimeout>;
+
   private readonly CIRCUMFERENCE = 2 * Math.PI * 42;
 
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
+    private proctoringService: ProctoringService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -104,10 +115,17 @@ export class TestComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
       }
     });
+
+    this.violationSub = this.proctoringService.violationState$.subscribe(
+      (state: ViolationState) => this.onViolationState(state),
+    );
   }
 
   ngOnDestroy(): void {
     this.clearTimer();
+    this.proctoringService.stop();
+    this.violationSub?.unsubscribe();
+    if (this.bannerHideTimer) clearTimeout(this.bannerHideTimer);
   }
 
   private validateToken(): void {
@@ -155,12 +173,14 @@ export class TestComponent implements OnInit, OnDestroy {
   beginExam(): void {
     this.examStarted = true;
     this.startTimer();
+    this.proctoringService.start(this.token);
     this.cdr.markForCheck();
   }
 
   private startTimer(): void {
     this.startedAt = Date.now();
     this.timerRef = setInterval(() => {
+      if (this.isBlocked) return;
       if (this.timeSeconds > 0) {
         this.timeSeconds--;
         this.cdr.markForCheck();
@@ -222,6 +242,7 @@ export class TestComponent implements OnInit, OnDestroy {
   }
 
   selectAnswer(qId: string, option: string): void {
+    if (this.isBlocked) return;
     this.answers[qId] = option;
     this.lastSaved = Date.now();
     this.cdr.markForCheck();
@@ -232,12 +253,13 @@ export class TestComponent implements OnInit, OnDestroy {
   }
 
   toggleFlag(qId: string | undefined): void {
-    if (!qId) return;
+    if (!qId || this.isBlocked) return;
     this.flagged[qId] = !this.flagged[qId];
     this.cdr.markForCheck();
   }
 
   navigate(dir: 1 | -1): void {
+    if (this.isBlocked) return;
     this.currentIndex = Math.max(
       0,
       Math.min(this.questions.length - 1, this.currentIndex + dir),
@@ -247,12 +269,14 @@ export class TestComponent implements OnInit, OnDestroy {
   }
 
   goTo(index: number): void {
+    if (this.isBlocked) return;
     this.currentIndex = index;
     this.showUnansweredWarning = false;
     this.cdr.markForCheck();
   }
 
   submitTest(): void {
+    if (this.isBlocked) return;
     if (this.remainingCount > 0) {
       this.showUnansweredWarning = true;
     } else {
@@ -276,6 +300,7 @@ export class TestComponent implements OnInit, OnDestroy {
 
     this.isSubmitting = true;
     this.clearTimer();
+    this.proctoringService.stop();
 
     this.submittedAnswerCount = this.answeredCount;
     this.completionTime = this.buildCompletionTime();
@@ -316,4 +341,27 @@ export class TestComponent implements OnInit, OnDestroy {
         : '#E24B4A';
   }
 
+  private onViolationState(state: ViolationState): void {
+    if (!state.lastViolationType && !state.blocked) return;
+
+    this.warningCount = state.warningCount;
+    this.violationMessage = state.message;
+    this.isBlocked = state.blocked;
+
+    if (state.blocked) {
+      this.clearTimer();
+      this.showViolationBanner = true;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.showViolationBanner = true;
+    if (this.bannerHideTimer) clearTimeout(this.bannerHideTimer);
+    this.bannerHideTimer = setTimeout(() => {
+      this.showViolationBanner = false;
+      this.cdr.markForCheck();
+    }, 5000);
+
+    this.cdr.markForCheck();
+  }
 }

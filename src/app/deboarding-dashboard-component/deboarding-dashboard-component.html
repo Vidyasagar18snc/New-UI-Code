@@ -1,13 +1,14 @@
 <div class="dashboard">
 
   <div class="page-header">
-    <h1><i class="ti ti-logout"></i> Employee deboarding</h1>
+    <h1><i class="ti ti-logout"></i> Employee Deboarding</h1>
     <p>Manage employee exit process</p>
   </div>
 
+  <!-- ═══════ STATS ═══════ -->
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-label"><i class="ti ti-users"></i> Total records</div>
+      <div class="stat-label"><i class="ti ti-users"></i> Total Records</div>
       <div class="stat-value blue">{{ deboardingRecords.length }}</div>
     </div>
     <div class="stat-card">
@@ -18,19 +19,36 @@
       <div class="stat-label"><i class="ti ti-clock"></i> Pending</div>
       <div class="stat-value amber">{{ deboardingRecords.filter(x => x.status !== 'COMPLETED').length }}</div>
     </div>
+    <div class="stat-card">
+      <div class="stat-label"><i class="ti ti-transfer"></i> KT Records</div>
+      <div class="stat-value purple">{{ ktRecords.length }}</div>
+    </div>
   </div>
 
-  <!-- KT SECTION -->
+  <!-- ═══════ KT SECTION ═══════ -->
   <div class="section-card">
-    <div class="section-title"><i class="ti ti-transfer"></i> Knowledge transfer</div>
+    <div class="section-title"><i class="ti ti-transfer"></i> Knowledge Transfer</div>
 
-    <div class="field-group">
-      <label>Employee ID</label>
-      <input type="text" placeholder="e.g. EMP-00124" [(ngModel)]="employeeId" />
+    <div class="form-grid">
+
+      <!-- From Employee -->
+      <div class="field-group">
+        <label>From Employee ID <span class="required">*</span></label>
+        <input type="text" placeholder="e.g. EMP-00124 (leaving employee)"
+               [(ngModel)]="employeeId" />
+      </div>
+
+      <!-- To Employee  ← NEW -->
+      <div class="field-group">
+        <label>Transfer To Employee ID <span class="required">*</span></label>
+        <input type="text" placeholder="e.g. EMP-00089 (receiving employee)"
+               [(ngModel)]="transferToEmployeeId" />
+      </div>
+
     </div>
 
     <div class="field-group">
-      <label>Knowledge transfer available?</label>
+      <label>KT Document Available?</label>
       <div class="radio-row">
         <span class="radio-pill" [class.active]="ktAvailable === true" (click)="ktAvailable = true">
           <i class="ti ti-check"></i> Yes
@@ -42,12 +60,13 @@
     </div>
 
     <div class="field-group" *ngIf="ktAvailable">
-      <label>Upload KT document</label>
+      <label>Upload KT Document</label>
       <div class="upload-zone" (click)="fileInput.click()">
         <i class="ti ti-file-upload"></i>
         <span>Click to upload &nbsp;<strong>.pdf, .doc, .docx</strong></span>
       </div>
-      <input #fileInput type="file" accept=".pdf,.doc,.docx" style="display:none" (change)="onFileSelected($event)" />
+      <input #fileInput type="file" accept=".pdf,.doc,.docx"
+             style="display:none" (change)="onFileSelected($event)" />
       <div class="file-badge" *ngIf="selectedFile">
         <i class="ti ti-file-description"></i>
         <span>{{ selectedFile.name }}</span>
@@ -55,7 +74,9 @@
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-primary" [disabled]="ktAvailable && !selectedFile" (click)="initiateKT()">
+      <button class="btn btn-primary"
+              [disabled]="!employeeId || !transferToEmployeeId || (ktAvailable && !selectedFile)"
+              (click)="initiateKT()">
         <i class="ti ti-player-play"></i> Start KT
       </button>
       <button class="btn btn-outline-green" (click)="completeKT()">
@@ -64,9 +85,92 @@
     </div>
   </div>
 
-  <!-- DEBOARDING SECTION -->
+  <!-- ═══════ KT RECORDS TABLE (who → whom) ═══════ -->
+  <div class="section-card table-section">
+    <div class="table-header">
+      <span class="section-title" style="margin-bottom:0">
+        <i class="ti ti-arrows-transfer-down"></i> Knowledge Transfer Records
+      </span>
+      <span class="record-count">{{ ktRecords.length }} records</span>
+    </div>
+
+    <div class="empty-state" *ngIf="ktRecords.length === 0">
+      <i class="ti ti-transfer"></i>
+      <p>No KT records found</p>
+    </div>
+
+    <table *ngIf="ktRecords.length > 0">
+      <thead>
+        <tr>
+          <th>From Employee</th>
+          <th>Department</th>
+          <th>Transfer To</th>
+          <th>Document</th>
+          <th>KT Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let kt of ktRecords">
+          <!-- FROM -->
+          <td>
+            <div class="emp-cell">
+              <div class="avatar from-avatar">
+                {{ kt.employeeName?.substring(0,2)?.toUpperCase() }}
+              </div>
+              <div class="emp-info">
+                <span class="emp-name">{{ kt.employeeName }}</span>
+                <span class="emp-id">{{ kt.employeeId }}</span>
+              </div>
+            </div>
+          </td>
+
+          <td class="muted">{{ kt.department }}</td>
+
+          <!-- TO ← NEW -->
+          <td>
+            <div class="emp-cell">
+              <div class="transfer-arrow"><i class="ti ti-arrow-right"></i></div>
+              <div class="avatar to-avatar">
+                {{ kt.transferToEmployeeName?.substring(0,2)?.toUpperCase() || '?' }}
+              </div>
+              <div class="emp-info">
+                <span class="emp-name">{{ kt.transferToEmployeeName || '—' }}</span>
+                <span class="emp-id">{{ kt.transferToEmployeeId || '—' }}</span>
+              </div>
+            </div>
+          </td>
+
+          <!-- Document -->
+          <td>
+            <a *ngIf="kt.documentUrl" [href]="kt.documentUrl" target="_blank"
+               class="doc-link">
+              <i class="ti ti-file-description"></i>
+              {{ kt.documentName || 'View' }}
+            </a>
+            <span *ngIf="!kt.documentUrl" class="muted">—</span>
+          </td>
+
+          <td class="muted">{{ kt.ktDate }}</td>
+
+          <td>
+            <span class="badge"
+                  [class.badge-success]="kt.status === 'COMPLETED'"
+                  [class.badge-pending]="kt.status === 'PENDING'">
+              <i class="ti"
+                 [class.ti-check]="kt.status === 'COMPLETED'"
+                 [class.ti-clock]="kt.status === 'PENDING'"></i>
+              {{ kt.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════ DEBOARDING SECTION ═══════ -->
   <div class="section-card">
-    <div class="section-title"><i class="ti ti-user-minus"></i> Deboard employee</div>
+    <div class="section-title"><i class="ti ti-user-minus"></i> Deboard Employee</div>
 
     <div class="form-grid">
       <div class="field-group">
@@ -78,7 +182,7 @@
         <input type="text" placeholder="Reason" [(ngModel)]="deboarding.reason" />
       </div>
       <div class="field-group">
-        <label>Last working date</label>
+        <label>Last Working Date</label>
         <input type="date" [(ngModel)]="deboarding.lastWorkingDate" />
       </div>
       <div class="field-group">
@@ -88,33 +192,40 @@
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-primary" (click)="initiateDeboarding()">
-        <i class="ti ti-check"></i> Complete deboarding
-      </button>
-      <button class="btn btn-warn" *ngIf="assetError" (click)="goToAssets()">
-        <i class="ti ti-box"></i> Return assets
-      </button>
-    </div>
+  <button class="btn btn-primary" (click)="initiateDeboarding()">
+    <i class="ti ti-check"></i> Complete Deboarding
+  </button>
+  <button class="btn btn-return-assets" (click)="goToAssets()">
+    <i class="ti ti-box"></i> Return Assets
+  </button>
+</div>
 
-    <div class="alert-warn" *ngIf="assetError">
-      <i class="ti ti-alert-triangle"></i>
-      Employee still has assigned assets. Please return them before completing deboarding.
-    </div>
-  </div>
+<div class="alert-warn" *ngIf="assetError">
+  <i class="ti ti-alert-triangle"></i>
+  Employee still has assigned assets. Please return them before completing deboarding.
+</div>
 
-  <!-- TABLE SECTION -->
+  <!-- ═══════ DEBOARDING RECORDS TABLE ═══════ -->
   <div class="section-card table-section">
     <div class="table-header">
-      <span class="section-title" style="margin-bottom:0"><i class="ti ti-table"></i> Deboarding records</span>
+      <span class="section-title" style="margin-bottom:0">
+        <i class="ti ti-table"></i> Deboarding Records
+      </span>
       <span class="record-count">{{ deboardingRecords.length }} records</span>
     </div>
-    <table>
+
+    <div class="empty-state" *ngIf="deboardingRecords.length === 0">
+      <i class="ti ti-users"></i>
+      <p>No deboarding records found</p>
+    </div>
+
+    <table *ngIf="deboardingRecords.length > 0">
       <thead>
         <tr>
           <th>Employee</th>
           <th>Department</th>
           <th>Reason</th>
-          <th>Last working day</th>
+          <th>Last Working Day</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -130,8 +241,12 @@
           <td class="muted">{{ item.reason }}</td>
           <td class="muted">{{ item.lastWorkingDate }}</td>
           <td>
-            <span class="badge" [class.badge-success]="item.status === 'COMPLETED'" [class.badge-pending]="item.status !== 'COMPLETED'">
-              <i class="ti" [class.ti-check]="item.status === 'COMPLETED'" [class.ti-clock]="item.status !== 'COMPLETED'"></i>
+            <span class="badge"
+                  [class.badge-success]="item.status === 'COMPLETED'"
+                  [class.badge-pending]="item.status !== 'COMPLETED'">
+              <i class="ti"
+                 [class.ti-check]="item.status === 'COMPLETED'"
+                 [class.ti-clock]="item.status !== 'COMPLETED'"></i>
               {{ item.status }}
             </span>
           </td>

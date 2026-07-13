@@ -85,7 +85,7 @@
   font-weight: 700;
   color: var(--clr-primary);
   letter-spacing: .1em;
-  text-transform: uppercase;
+  text-transform: none;
   margin-bottom: 1.75rem;
   padding: 5px 12px 5px 8px;
   background: var(--clr-primary-light);

@@ -1,23 +1,23 @@
 
 
 :host {
-  --sb-accent:          #2563EB;
-  --sb-accent-hover:    #1D4ED8;
-  --sb-accent-light:    rgba(37, 99, 235, 0.12);
-  --sb-accent-glow:     rgba(37, 99, 235, 0.30);
-  --sb-accent-text:     #93c5fd;   /* soft blue for active label */
+  --sb-accent:          #6d28d9;
+  --sb-accent-hover:    #7c3aed;
+  --sb-accent-light:    #6d28d9;
+  --sb-accent-glow:     rgba(109, 40, 217, 0.3);
+  --sb-accent-text:     #ffffff;
 
-  --sb-bg:              #0f1623;
-  --sb-surface:         #151e2e;
-  --sb-surface-2:       #1b2540;
-  --sb-border:          rgba(255, 255, 255, 0.07);
+  --sb-bg:              #131129;
+  --sb-surface:         #1c193c;
+  --sb-surface-2:       #2b2759;
+  --sb-border:          #211e48;
 
-  --sb-text-muted:      #4b5a7a;
-  --sb-text:            #8fa3c0;
-  --sb-text-bright:     #e2eaf6;
+  --sb-text-muted:      #908ba8;
+  --sb-text:            #a5a1bf;
+  --sb-text-bright:     #ffffff;
 
   --sb-width:           260px;
-  --sb-radius:          10px;
+  --sb-radius:          12px;
   --sb-icon-size:       32px;
 }
 
@@ -47,8 +47,8 @@
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(37, 99, 235, 0.4) 40%,
-    rgba(37, 99, 235, 0.4) 60%,
+    rgba(109, 40, 217, 0.2) 40%,
+    rgba(109, 40, 217, 0.2) 60%,
     transparent 100%
   );
   pointer-events: none;
@@ -67,16 +67,19 @@
 .logo-icon {
   width: 38px;
   height: 38px;
-  background: linear-gradient(135deg, var(--sb-accent), #60a5fa);
+  background: none;
   border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
   flex-shrink: 0;
-  box-shadow:
-    0 0 0 1px rgba(37, 99, 235, 0.3),
-    0 4px 14px var(--sb-accent-glow);
+}
+
+.logo-icon img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .logo-text {
@@ -88,7 +91,7 @@
 
 .logo-text strong {
   font-weight: 700;
-  color: #fff;
+  color: var(--sb-text-bright);
 }
 
 .nav-list {
@@ -142,33 +145,16 @@
 }
 
 .nav-item.active {
-  background: linear-gradient(
-    90deg,
-    rgba(37, 99, 235, 0.22) 0%,
-    rgba(37, 99, 235, 0.06) 100%
-  );
-  color: #fff;
+  background: var(--sb-accent) !important;
+  color: #ffffff !important;
 }
 
 .active-bar {
-  position: absolute;
-  left: 0;
-  top: 22%;
-  bottom: 22%;
-  width: 3px;
-  border-radius: 0 3px 3px 0;
-  background: var(--sb-accent);
-  opacity: 0;
-  transform: scaleY(0.4);
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-  box-shadow: 0 0 8px var(--sb-accent-glow), 0 0 16px var(--sb-accent-glow);
+  display: none !important;
 }
 
 .nav-item.active .active-bar {
-  opacity: 1;
-  transform: scaleY(1);
+  display: none !important;
 }
 
 .nav-icon {
@@ -188,17 +174,15 @@
 }
 
 .nav-item:hover .nav-icon {
-  background: rgba(37, 99, 235, 0.18);
-  color: #93c5fd;
-  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
 }
 
 .nav-item.active .nav-icon {
-  background: rgba(37, 99, 235, 0.25);
-  color: #bfdbfe;
-  box-shadow:
-    0 0 0 1px rgba(37, 99, 235, 0.35),
-    0 2px 10px rgba(37, 99, 235, 0.2);
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
 }
 
 /* SVG icon inherits color */
@@ -220,7 +204,7 @@
 }
 
 .nav-item.active .nav-label {
-  color: #eff6ff;
+  color: #ffffff !important;
   font-weight: 600;
 }
 .sidebar-footer {
@@ -235,7 +219,7 @@
   gap: 10px;
   padding: 9px 10px;
   border-radius: var(--sb-radius);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--sb-surface);
   border: 1px solid var(--sb-border);
   cursor: pointer;
   transition:
@@ -245,14 +229,14 @@
 
 .user-card:hover {
   background: var(--sb-accent-light);
-  border-color: rgba(37, 99, 235, 0.3);
+  border-color: rgba(109, 40, 217, 0.18);
 }
 
 .user-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--sb-accent), #60a5fa);
+  background: linear-gradient(135deg, var(--sb-accent), #8b5cf6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -261,7 +245,7 @@
   letter-spacing: 0.04em;
   color: #fff;
   flex-shrink: 0;
-  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 0 10px rgba(109, 40, 217, 0.3);
 }
 
 .user-info {
@@ -287,13 +271,138 @@
   color: var(--sb-text-muted);
 }
 
-.user-settings {
+.logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
   color: var(--sb-text-muted);
   flex-shrink: 0;
-  transition: color 0.18s ease, transform 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  transition: color 0.18s ease, background-color 0.18s ease, transform 0.15s ease;
 }
 
-.user-card:hover .user-settings {
+.user-card:hover .logout-btn {
   color: var(--sb-text);
-  transform: rotate(30deg);
+}
+
+.logout-btn:hover {
+  color: #f87171 !important;
+  background-color: rgba(239, 68, 68, 0.1);
+  transform: scale(1.08);
+}
+
+
+
+/* Logout Confirmation Modal Overlay */
+.logout-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(29, 18, 77, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.logout-modal {
+  width: 90%;
+  max-width: 380px;
+  background: #ffffff;
+  border: 1px solid var(--sb-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 
+    0 20px 40px rgba(109, 40, 217, 0.12),
+    0 5px 15px rgba(0, 0, 0, 0.06);
+  animation: modalScaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalScaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.logout-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.logout-modal-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-modal-header h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--sb-text-bright);
+  margin: 0;
+}
+
+.logout-modal-body p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--sb-text);
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.logout-modal-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.modal-btn {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s, background-color 0.2s;
+}
+
+.modal-btn:active {
+  transform: scale(0.97);
+}
+
+.modal-btn--cancel {
+  background: var(--sb-surface);
+  color: var(--sb-text-bright);
+  border: 1px solid var(--sb-border);
+}
+.modal-btn--cancel:hover {
+  background: var(--sb-surface-2);
+}
+
+.modal-btn--confirm {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+.modal-btn--confirm:hover {
+  background: #dc2626;
 }

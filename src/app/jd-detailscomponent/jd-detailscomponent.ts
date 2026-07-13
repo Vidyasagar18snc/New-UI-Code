@@ -1,8 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone, HostListener } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { NotificationService } from '../Service/NotificationService';
 
 import { ApiService } from '../Service/ApiService ';
 import { Job } from '../Model/Job ';
@@ -46,6 +48,10 @@ export class JdDetailscomponent implements OnInit {
 
   loading = true;
   searchQuery = '';
+  sortBy = 'latest';
+
+  totalCandidates = 48;
+  avgMatchScore = 78;
 
   selectedJob: Job | null = null;
 
@@ -65,10 +71,98 @@ export class JdDetailscomponent implements OnInit {
     private api: ApiService,
     private cdr: ChangeDetectorRef,
     private zone: NgZone,
+    private router: Router,
+    public notificationService: NotificationService
   ) { }
+
+  // ─── AI Chat state ───
+  // (Removed Ask AI panel logic to retain static AI Analysis Active badge)
+
+  // ─── Notifications state ───
+  showNotifPanel = false;
+
+  get notifications$() {
+    return this.notificationService.notifications$;
+  }
+
+  get notifications() {
+    return this.notificationService.notifications;
+  }
+
+  get unreadCount(): number {
+    return this.notificationService.unreadCount;
+  }
+
+  // ─── Profile Menu state ───
+  showProfileMenu = false;
+  employeeName = localStorage.getItem('employeeName') || 'HR Admin';
+
+  @HostListener('document:click')
+  onDocClick() {
+    this.showNotifPanel  = false;
+    this.showProfileMenu = false;
+  }
+
+  // ════════════════════════════════
+  // ASK AI RECRUIT
+  // ════════════════════════════════
+  // (Chat Panel removed, logic omitted)
+
+  // ════════════════════════════════
+  // NOTIFICATIONS
+  // ════════════════════════════════
+  toggleNotifPanel(e: Event) {
+    e.stopPropagation();
+    this.showNotifPanel = !this.showNotifPanel;
+    if (this.showNotifPanel) { this.showProfileMenu = false; }
+  }
+  markAllRead() { this.notificationService.markAllAsRead(); }
+  markRead(n: any) { this.notificationService.markAsRead(n.id); }
+
+  // ════════════════════════════════
+  // PROFILE MENU
+  // ════════════════════════════════
+  toggleProfileMenu(e: Event) {
+    e.stopPropagation();
+    this.showProfileMenu = !this.showProfileMenu;
+    if (this.showProfileMenu) { this.showNotifPanel = false; }
+  }
+  goToDashboard() { this.router.navigate(['/dashboard']); }
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/PortalLogin']);
+  }
 
   ngOnInit(): void {
     this.loadJobs();
+    this.loadCandidateStats();
+  }
+
+  loadCandidateStats(): void {
+    this.api.getCandidates().subscribe({
+      next: (res: any) => {
+        const candidates = Array.isArray(res)
+          ? res
+          : (Array.isArray(res?.data) ? res.data : []);
+        if (candidates.length > 0) {
+          this.totalCandidates = candidates.length;
+          let sum = 0;
+          let count = 0;
+          candidates.forEach((c: any) => {
+            if (c.score != null) {
+              sum += Number(c.score);
+              count++;
+            }
+          });
+          if (count > 0) {
+            this.avgMatchScore = Math.round(sum / count);
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Error loading candidate stats:', err);
+      }
+    });
   }
 
   loadJobs(): void {
@@ -80,7 +174,7 @@ export class JdDetailscomponent implements OnInit {
 
         this.zone.run(() => {
           this.jobs = jobsData.map((j: any) => this.normalizeJob(j));
-          this.filteredJobs = [...this.jobs];
+          this.applyFilterAndSort();
           this.loading = false;
           this.cdr.detectChanges();
         });
@@ -114,10 +208,10 @@ export class JdDetailscomponent implements OnInit {
     };
   }
 
-  filterJobs(): void {
+  applyFilterAndSort(): void {
     const q = this.searchQuery.toLowerCase().trim();
 
-    this.filteredJobs = q
+    let temp = q
       ? this.jobs.filter(
         (j: any) =>
           j.title?.toLowerCase().includes(q) ||
@@ -127,7 +221,51 @@ export class JdDetailscomponent implements OnInit {
       )
       : [...this.jobs];
 
+    // Sort jobs
+    if (this.sortBy === 'latest') {
+      temp.sort((a: any, b: any) => {
+        const idA = a.id || 0;
+        const idB = b.id || 0;
+        if (typeof idA === 'number' && typeof idB === 'number') {
+          return idB - idA;
+        }
+        return String(idB).localeCompare(String(idA));
+      });
+    } else if (this.sortBy === 'title') {
+      temp.sort((a: any, b: any) => (a.title ?? '').localeCompare(b.title ?? ''));
+    } else if (this.sortBy === 'experience') {
+      temp.sort((a: any, b: any) => (a.experience ?? 0) - (b.experience ?? 0));
+    } else if (this.sortBy === 'location') {
+      temp.sort((a: any, b: any) => (a.location ?? '').localeCompare(b.location ?? ''));
+    }
+
+    this.filteredJobs = temp;
     this.cdr.detectChanges();
+  }
+
+  filterJobs(): void {
+    this.applyFilterAndSort();
+  }
+
+  getCreatedDate(job: any): string {
+    const id = job.id || job._id;
+    if (id && id.length === 24) {
+      try {
+        const timestamp = parseInt(id.substring(0, 8), 16) * 1000;
+        const date = new Date(timestamp);
+        const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+        return 'Created on ' + date.toLocaleDateString('en-GB', options);
+      } catch (e) {
+        // fallback
+      }
+    }
+    return 'Created on 17 Jun 2026';
+  }
+
+  getJobCode(job: any, index: number): string {
+    const seq = this.jobs.length - index;
+    const padded = String(seq).padStart(3, '0');
+    return `JD-2026-${padded}`;
   }
 
   trackByJob(_: number, job: any): any {

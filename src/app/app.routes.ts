@@ -67,8 +67,6 @@ export const routes: Routes = [
     path: 'deboarding-dashboard',
     component: DeboardingDashboardComponent
   },
-
-  // EMPLOYEE DETAILS
   {
     path: 'Employee-Details',
     component: Employeedetails,
@@ -87,6 +85,8 @@ export const routes: Routes = [
       departments: [
         'Engineering',
         'Product',
+        'HR',
+        'Admin',
         'Design',
         'Sales',
         'Finance',
@@ -112,7 +112,6 @@ export const routes: Routes = [
     ]
   },
 
-  // HR ROUTES
   {
     path: '',
     component: Layoutcomponent,
@@ -186,9 +185,6 @@ export const routes: Routes = [
     ]
   },
 
-  // FALLBACK
-  {
-    path: '**',
-    redirectTo: 'login'
-  }
+ 
+  
 ];

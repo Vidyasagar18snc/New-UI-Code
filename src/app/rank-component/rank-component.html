@@ -1,12 +1,16 @@
-  <div class="ranking-page">
+<div class="ranking-page-container">
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
 
+  <div class="ranking-page">
     <header class="page-header">
       <div class="header-left">
         <div class="header-eyebrow">
           <span class="live-pulse"></span>
-          <span class="eyebrow-text">Live · Assessment 2026</span>
+          <span class="eyebrow-text">Live Assessment Dashboard</span>
         </div>
-        <h1 class="page-title">Ranking Dashboard</h1>
+        <h1 class="page-title">Candidate Rankings</h1>
       </div>
       <div class="header-right">
         <span class="updated-badge" *ngIf="lastUpdated">
@@ -14,7 +18,7 @@
             stroke-linecap="round" stroke-linejoin="round">
             <circle cx="8" cy="8" r="6"/><polyline points="8 5 8 8 10.5 10.5"/>
           </svg>
-          {{ formattedTime() }}
+          Sync: {{ formattedTime() }}
         </span>
         <button class="refresh-btn" (click)="manualRefresh()" [disabled]="refreshing"
           [attr.aria-label]="refreshing ? 'Refreshing data' : 'Refresh data'">
@@ -32,7 +36,7 @@
     <section class="stats-grid" aria-label="Summary statistics">
       <article class="stat-card" aria-label="Total candidates">
         <div class="stat-icon stat-icon--indigo">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
             <circle cx="9" cy="7" r="4"/>
@@ -43,13 +47,13 @@
         <div class="stat-body">
           <span class="stat-label">Total Candidates</span>
           <span class="stat-value">{{ totalCandidates }}</span>
-          <span class="stat-meta stat-meta--up">Assessed today</span>
+          <span class="stat-meta stat-meta--up">Completed assessment</span>
         </div>
       </article>
 
       <article class="stat-card" aria-label="Top score">
         <div class="stat-icon stat-icon--amber">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/>
             <path d="M7 4H4a1 1 0 0 0-1 1v2a4 4 0 0 0 4 4"/>
@@ -60,13 +64,13 @@
         <div class="stat-body">
           <span class="stat-label">Top Score</span>
           <span class="stat-value">{{ topScore }}%</span>
-          <span class="stat-meta stat-meta--highlight">Best performance</span>
+          <span class="stat-meta stat-meta--highlight">Leader threshold</span>
         </div>
       </article>
 
       <article class="stat-card" aria-label="Average score">
         <div class="stat-icon stat-icon--blue">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="20" x2="18" y2="8"/>
             <line x1="12" y1="20" x2="12" y2="4"/>
@@ -77,194 +81,338 @@
         <div class="stat-body">
           <span class="stat-label">Avg Score</span>
           <span class="stat-value">{{ avgScore }}%</span>
-          <span class="stat-meta">Across all candidates</span>
+          <span class="stat-meta">Overall average</span>
         </div>
       </article>
 
       <article class="stat-card" aria-label="Average time">
         <div class="stat-icon stat-icon--emerald">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="9"/>
             <polyline points="12 7 12 12 15 15"/>
           </svg>
         </div>
         <div class="stat-body">
-          <span class="stat-label">Avg Time</span>
+          <span class="stat-label">Avg Duration</span>
           <span class="stat-value">{{ avgTime }}<span class="stat-unit">s</span></span>
-          <span class="stat-meta">Per assessment</span>
+          <span class="stat-meta">Completion time</span>
         </div>
       </article>
     </section>
 
-    <section class="table-card" aria-label="Leaderboard">
-
-      <!-- Toolbar -->
-      <div class="table-toolbar">
-        <div class="toolbar-left">
-          <h2 class="toolbar-title">Leaderboard</h2>
-          <span class="count-badge" aria-label="{{ filtered.length }} candidates">
-            {{ filtered.length }} candidate{{ filtered.length !== 1 ? 's' : '' }}
-          </span>
-        </div>
-        <div class="toolbar-right">
-          <div class="search-wrap" role="search">
-            <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"
-              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-              <circle cx="7" cy="7" r="5"/>
-              <path d="M12 12l2.5 2.5"/>
-            </svg>
-            <input
-              class="search-input"
-              type="search"
-              placeholder="Search candidate…"
-              [(ngModel)]="searchQuery"
-              (ngModelChange)="onSearch()"
-              aria-label="Search candidates"
-            />
+    <div class="ranking-grid">
+      <!-- LEFT COLUMN: Leaderboard -->
+      <section class="table-card" aria-label="Leaderboard">
+        <!-- Toolbar -->
+        <div class="table-toolbar">
+          <div class="toolbar-left">
+            <h2 class="toolbar-title">Leaderboard</h2>
+            <span class="count-badge" aria-label="{{ filtered.length }} candidates">
+              {{ filtered.length }} candidate{{ filtered.length !== 1 ? 's' : '' }}
+            </span>
           </div>
-          <div class="sort-wrap">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="3" y1="5" x2="13" y2="5"/>
-              <line x1="5" y1="8" x2="11" y2="8"/>
-              <line x1="7" y1="11" x2="9" y2="11"/>
-            </svg>
-            <select class="sort-select" [(ngModel)]="sortKey" (ngModelChange)="onSortChange()"
-              aria-label="Sort candidates">
-              <option value="rank">By Rank</option>
-              <option value="score">By Score</option>
-              <option value="time">By Fastest</option>
-              <option value="name">By Name</option>
-            </select>
+          <div class="toolbar-right">
+            <div class="search-wrap" role="search">
+              <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                <circle cx="7" cy="7" r="5"/>
+                <path d="M12 12l2.5 2.5"/>
+              </svg>
+              <input
+                class="search-input"
+                type="search"
+                placeholder="Search candidate…"
+                [(ngModel)]="searchQuery"
+                (ngModelChange)="onSearch()"
+                aria-label="Search candidates"
+              />
+            </div>
+            <div class="select-wrap sort-wrap">
+              <select class="sort-select" [(ngModel)]="sortKey" (ngModelChange)="onSortChange()"
+                aria-label="Sort candidates">
+                <option value="rank">Sort by Rank</option>
+                <option value="score">Sort by Score</option>
+                <option value="time">Sort by Speed</option>
+                <option value="name">Sort by Name</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Shimmer loading -->
-      <div *ngIf="loading" class="loading-rows" aria-busy="true" aria-label="Loading data">
-        <div class="shimmer-row" *ngFor="let i of [1,2,3,4,5]">
-          <div class="shimmer sh-rank"></div>
-          <div class="shimmer sh-avatar"></div>
-          <div class="shimmer sh-name"></div>
-          <div class="shimmer sh-score"></div>
-          <div class="shimmer sh-time"></div>
+        <!-- Shimmer loading -->
+        <div *ngIf="loading" class="loading-rows" aria-busy="true" aria-label="Loading data">
+          <div class="shimmer-row" *ngFor="let i of [1,2,3,4,5]">
+            <div class="shimmer sh-rank"></div>
+            <div class="shimmer sh-avatar"></div>
+            <div class="shimmer sh-name"></div>
+            <div class="shimmer sh-score"></div>
+            <div class="shimmer sh-time"></div>
+          </div>
         </div>
-      </div>
 
-      <!-- Table -->
-      <div class="table-scroll" *ngIf="!loading && filtered.length > 0" role="region" aria-label="Rankings table">
-        <table>
-          <thead>
-            <tr>
-              <th class="col-rank" scope="col">#</th>
-              <th class="col-candidate" scope="col">Candidate</th>
-              <th class="col-score" scope="col">Score</th>
-              <th class="col-time" scope="col">Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let r of pagedData; let i = index"
-              [ngClass]="{
-                'row-gold':   r.rank === 1,
-                'row-silver': r.rank === 2,
-                'row-bronze': r.rank === 3
-              }"
-              tabindex="0"
-            >
-              <!-- Rank -->
-              <td class="col-rank">
-                <span *ngIf="r.rank === 1" class="medal-badge medal-gold"  aria-label="1st place">1</span>
-                <span *ngIf="r.rank === 2" class="medal-badge medal-silver" aria-label="2nd place">2</span>
-                <span *ngIf="r.rank === 3" class="medal-badge medal-bronze" aria-label="3rd place">3</span>
-                <span *ngIf="r.rank > 3"   class="rank-num">#{{ r.rank }}</span>
-              </td>
+        <!-- Table -->
+        <div class="table-scroll" *ngIf="!loading && filtered.length > 0" role="region" aria-label="Rankings table">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-rank" scope="col">#</th>
+                <th class="col-candidate" scope="col">Candidate</th>
+                <th class="col-score" scope="col">Score</th>
+                <th class="col-time" scope="col">Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let r of pagedData; let i = index"
+                [ngClass]="{
+                  'row-gold':   r.rank === 1,
+                  'row-silver': r.rank === 2,
+                  'row-bronze': r.rank === 3
+                }"
+                [style.animation-delay.ms]="i * 40"
+                tabindex="0"
+              >
+                <!-- Rank -->
+                <td class="col-rank">
+                  <span *ngIf="r.rank === 1" class="medal-badge medal-gold" aria-label="1st place">1</span>
+                  <span *ngIf="r.rank === 2" class="medal-badge medal-silver" aria-label="2nd place">2</span>
+                  <span *ngIf="r.rank === 3" class="medal-badge medal-bronze" aria-label="3rd place">3</span>
+                  <span *ngIf="r.rank > 3"   class="rank-num">#{{ r.rank }}</span>
+                </td>
 
-              <!-- Candidate -->
-              <td class="col-candidate">
-                <div class="candidate-cell">
-                  <div
-                    class="avatar"
-                    [style.background]="avatarColor(globalIndex(r)).bg"
-                    [style.color]="avatarColor(globalIndex(r)).fg"
-                    [attr.aria-label]="r.candidateName + ' avatar'"
-                  >{{ initials(r.candidateName) }}</div>
-                  <div class="candidate-info">
-                    <span class="cname">{{ r.candidateName }}</span>
-                    <span class="cid">ID-{{ 1000 + r.rank }}</span>
-                  </div>
-                </div>
-              </td>
-
-              <!-- Score -->
-              <td class="col-score">
-                <div class="score-cell">
-                  <span
-                    class="score-pill"
-                    [ngClass]="{
-                      'score-high': r.score >= 80,
-                      'score-mid':  r.score >= 50 && r.score < 80,
-                      'score-low':  r.score < 50
-                    }"
-                    [attr.aria-label]="r.score + ' percent'"
-                  >{{ r.score }}%</span>
-                  <div class="score-track" aria-hidden="true">
+                <!-- Candidate -->
+                <td class="col-candidate">
+                  <div class="candidate-cell">
                     <div
-                      class="score-fill"
-                      [ngClass]="{
-                        'fill-high': r.score >= 80,
-                        'fill-mid':  r.score >= 50 && r.score < 80,
-                        'fill-low':  r.score < 50
-                      }"
-                      [style.width.%]="r.score"
-                    ></div>
+                      class="avatar"
+                      [style.background]="avatarColor(globalIndex(r)).bg"
+                      [style.color]="avatarColor(globalIndex(r)).fg"
+                      [attr.aria-label]="r.candidateName + ' avatar'"
+                    >{{ initials(r.candidateName) }}</div>
+                    <div class="candidate-info">
+                      <span class="cname">{{ r.candidateName }}</span>
+                      <span class="cid">ID-{{ 1000 + r.rank }}</span>
+                    </div>
                   </div>
-                </div>
-              </td>
+                </td>
 
-              <!-- Time -->
-              <td class="col-time">
-                <span class="time-chip">
-                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-                    stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-                    <circle cx="8" cy="8" r="6.5"/>
-                    <polyline points="8 5 8 8 10 10"/>
-                  </svg>
-                  {{ r.timeTaken }}s
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                <!-- Score -->
+                <td class="col-score">
+                  <div class="score-cell">
+                    <span
+                      class="score-pill"
+                      [ngClass]="{
+                        'score-high': r.score >= 80,
+                        'score-mid':  r.score >= 50 && r.score < 80,
+                        'score-low':  r.score < 50
+                      }"
+                      [attr.aria-label]="r.score + ' percent'"
+                    >{{ r.score }}%</span>
+                    <div class="score-track" aria-hidden="true">
+                      <div
+                        class="score-fill"
+                        [ngClass]="{
+                          'fill-high': r.score >= 80,
+                          'fill-mid':  r.score >= 50 && r.score < 80,
+                          'fill-low':  r.score < 50
+                        }"
+                        [style.width.%]="r.score"
+                      ></div>
+                    </div>
+                  </div>
+                </td>
 
-      <!-- Empty state -->
-      <div *ngIf="!loading && filtered.length === 0" class="empty-state" role="status">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.4"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
-          <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+                <!-- Time -->
+                <td class="col-time">
+                  <span class="time-chip">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    {{ r.timeTaken }}s
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty state -->
+        <div *ngIf="!loading && filtered.length === 0" class="empty-state" role="status">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <p>No candidates found matching your search.</p>
+        </div>
+
+        <!-- Footer / Pagination -->
+        <div class="table-footer" *ngIf="!loading && filtered.length > 0">
+          <span class="footer-info" aria-live="polite">
+            Showing <strong>{{ showStart }}–{{ showEnd }}</strong> of <strong>{{ filtered.length }}</strong>
+          </span>
+          <nav class="pagination" aria-label="Table pagination" *ngIf="totalPages > 1">
+            <button
+              class="pg-btn"
+              *ngFor="let p of pageNumbers"
+              [class.active]="p === currentPage"
+              (click)="goToPage(p)"
+              [attr.aria-label]="'Go to page ' + p"
+              [attr.aria-current]="p === currentPage ? 'page' : null"
+            >{{ p }}</button>
+          </nav>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Spotlight & Stats Sidebar -->
+      <aside class="sidebar-panel">
+        <!-- Spotlight Card -->
+        <div class="benefits-card sidebar-card spotlight-card">
+          <div class="sidebar-card-header">
+            <div class="sc-icon bi-purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <div>
+              <h3>AI Spotlight</h3>
+              <p>Top achievements in this cycle</p>
+            </div>
+          </div>
+
+          <!-- Top Performer Spotlight -->
+          <div class="spotlight-item performer-spotlight" *ngIf="topCandidate">
+            <span class="spotlight-badge badge-gold">Top Performer</span>
+            <div class="spotlight-body">
+              <div class="avatar" [style.background]="'#ede9fe'" [style.color]="'#7c3aed'">
+                {{ initials(topCandidate.candidateName) }}
+              </div>
+              <div class="spotlight-info">
+                <span class="spotlight-name">{{ topCandidate.candidateName }}</span>
+                <span class="spotlight-meta">Score: <strong>{{ topCandidate.score }}%</strong> · Rank #1</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Speed Champion Spotlight -->
+          <div class="spotlight-item speed-spotlight" *ngIf="fastCandidate">
+            <span class="spotlight-badge badge-blue">Speed Champion</span>
+            <div class="spotlight-body">
+              <div class="avatar" [style.background]="'#e0f2fe'" [style.color]="'#0369a1'">
+                {{ initials(fastCandidate.candidateName) }}
+              </div>
+              <div class="spotlight-info">
+                <span class="spotlight-name">{{ fastCandidate.candidateName }}</span>
+                <span class="spotlight-meta">Time: <strong>{{ fastCandidate.timeTaken }}s</strong> · Score: {{ fastCandidate.score }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score Bracket distribution -->
+        <div class="benefits-card sidebar-card analytics-card">
+          <div class="sidebar-card-header">
+            <div class="sc-icon bi-green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+                <line x1="2" y1="20" x2="22" y2="20"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Score Bands</h3>
+              <p>Performance distribution</p>
+            </div>
+          </div>
+
+          <div class="analytics-body">
+            <div class="distribution-row">
+              <div class="dist-meta">
+                <span>High Performance (≥80%)</span>
+                <strong>{{ highPerformersCount }}</strong>
+              </div>
+              <div class="dist-bar">
+                <div class="dist-fill fill-high" [style.width.%]="totalCandidates ? (highPerformersCount / totalCandidates * 100) : 0"></div>
+              </div>
+            </div>
+
+            <div class="distribution-row">
+              <div class="dist-meta">
+                <span>Mid Tier (50% - 79%)</span>
+                <strong>{{ midPerformersCount }}</strong>
+              </div>
+              <div class="dist-bar">
+                <div class="dist-fill fill-mid" [style.width.%]="totalCandidates ? (midPerformersCount / totalCandidates * 100) : 0"></div>
+              </div>
+            </div>
+
+            <div class="distribution-row">
+              <div class="dist-meta">
+                <span>Needs Review (<50%)</span>
+                <strong>{{ lowPerformersCount }}</strong>
+              </div>
+              <div class="dist-bar">
+                <div class="dist-fill fill-low" [style.width.%]="totalCandidates ? (lowPerformersCount / totalCandidates * 100) : 0"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Tips / Insights Section -->
+    <div class="tips-section">
+      <h4>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
-        <p>No candidates found matching your search.</p>
+        Recruitment Screening Guidelines
+      </h4>
+      <div class="tips-grid">
+        <div class="tip-item">
+          <div class="tip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+          </div>
+          <p>Assessments combine technical, cognitive, and communication indicators.</p>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <p>Ties in final scores are resolved in favor of the faster completion duration.</p>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+          <p>Verify candidate identities and credentials before issuing offer letters.</p>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 2L11 13" />
+              <path d="M22 2L15 22 11 13 2 9l20-7z" />
+            </svg>
+          </div>
+          <p>Issue standard job offer letters directly using the quick links on dashboard profiles.</p>
+        </div>
       </div>
+    </div>
 
-      <!-- Footer / Pagination -->
-      <div class="table-footer" *ngIf="!loading && filtered.length > 0">
-        <span class="footer-info" aria-live="polite">
-          Showing <strong>{{ showStart }}–{{ showEnd }}</strong> of <strong>{{ filtered.length }}</strong>
-        </span>
-        <nav class="pagination" aria-label="Table pagination" *ngIf="totalPages > 1">
-          <button
-            class="pg-btn"
-            *ngFor="let p of pageNumbers"
-            [class.active]="p === currentPage"
-            (click)="goToPage(p)"
-            [attr.aria-label]="'Go to page ' + p"
-            [attr.aria-current]="p === currentPage ? 'page' : null"
-          >{{ p }}</button>
-        </nav>
-      </div>
-
-    </section>
+    <!-- Footer -->
+    <div class="upload-footer" style="text-align: center; margin-top: 36px; font-size: 12px; color: var(--rc-text-4); font-weight: 500;">
+      © 2026 AI Recruiter. All rights reserved.
+    </div>
   </div>
+</div>

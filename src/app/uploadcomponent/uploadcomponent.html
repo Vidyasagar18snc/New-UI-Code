@@ -1,69 +1,368 @@
-<div class="upload-container">
-  <div class="upload-header">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-      <polyline points="14 2 14 8 20 8"/>
-    </svg>
-    <h2>Upload resume</h2>
-  </div>
+<div class="upload-page" (click)="onDocClick()">
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
 
-  <div class="form-row">
-    <div class="form-group">
-      <label>Job role</label>
-      <select [(ngModel)]="jobRole">
-        <option value="">Select role</option>
-        <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-      </select>
+  <!-- ══════════════════════════════
+       HEADER BAR
+  ══════════════════════════════ -->
+  <div class="greeting-bar">
+    <div class="greeting-left">
+      <h2>Hello, {{ employeeName }} <span class="wave">👋</span></h2>
+      <p>Let's find the best talent for your team.</p>
     </div>
-    <div class="form-group">
-      <label>Language</label>
-      <select [(ngModel)]="language">
-        <option value="auto">Auto detect</option>
-        <option value="english">English</option>
-        <option value="hindi">Hindi</option>
-      </select>
-    </div>
-  </div>
+    <div class="greeting-right">
 
-  <div class="drop-zone" (dragover)="$event.preventDefault()" (drop)="onDrop($event)">
-    <input type="file" multiple (change)="onFileSelect($event)" accept=".pdf,.doc,.docx">
-    <div class="drop-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-        <polyline points="16 16 12 12 8 16"/>
-        <line x1="12" y1="12" x2="12" y2="21"/>
+      <!-- ① ASK AI RECRUIT -->
+      <div class="ai-btn-wrapper">
+        <button class="search-ai-btn" (click)="toggleAiPanel($event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="sparkle-icon">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <span>Ask AI Recruit</span>
+        </button>
+
+        <!-- AI Chat Panel -->
+        <div class="ai-chat-panel" *ngIf="showAiPanel" (click)="$event.stopPropagation()">
+          <div class="acp-header">
+            <div class="acp-title-row">
+              <div class="acp-avatar">AI</div>
+              <div>
+                <div class="acp-title">AI Recruit</div>
+                <div class="acp-status"><span class="acp-dot"></span> Online</div>
+              </div>
+            </div>
+            <button class="acp-close" (click)="closeAiPanel()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="acp-messages">
+            <div *ngFor="let msg of aiMessages" class="acp-msg" [class.acp-msg-user]="msg.role==='user'" [class.acp-msg-ai]="msg.role==='ai'">
+              <div class="acp-bubble">{{ msg.text }}</div>
+            </div>
+            <div class="acp-msg acp-msg-ai" *ngIf="aiLoading">
+              <div class="acp-bubble acp-typing"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+
+          <div class="acp-footer">
+            <input class="acp-input" type="text" [(ngModel)]="aiInput" [ngModelOptions]="{standalone:true}"
+              placeholder="Ask about shortlisting, formats…" (keydown)="onAiKeydown($event)">
+            <button class="acp-send" (click)="sendAiMessage()" [disabled]="!aiInput.trim()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② NOTIFICATION BELL -->
+      <div class="notif-wrapper">
+        <button class="notif-badge" (click)="toggleNotifPanel($event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="red-dot" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+        </button>
+
+        <!-- Notifications Dropdown -->
+        <div class="notif-panel" *ngIf="showNotifPanel" (click)="$event.stopPropagation()">
+          <div class="np-header">
+            <span class="np-title">Notifications</span>
+            <button class="np-mark-read" (click)="markAllRead()">Mark all read</button>
+          </div>
+          <div class="np-list">
+            <div class="np-item" *ngFor="let n of notifications$ | async" [class.np-unread]="!n.read" (click)="markRead(n)">
+              <div class="np-icon">{{ n.icon }}</div>
+              <div class="np-body">
+                <div class="np-item-title">{{ n.title }}</div>
+                <div class="np-item-desc">{{ n.description }}</div>
+                <div class="np-item-time">{{ n.timeDisplay }}</div>
+              </div>
+              <div class="np-unread-dot" *ngIf="!n.read"></div>
+            </div>
+
+            <div class="np-empty-state" *ngIf="(notifications$ | async)?.length === 0">
+              <div class="np-empty-icon">🎉</div>
+              <div class="np-empty-title">All caught up!</div>
+              <div class="np-empty-desc">You have no unread notifications.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ HR AVATAR / PROFILE MENU -->
+      <div class="avatar-wrapper">
+        <button class="user-avatar-top" (click)="toggleProfileMenu($event)">HR</button>
+
+        <div class="profile-menu" *ngIf="showProfileMenu" (click)="$event.stopPropagation()">
+          <div class="pm-header">
+            <div class="pm-avatar">HR</div>
+            <div>
+              <div class="pm-name">{{ employeeName }}</div>
+              <div class="pm-role">HR Admin · Recruiter</div>
+            </div>
+          </div>
+          <div class="pm-divider"></div>
+          <button class="pm-item" (click)="goToDashboard()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </button>
+          <button class="pm-item pm-item-danger" (click)="logout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /greeting-bar -->
+
+  <!-- ══════════════════════════════
+       UPLOAD RESULT PANEL (replaces alert)
+  ══════════════════════════════ -->
+  <div class="result-panel" *ngIf="showResultsPanel">
+  <div class="rp-header">
+    <div class="rp-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
         <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
       </svg>
+      Upload Results
+      <span class="rp-spinner" *ngIf="uploading"></span>
     </div>
-    <p>Drag &amp; drop resumes here</p>
-    <span>or click to browse · PDF, DOC, DOCX</span>
+    <div class="rp-actions" *ngIf="!uploading">
+      <span class="rp-redirect-note" *ngIf="redirectCountdown > 0">
+        Redirecting to Dashboard in {{ redirectCountdown }}s…
+        <button class="rp-cancel-redirect" (click)="cancelAutoRedirect()">Cancel</button>
+      </span>
+      <button class="rp-view-btn" (click)="goToCandidates()">View Candidates →</button>
+      <button class="rp-close-btn" (click)="closeResults()">✕</button>
+    </div>
   </div>
 
-  <div class="file-list">
-    <div class="file-item" *ngFor="let file of selectedFiles; let i = index">
-      <div class="file-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-        </svg>
+  <div class="rp-list">
+    <div class="rp-item" *ngFor="let r of uploadResults" [class.rp-success]="r.status==='success'" [class.rp-duplicate]="r.status==='duplicate'" [class.rp-error]="r.status==='error'">
+      <div class="rp-file-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       </div>
-      <div class="file-info">
-        <div class="file-name">{{ file.name }}</div>
-        <div class="file-size">{{ formatSize(file.size) }}</div>
+      <div class="rp-info">
+        <div class="rp-file-name">{{ r.fileName }}</div>
+        <div class="rp-bar-wrap">
+          <div class="rp-bar" [style.width.%]="r.progress" [class.rp-bar-done]="r.status!=='uploading'"></div>
+        </div>
+        <div class="rp-msg">{{ r.message }}</div>
       </div>
-      <button class="remove-btn" (click)="removeFile(i)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      <div class="rp-status-icon">
+        <span *ngIf="r.status==='uploading'" class="rp-spinner-sm"></span>
+        <span *ngIf="r.status==='success'">✅</span>
+        <span *ngIf="r.status==='duplicate'">⚠️</span>
+        <span *ngIf="r.status==='error'">❌</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+  <div class="upload-grid">
+
+    <!-- LEFT: Upload Card -->
+    <div class="upload-card">
+      <div class="upload-card-header">
+        <div class="uc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Upload Resume</h3>
+          <p>Upload candidate resumes and let AI handle the rest.</p>
+        </div>
+      </div>
+
+      <!-- Form Row -->
+      <div class="uc-form-row">
+        <div class="uc-form-group">
+          <label>Job Role <span class="req-star">*</span></label>
+          <div class="uc-select-wrap">
+            <svg class="uc-select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            </svg>
+            <select [(ngModel)]="jobRole" [ngModelOptions]="{standalone:true}" [disabled]="rolesLoading">
+              <option value="">{{ rolesLoading ? 'Loading roles…' : 'Select role' }}</option>
+              <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+            </select>
+            <svg class="uc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="uc-form-group">
+          <label>Language</label>
+          <div class="uc-select-wrap">
+            <svg class="uc-select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <select [(ngModel)]="language" [ngModelOptions]="{standalone:true}">
+              <option value="auto">Auto detect</option>
+              <option value="english">English</option>
+              <option value="hindi">Hindi</option>
+            </select>
+            <svg class="uc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drop Zone -->
+      <div class="uc-drop-zone" [class.drag-over]="isDragging"
+           (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+        <input type="file" multiple (change)="onFileSelect($event)" accept=".pdf,.doc,.docx">
+        <div class="uc-drop-inner">
+          <div class="uc-drop-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+            </svg>
+          </div>
+          <p class="uc-drop-title">Drag &amp; drop resumes here</p>
+          <p class="uc-drop-sub">or <span class="uc-browse-link">click to browse</span></p>
+          <p class="uc-drop-formats">Supported formats: PDF, DOC, DOCX · Max size: 20MB per file</p>
+        </div>
+      </div>
+
+      <!-- File List -->
+      <div class="uc-file-list" *ngIf="selectedFiles.length > 0">
+        <div class="uc-file-item" *ngFor="let file of selectedFiles; let i = index"
+          [class.pdf-item]="file.name.toLowerCase().endsWith('.pdf')"
+          [class.word-item]="file.name.toLowerCase().endsWith('.doc') || file.name.toLowerCase().endsWith('.docx')">
+          <div class="uc-file-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div class="uc-file-info">
+            <span class="uc-file-name">{{ file.name }}</span>
+            <div class="uc-file-meta">
+              <span class="uc-file-size">{{ formatSize(file.size) }}</span>
+              <span class="uc-file-status">Ready to upload</span>
+            </div>
+            <div class="uc-progress-bar">
+              <div class="uc-progress-fill"></div>
+            </div>
+          </div>
+          <button class="uc-remove-btn" (click)="removeFile(i)" title="Remove">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- AI Note -->
+      <div class="uc-ai-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
         </svg>
+        <span>AI will extract skills, experience, and key details to match the best candidates.</span>
+      </div>
+
+      <!-- Upload Button -->
+      <button class="uc-upload-btn" (click)="upload()" [disabled]="selectedFiles.length === 0 || !jobRole || uploading">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+          <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+        </svg>
+        <span *ngIf="!uploading">Upload {{ selectedFiles.length > 0 ? selectedFiles.length : '' }} Resume{{ selectedFiles.length !== 1 ? 's' : '' }}</span>
+        <span *ngIf="uploading" class="uc-btn-spinner"></span>
+        <span *ngIf="uploading">Uploading…</span>
       </button>
     </div>
+
+    <!-- RIGHT: Benefits Card -->
+    <div class="benefits-card">
+      <h4>Why upload resumes here?</h4>
+
+      <div class="benefit-item">
+        <div class="benefit-icon bi-purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+        <div><strong>AI-Powered Screening</strong><p>Extract key information and rank candidates instantly.</p></div>
+      </div>
+
+      <div class="benefit-item">
+        <div class="benefit-icon bi-green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div><strong>Save 70-80% HR Time</strong><p>Automate repetitive tasks and focus on the right talent.</p></div>
+      </div>
+
+      <div class="benefit-item">
+        <div class="benefit-icon bi-amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <div><strong>Better Hiring Decisions</strong><p>Data-driven insights to choose the best fit.</p></div>
+      </div>
+
+      <div class="benefit-item">
+        <div class="benefit-icon bi-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div><strong>Secure &amp; Confidential</strong><p>Your data is encrypted and always protected.</p></div>
+      </div>
+
+      <div class="benefit-check-visual">
+        <svg width="110" height="110" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="50" fill="rgba(109,40,217,0.02)" stroke="rgba(109,40,217,0.06)" stroke-width="1.5"/>
+          <path d="M35 82H85V44C85 41.7909 83.2091 40 81 40H60L54 34H39C36.7909 34 35 35.7909 35 38V82Z" fill="rgba(109,40,217,0.06)" stroke="#6d28d9" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M43 44H77V72" stroke="rgba(109,40,217,0.25)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M48 30H72C73.1046 30 74 30.8954 74 32V60C74 61.1046 73.1046 62 72 62H48C46.8954 62 46 61.1046 46 60V32C46 30.8954 46.8954 30 48 30Z" fill="#ffffff" stroke="#6d28d9" stroke-width="2"/>
+          <line x1="52" y1="38" x2="68" y2="38" stroke="rgba(109,40,217,0.15)" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="52" y1="44" x2="68" y2="44" stroke="rgba(109,40,217,0.15)" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="52" y1="50" x2="62" y2="50" stroke="rgba(109,40,217,0.15)" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="82" cy="72" r="16" fill="#10b981" stroke="#ffffff" stroke-width="2.5"/>
+          <path d="M76 72L80 76L88 68" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+  </div><!-- /upload-grid -->
+
+  <!-- Tips Section -->
+  <div class="tips-section">
+    <h4>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      Tips for better results
+    </h4>
+    <div class="tips-grid">
+      <div class="tip-item">
+        <div class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <p>Use clean, updated resumes</p>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <p>Make sure key sections are not blank</p>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <p>Supported formats: PDF, DOC, DOCX</p>
+      </div>
+      <div class="tip-item">
+        <div class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <p>The more accurate the data, the better the match</p>
+      </div>
+    </div>
   </div>
 
-  <button class="upload-btn" (click)="upload()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="16 16 12 12 8 16"/>
-      <line x1="12" y1="12" x2="12" y2="21"/>
-      <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
-    </svg>
-    Upload resumes
-  </button>
+  <div class="upload-footer">© 2026 AI Recruiter. All rights reserved.</div>
+
 </div>

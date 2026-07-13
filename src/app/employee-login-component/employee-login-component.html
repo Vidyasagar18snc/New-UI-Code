@@ -1,226 +1,317 @@
+<div class="login-wrapper" *ngIf="isAnimating" [attr.data-theme]="isDarkMode ? 'dark' : 'light'">
 
-
-<div class="login-wrapper">
-
- 
+  <!-- Background decorations -->
   <div class="bg-grid"></div>
   <div class="bg-orb orb-1"></div>
   <div class="bg-orb orb-2"></div>
   <div class="bg-orb orb-3"></div>
 
-  
+  <!-- ── DARK / LIGHT MODE TOGGLE ── -->
+  <button class="theme-toggle-btn" (click)="toggleTheme()" [title]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+    <!-- Sun icon (shown in dark mode → click to go light) -->
+    <svg *ngIf="isDarkMode" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <!-- Moon icon (shown in light mode → click to go dark) -->
+    <svg *ngIf="!isDarkMode" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+
+  <!-- Left Sidebar Panel (Platform Overview & Brand Info) -->
   <div class="side-panel">
     <div class="side-content">
-      <div class="side-logo">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <h2 class="side-title">AI Recruiter</h2>
-      <p class="side-tagline">End-to-end employee lifecycle management — from onboarding to offboarding.</p>
-
-      <div class="side-stats">
-        <div class="side-stat">
-          <span class="side-stat-val">2,400+</span>
-          <span class="side-stat-label">Employees managed</span>
+      <div class="side-brand-row">
+        <div class="side-logo">
+          <img src="assets/hg-icon.webp" alt="Hg" />
         </div>
-        <div class="side-stat">
-          <span class="side-stat-val">98%</span>
-          <span class="side-stat-label">Onboarding success</span>
-        </div>
-        <div class="side-stat">
-          <span class="side-stat-val">12</span>
-          <span class="side-stat-label">Departments synced</span>
-        </div>
+        <span class="side-brand-title">AI Recruiter</span>
       </div>
 
-      <div class="side-card-preview">
-        <div class="preview-dot online"></div>
-        <div class="preview-info">
-          <span class="preview-name">System Live</span>
-          <span class="preview-sub">All services operational</span>
+      <h2 class="side-title">
+        AI-Powered Hiring.<br>
+        Smarter Work.<br>
+        <span class="accent-highlight">Better People.</span>
+      </h2>
+      <p class="side-tagline">AI Recruiter automates and simplifies hiring, reducing HR workload by 70-80%.</p>
+      <!-- Features List -->
+      <div class="side-features-list">
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <line x1="11" y1="8" x2="11" y2="14"/>
+              <line x1="8" y1="11" x2="14" y2="11"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <h3>AI-Powered Screening</h3>
+            <p>Intelligent candidate ranking and matching in seconds.</p>
+          </div>
         </div>
-        <div class="preview-badge"></div>
+
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <h3>End-to-End Hiring</h3>
+            <p>Manage the complete recruitment lifecycle in one place.</p>
+          </div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <h3>Reduce HR Workload</h3>
+            <p>Automate repetitive tasks and focus on strategic decisions.</p>
+          </div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <h3>Better Hiring Outcomes</h3>
+            <p>Data-driven insights for smarter, more efficient choices.</p>
+          </div>
+        </div>
       </div>
+
+      <!-- ── ANIMATED CUTE ROBOT CONTAINER ── -->
+      <div class="mockup-wrapper robot-wrapper">
+        <div class="mockup-card robot-card">
+          <img src="assets/cute_robot_laptop.png" alt="AI Recruiter AI Assistant" class="mockup-img robot-slide-1" />
+          <img src="assets/cute_robot_waving.png" alt="AI Recruiter AI Assistant Waving" class="mockup-img robot-slide-2" />
+        </div>
+      </div>
+
+      <!-- Compliance Info Footer -->
+      <div class="side-compliance-badges">
+        <div class="compliance-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>SOC-2 Certified System</span>
+        </div>
+        <div class="compliance-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span>SSO Access Secured</span>
+        </div>
+      </div>
+
+      <!-- Bottom Stat Badge -->
+      <div class="side-stat-badge">
+        <div class="stat-icon-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <span>Save 70-80% of HR time with AI-driven automation</span>
+      </div>
+
     </div>
   </div>
 
-
+  <!-- Right Form Area (Centered Login Panel) -->
   <div class="form-area">
 
-    
-    <div class="panel login-panel" *ngIf="!showReset && !showForgotPassword">
-
+    <!-- ── 1. LOGIN PANEL ── -->
+    <div class="panel login-panel" *ngIf="!showReset && !showForgotPassword && !showCreateAccount">
+      
       <div class="panel-brand">
         <div class="brand-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-              stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <img src="assets/hg-icon.webp" alt="Hg" />
         </div>
-        <span class="brand-text">WorkSpace</span>
+        <span class="brand-text">AI Recruiter</span>
       </div>
 
       <div class="panel-head">
-        <div class="panel-eyebrow">AI RECRUITER PLATFORM</div>
-        <h1>Welcome back</h1>
-        <p>Sign in to your AI Recruiter account</p>
+        <div class="panel-eyebrow">Talent Intelligence</div>
+        <h1>Welcome Back</h1>
+        <p>Sign in to continue to AI Recruiter</p>
       </div>
 
       <div class="form-body">
-
-     
+        
+        <!-- Email Field -->
         <div class="field" [class.has-error]="errors.email">
           <label>Official Email</label>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                stroke="currentColor" stroke-width="1.8"/>
-              <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8"/>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
             </svg>
             <input
               type="email"
               [(ngModel)]="email"
               (input)="clearError('email')"
-              placeholder="you@company.com"
+              placeholder="name@company.com"
               autocomplete="email"
             />
           </div>
           <span class="error-msg" *ngIf="errors.email">{{ errors.email }}</span>
         </div>
 
-     
+        <!-- Password Field -->
         <div class="field" [class.has-error]="errors.password">
-          <div class="label-row">
-            <label>Password</label>
-          </div>
+          <label>Password</label>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"
-                stroke="currentColor" stroke-width="1.8"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="1.8"/>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
             <input
               [type]="showPassword ? 'text' : 'password'"
               [(ngModel)]="password"
               (input)="clearError('password')"
-              placeholder="Enter your password"
+              placeholder="••••••••"
               autocomplete="current-password"
             />
             <button class="eye-btn" type="button" (click)="showPassword = !showPassword" tabindex="-1">
-              <svg *ngIf="!showPassword" viewBox="0 0 24 24" fill="none">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="!showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
               </svg>
-              <svg *ngIf="showPassword" viewBox="0 0 24 24" fill="none">
-                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" stroke="currentColor" stroke-width="1.8"/>
-                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" stroke="currentColor" stroke-width="1.8"/>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
               </svg>
             </button>
           </div>
           <span class="error-msg" *ngIf="errors.password">{{ errors.password }}</span>
 
-          <!-- ✅ FORGOT PASSWORD LINK — sits directly below password field -->
+          <!-- Forgot password link -->
           <div class="forgot-link-row">
             <button class="forgot-link" type="button" (click)="openForgotPassword()">
               Forgot Password?
             </button>
           </div>
-
         </div>
 
-      
+        <!-- Server error alert -->
         <div class="alert alert-error" *ngIf="serverError">
-          <svg viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-            <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
-            <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" stroke-width="2.5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
-          {{ serverError }}
+          <span>{{ serverError }}</span>
         </div>
 
-        
+        <!-- Submit Button -->
         <button class="primary-btn" (click)="login()" [disabled]="loading">
           <span class="btn-content" *ngIf="!loading">
-            Sign In
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            Sign In to Workspace
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </span>
           <span class="spinner-wrap" *ngIf="loading">
-            <span class="spinner"></span> Signing in…
+            <span class="spinner"></span> Establishing Session…
           </span>
         </button>
 
       </div>
-    </div>
-    <div class="panel reset-panel" *ngIf="showReset && !showForgotPassword">
 
+      <!-- Card Footer -->
+      <div class="card-footer">
+        <span>Don't have an account?
+          <a href="javascript:void(0)" class="contact-admin" (click)="openCreateAccount()">Create Account</a>
+        </span>
+      </div>
+    </div>
+
+    <!-- ── 2. RESET PASSWORD PANEL (First Login) ── -->
+    <div class="panel reset-panel" *ngIf="showReset && !showForgotPassword && !showCreateAccount">
+      
       <div class="reset-hero">
         <div class="reset-icon-ring">
-          <div class="reset-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
         </div>
       </div>
 
       <div class="panel-head centered">
-        <div class="panel-eyebrow">First Login Detected</div>
-        <h1>Secure Your Account</h1>
-        <p>Create a strong password to protect your workspace access.</p>
+        <div class="panel-eyebrow">Onboarding Security</div>
+        <h1>Initialize Access</h1>
+        <p>First login detected. Create a secure master password to safeguard your work files.</p>
       </div>
 
+      <!-- User Badge -->
       <div class="user-badge">
         <div class="user-badge-avatar">{{ getEmailInitial(resetEmail) }}</div>
         <div class="user-badge-info">
           <span class="user-badge-email">{{ resetEmail }}</span>
-          <span class="user-badge-role">Employee Account</span>
+          <span class="user-badge-role">System Identity</span>
         </div>
         <div class="user-badge-lock">
-          <svg viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="1.8"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         </div>
       </div>
 
       <div class="form-body">
-
+        
+        <!-- New Password Field -->
         <div class="field" [class.has-error]="resetErrors.newPassword">
-          <label>New Password</label>
+          <label>New Master Password</label>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="1.8"/>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
             <input
               [type]="showNewPwd ? 'text' : 'password'"
               [(ngModel)]="newPassword"
               (input)="onNewPasswordInput()"
-              placeholder="Min 8 characters"
+              placeholder="At least 8 characters"
             />
             <button class="eye-btn" type="button" (click)="showNewPwd = !showNewPwd" tabindex="-1">
-              <svg *ngIf="!showNewPwd" viewBox="0 0 24 24" fill="none">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="!showNewPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
               </svg>
-              <svg *ngIf="showNewPwd" viewBox="0 0 24 24" fill="none">
-                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" stroke="currentColor" stroke-width="1.8"/>
-                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" stroke="currentColor" stroke-width="1.8"/>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="showNewPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
               </svg>
             </button>
           </div>
           <span class="error-msg" *ngIf="resetErrors.newPassword">{{ resetErrors.newPassword }}</span>
 
-        
           <div class="strength-bar" *ngIf="newPassword">
             <div class="strength-segments">
               <div [class]="passwordStrength.percent >= 25 ? 'seg filled seg-' + passwordStrength.level : 'seg'"></div>
@@ -233,49 +324,57 @@
             </span>
           </div>
 
-         
           <div class="pwd-requirements" *ngIf="newPassword">
             <div class="req" [class.met]="newPassword.length >= 8">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              At least 8 characters
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>At least 8 characters</span>
             </div>
             <div class="req" [class.met]="/[A-Z]/.test(newPassword)">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              One uppercase letter
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>One uppercase letter</span>
             </div>
             <div class="req" [class.met]="/[0-9]/.test(newPassword)">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              One number
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>One numerical character</span>
             </div>
             <div class="req" [class.met]="/[^A-Za-z0-9]/.test(newPassword)">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              One special character
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>One special character</span>
             </div>
           </div>
         </div>
 
+        <!-- Confirm Password Field -->
         <div class="field" [class.has-error]="resetErrors.confirmPassword">
           <label>Confirm Password</label>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none">
-              <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.86 0 3.58.57 5 1.53" stroke="currentColor" stroke-width="1.8"/>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
             <input
               [type]="showConfirmPwd ? 'text' : 'password'"
               [(ngModel)]="confirmPassword"
               (input)="clearResetError('confirmPassword')"
-              placeholder="Re-enter new password"
+              placeholder="Re-enter password"
             />
             <button class="eye-btn" type="button" (click)="showConfirmPwd = !showConfirmPwd" tabindex="-1">
-              <svg *ngIf="!showConfirmPwd" viewBox="0 0 24 24" fill="none">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="!showConfirmPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
               </svg>
-              <svg *ngIf="showConfirmPwd" viewBox="0 0 24 24" fill="none">
-                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" stroke="currentColor" stroke-width="1.8"/>
-                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" stroke="currentColor" stroke-width="1.8"/>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="showConfirmPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
               </svg>
             </button>
           </div>
@@ -283,105 +382,99 @@
 
           <div class="match-indicator" *ngIf="confirmPassword && newPassword">
             <div class="match-ok" *ngIf="confirmPassword === newPassword">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Passwords match
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Passwords match</span>
             </div>
             <div class="match-fail" *ngIf="confirmPassword !== newPassword">
-              <svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2"/></svg>
-              Does not match
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+              <span>Passwords do not match</span>
             </div>
           </div>
         </div>
 
-        <!-- SERVER ERROR -->
         <div class="alert alert-error" *ngIf="resetServerError">
-          <svg viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-            <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
-            <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" stroke-width="2.5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
-          {{ resetServerError }}
+          <span>{{ resetServerError }}</span>
         </div>
 
-       
         <div class="alert alert-success" *ngIf="resetSuccess">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="1.8"/>
-            <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" stroke-width="1.8"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
-          Password reset successful! Redirecting to login…
+          <span>Password configured successfully! Loading...</span>
         </div>
 
-      
         <button class="primary-btn" (click)="resetPassword()" [disabled]="resetLoading || resetSuccess">
           <span class="btn-content" *ngIf="!resetLoading && !resetSuccess">
-            Set New Password
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            Initialize Master Password
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             </svg>
           </span>
           <span class="spinner-wrap" *ngIf="resetLoading">
-            <span class="spinner"></span> Resetting…
+            <span class="spinner"></span> Activating Account…
           </span>
           <span class="btn-content" *ngIf="resetSuccess && !resetLoading">
-            Done ✓
+            Verified ✓
           </span>
         </button>
 
-      
         <button class="back-link" (click)="goBackToLogin()" [disabled]="resetLoading || resetSuccess">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
-          Back to login
+          Return to gateway login
         </button>
 
       </div>
     </div>
 
-    <div class="panel forgot-panel" *ngIf="showForgotPassword">
-
+    <!-- ── 3. FORGOT PASSWORD PANEL ── -->
+    <div class="panel forgot-panel" *ngIf="showForgotPassword && !showCreateAccount">
       
       <div class="reset-hero">
         <div class="reset-icon-ring forgot-icon-ring">
-          <div class="reset-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"
-                stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
         </div>
       </div>
 
-    
       <div class="panel-head centered">
-        <div class="panel-eyebrow">Account Recovery</div>
-        <h1 *ngIf="!otpSent">Forgot Password?</h1>
-        <h1 *ngIf="otpSent">Reset Password</h1>
-        <p *ngIf="!otpSent">Enter your registered email address and we'll send you a one-time password.</p>
-        <p *ngIf="otpSent">Enter the OTP sent to <strong>{{ forgotEmail }}</strong> and set your new password.</p>
+        <div class="panel-eyebrow">Recovery System</div>
+        <h1 *ngIf="!otpSent">Recover Password</h1>
+        <h1 *ngIf="otpSent">Establish Password</h1>
+        <p *ngIf="!otpSent">Input your authorized work email address to receive a secure recovery OTP.</p>
+        <p *ngIf="otpSent">Enter the OTP sent to <strong>{{ forgotEmail }}</strong> to configure your password.</p>
       </div>
 
-   
+      <!-- Form Body - STEP 1 -->
       <div class="form-body" *ngIf="!otpSent && !forgotSuccess">
-
         
         <div class="field" [class.has-error]="forgotErrors.email">
-          <label>Registered Email</label>
+          <label>Work Email Address</label>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                stroke="currentColor" stroke-width="1.8"/>
-              <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8"/>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
             </svg>
             <input
               type="email"
               [(ngModel)]="forgotEmail"
               (input)="clearForgotError('email')"
-              placeholder="you@company.com"
+              placeholder="name@company.com"
               autocomplete="email"
             />
           </div>
@@ -389,63 +482,60 @@
         </div>
 
         <div class="alert alert-error" *ngIf="forgotServerError">
-          <svg viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-            <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
-            <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" stroke-width="2.5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
-          {{ forgotServerError }}
+          <span>{{ forgotServerError }}</span>
         </div>
 
-       
         <button class="primary-btn" (click)="sendOtp()" [disabled]="forgotOtpLoading">
           <span class="btn-content" *ngIf="!forgotOtpLoading">
-            Send OTP
-            <svg viewBox="0 0 24 24" fill="none">
-              <line x1="22" y1="2" x2="11" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <polygon points="22 2 15 22 11 13 2 9 22 2" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/>
+            Request Recovery OTP
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
             </svg>
           </span>
           <span class="spinner-wrap" *ngIf="forgotOtpLoading">
-            <span class="spinner"></span> Sending OTP…
+            <span class="spinner"></span> Dispatching OTP…
           </span>
         </button>
 
-       
         <button class="back-link" (click)="backToLogin()" [disabled]="forgotOtpLoading">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
-          Back to login
+          Cancel and return to login
         </button>
 
       </div>
 
+      <!-- Form Body - STEP 2 -->
       <div class="form-body" *ngIf="otpSent && !forgotSuccess">
-
+        
         <div class="alert alert-info">
-          <svg viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-            <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
-            <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" stroke-width="2.5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
-          OTP sent successfully! Please check your email inbox.
+          <span>One-Time Password has been dispatched. Please check your inbox.</span>
         </div>
 
-        <!-- OTP FIELD -->
         <div class="field" [class.has-error]="forgotErrors.otp">
-          <label>One-Time Password (OTP)</label>
+          <label>Enter One-Time Password</label>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none">
-              <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M10 14h.01M14 14h.01M18 14h.01"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="6" width="20" height="12" rx="2"/>
+              <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M10 14h.01M14 14h.01M18 14h.01"/>
             </svg>
             <input
               type="text"
               [(ngModel)]="forgotOtp"
               (input)="clearForgotError('otp')"
-              placeholder="Enter OTP from email"
+              placeholder="Recovery Code"
               autocomplete="one-time-code"
               maxlength="10"
             />
@@ -453,35 +543,33 @@
           <span class="error-msg" *ngIf="forgotErrors.otp">{{ forgotErrors.otp }}</span>
         </div>
 
-        <!-- NEW PASSWORD FIELD -->
         <div class="field" [class.has-error]="forgotErrors.newPassword">
           <label>New Password</label>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="1.8"/>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
             <input
               [type]="showForgotNewPwd ? 'text' : 'password'"
               [(ngModel)]="forgotNewPassword"
               (input)="clearForgotError('newPassword')"
-              placeholder="Min 8 characters"
+              placeholder="Minimum 8 characters"
             />
             <button class="eye-btn" type="button" (click)="showForgotNewPwd = !showForgotNewPwd" tabindex="-1">
-              <svg *ngIf="!showForgotNewPwd" viewBox="0 0 24 24" fill="none">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="!showForgotNewPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
               </svg>
-              <svg *ngIf="showForgotNewPwd" viewBox="0 0 24 24" fill="none">
-                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" stroke="currentColor" stroke-width="1.8"/>
-                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" stroke="currentColor" stroke-width="1.8"/>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="showForgotNewPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
               </svg>
             </button>
           </div>
           <span class="error-msg" *ngIf="forgotErrors.newPassword">{{ forgotErrors.newPassword }}</span>
 
-          <!-- STRENGTH BAR -->
           <div class="strength-bar" *ngIf="forgotNewPassword">
             <div class="strength-segments">
               <div [class]="forgotPasswordStrength.percent >= 25 ? 'seg filled seg-' + forgotPasswordStrength.level : 'seg'"></div>
@@ -494,92 +582,89 @@
             </span>
           </div>
 
-          <!-- PASSWORD REQUIREMENTS -->
           <div class="pwd-requirements" *ngIf="forgotNewPassword">
             <div class="req" [class.met]="forgotNewPassword.length >= 8">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              At least 8 characters
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>At least 8 characters</span>
             </div>
             <div class="req" [class.met]="/[A-Z]/.test(forgotNewPassword)">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              One uppercase letter
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>One uppercase letter</span>
             </div>
             <div class="req" [class.met]="/[0-9]/.test(forgotNewPassword)">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              One number
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>One numerical character</span>
             </div>
             <div class="req" [class.met]="/[^A-Za-z0-9]/.test(forgotNewPassword)">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              One special character
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>One special character</span>
             </div>
           </div>
         </div>
 
-        <!-- CONFIRM PASSWORD FIELD -->
         <div class="field" [class.has-error]="forgotErrors.confirmPassword">
           <label>Confirm Password</label>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none">
-              <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.86 0 3.58.57 5 1.53" stroke="currentColor" stroke-width="1.8"/>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
             <input
               [type]="showForgotConfirmPwd ? 'text' : 'password'"
               [(ngModel)]="forgotConfirmPassword"
               (input)="clearForgotError('confirmPassword')"
-              placeholder="Re-enter new password"
+              placeholder="Re-enter password"
             />
             <button class="eye-btn" type="button" (click)="showForgotConfirmPwd = !showForgotConfirmPwd" tabindex="-1">
-              <svg *ngIf="!showForgotConfirmPwd" viewBox="0 0 24 24" fill="none">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="!showForgotConfirmPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
               </svg>
-              <svg *ngIf="showForgotConfirmPwd" viewBox="0 0 24 24" fill="none">
-                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" stroke="currentColor" stroke-width="1.8"/>
-                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" stroke="currentColor" stroke-width="1.8"/>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.8"/>
+              <svg width="18" height="18" *ngIf="showForgotConfirmPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
               </svg>
             </button>
           </div>
           <span class="error-msg" *ngIf="forgotErrors.confirmPassword">{{ forgotErrors.confirmPassword }}</span>
 
-          <!-- MATCH INDICATOR -->
           <div class="match-indicator" *ngIf="forgotConfirmPassword && forgotNewPassword">
             <div class="match-ok" *ngIf="forgotConfirmPassword === forgotNewPassword">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Passwords match
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Passwords match</span>
             </div>
             <div class="match-fail" *ngIf="forgotConfirmPassword !== forgotNewPassword">
-              <svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2"/></svg>
-              Does not match
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+              <span>Passwords do not match</span>
             </div>
           </div>
         </div>
 
-        <!-- SERVER ERROR -->
         <div class="alert alert-error" *ngIf="forgotServerError">
-          <svg viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-            <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
-            <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" stroke-width="2.5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
-          {{ forgotServerError }}
+          <span>{{ forgotServerError }}</span>
         </div>
 
-        <!-- RESET PASSWORD BUTTON -->
         <button class="primary-btn" (click)="forgotPasswordReset()" [disabled]="forgotLoading">
           <span class="btn-content" *ngIf="!forgotLoading">
-            Reset Password
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            Re-establish Password
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             </svg>
           </span>
           <span class="spinner-wrap" *ngIf="forgotLoading">
-            <span class="spinner"></span> Resetting…
+            <span class="spinner"></span> Resetting credentials…
           </span>
         </button>
 
-        <!-- RESEND OTP LINK -->
         <div class="resend-row">
           <span class="resend-label">Didn't receive the OTP?</span>
           <button class="resend-btn" type="button" (click)="otpSent = false; forgotOtp = ''; forgotErrors = {}; forgotServerError = ''" [disabled]="forgotLoading">
@@ -587,27 +672,26 @@
           </button>
         </div>
 
-        <!-- BACK LINK -->
         <button class="back-link" (click)="backToLogin()" [disabled]="forgotLoading">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
-          Back to login
+          Return to gateway login
         </button>
 
       </div>
 
-      <!-- ── SUCCESS STATE ── -->
+      <!-- SUCCESS STATE -->
       <div class="form-body" *ngIf="forgotSuccess">
         <div class="forgot-success-wrap">
           <div class="forgot-success-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="10" stroke="#22c55e" stroke-width="1.8"/>
-              <path d="M8 12l3 3 5-5" stroke="#22c55e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" stroke="#10b981"/>
+              <polyline points="16 9 11 14 8 11" stroke="#10b981"/>
             </svg>
           </div>
-          <h3 class="forgot-success-title">Password Reset Successful!</h3>
-          <p class="forgot-success-sub">Your password has been updated. Redirecting you to the login screen…</p>
+          <h3 class="forgot-success-title">Authentication Updated</h3>
+          <p class="forgot-success-sub">Your password was successfully updated. Loading system gate...</p>
           <div class="forgot-success-loader">
             <div class="forgot-success-bar"></div>
           </div>
@@ -615,7 +699,227 @@
       </div>
 
     </div>
-    <!-- ── END FORGOT PASSWORD PANEL ── -->
+
+    <!-- ── 4. CREATE ACCOUNT PANEL (NEW) ── -->
+    <div class="panel signup-panel" *ngIf="showCreateAccount">
+
+      <div class="panel-brand">
+        <div class="brand-icon">
+          <img src="assets/hg-icon.webp" alt="Hg" />
+        </div>
+        <span class="brand-text">AI Recruiter</span>
+      </div>
+
+      <div class="panel-head">
+        <div class="panel-eyebrow signup-eyebrow">Create Account</div>
+        <h1>Join the Platform</h1>
+        <p>Register your AI Recruiter account to get started.</p>
+      </div>
+
+      <div class="form-body">
+
+        <!-- USERNAME + DEPARTMENT -->
+        <div class="two-col-row">
+
+          <div class="field" [class.has-error]="signupErrors.username">
+            <label>Username</label>
+            <div class="input-wrap">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input type="text" [(ngModel)]="signupUsername" (input)="clearSignupError('username')"
+                placeholder="John Doe" autocomplete="name" />
+            </div>
+            <span class="error-msg" *ngIf="signupErrors.username">{{ signupErrors.username }}</span>
+          </div>
+
+          <div class="field" [class.has-error]="signupErrors.department">
+            <label>Department</label>
+            <div class="input-wrap select-wrap">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+              <select [(ngModel)]="signupDepartment" (change)="clearSignupError('department')" class="dept-select">
+                <option value="">Select department</option>
+                <option value="HR">HR</option>
+                <option value="Engineer">Engineer</option>
+                <option value="Admin">Admin</option>
+              </select>
+              <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </div>
+            <span class="error-msg" *ngIf="signupErrors.department">{{ signupErrors.department }}</span>
+          </div>
+
+        </div>
+
+        <!-- EMAIL -->
+        <div class="field" [class.has-error]="signupErrors.email">
+          <label>Official Email</label>
+          <div class="input-wrap">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input type="email" [(ngModel)]="signupEmail" (input)="clearSignupError('email')"
+              placeholder="name@company.com" autocomplete="email" />
+          </div>
+          <span class="error-msg" *ngIf="signupErrors.email">{{ signupErrors.email }}</span>
+        </div>
+
+        <!-- PASSWORD + CONFIRM ROW -->
+        <div class="two-col-row">
+
+          <div class="field" [class.has-error]="signupErrors.password">
+            <label>Password</label>
+            <div class="input-wrap">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input [type]="showSignupPwd ? 'text' : 'password'" [(ngModel)]="signupPassword"
+                (input)="onSignupPasswordInput()" placeholder="Min 8 characters" />
+              <button class="eye-btn" type="button" (click)="showSignupPwd = !showSignupPwd" tabindex="-1">
+                <svg width="18" height="18" *ngIf="!showSignupPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <svg width="18" height="18" *ngIf="showSignupPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                  <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              </button>
+            </div>
+            <span class="error-msg" *ngIf="signupErrors.password">{{ signupErrors.password }}</span>
+          </div>
+
+          <div class="field" [class.has-error]="signupErrors.confirmPassword">
+            <label>Confirm Password</label>
+            <div class="input-wrap">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input [type]="showSignupConfirmPwd ? 'text' : 'password'" [(ngModel)]="signupConfirmPassword"
+                (input)="clearSignupError('confirmPassword')" placeholder="Re-enter password" />
+              <button class="eye-btn" type="button" (click)="showSignupConfirmPwd = !showSignupConfirmPwd" tabindex="-1">
+                <svg width="18" height="18" *ngIf="!showSignupConfirmPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <svg width="18" height="18" *ngIf="showSignupConfirmPwd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                  <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              </button>
+            </div>
+            <span class="error-msg" *ngIf="signupErrors.confirmPassword">{{ signupErrors.confirmPassword }}</span>
+          </div>
+
+        </div>
+
+        <!-- STRENGTH BAR -->
+        <div class="strength-bar" *ngIf="signupPassword">
+          <div class="strength-segments">
+            <div [class]="signupPasswordStrength.percent >= 25  ? 'seg filled seg-' + signupPasswordStrength.level : 'seg'"></div>
+            <div [class]="signupPasswordStrength.percent >= 55  ? 'seg filled seg-' + signupPasswordStrength.level : 'seg'"></div>
+            <div [class]="signupPasswordStrength.percent >= 78  ? 'seg filled seg-' + signupPasswordStrength.level : 'seg'"></div>
+            <div [class]="signupPasswordStrength.percent >= 100 ? 'seg filled seg-' + signupPasswordStrength.level : 'seg'"></div>
+          </div>
+          <span class="strength-label" [class]="'strength-' + signupPasswordStrength.level">
+            {{ signupPasswordStrength.label }}
+          </span>
+        </div>
+
+        <!-- PASSWORD REQUIREMENTS -->
+        <div class="pwd-requirements" *ngIf="signupPassword">
+          <div class="req" [class.met]="signupPassword.length >= 8">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>At least 8 characters</span>
+          </div>
+          <div class="req" [class.met]="/[A-Z]/.test(signupPassword)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>One uppercase letter</span>
+          </div>
+          <div class="req" [class.met]="/[0-9]/.test(signupPassword)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>One number</span>
+          </div>
+          <div class="req" [class.met]="/[^A-Za-z0-9]/.test(signupPassword)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>One special character</span>
+          </div>
+        </div>
+
+        <!-- MATCH INDICATOR -->
+        <div class="match-indicator" *ngIf="signupConfirmPassword && signupPassword">
+          <div class="match-ok" *ngIf="signupConfirmPassword === signupPassword">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Passwords match</span>
+          </div>
+          <div class="match-fail" *ngIf="signupConfirmPassword !== signupPassword">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+            <span>Does not match</span>
+          </div>
+        </div>
+
+        <!-- SERVER ERROR -->
+        <div class="alert alert-error" *ngIf="signupServerError">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>{{ signupServerError }}</span>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="alert alert-success" *ngIf="signupSuccess">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <span>Account created successfully! Redirecting to login…</span>
+        </div>
+
+        <!-- SUBMIT -->
+        <button class="primary-btn signup-btn" (click)="register()" [disabled]="signupLoading || signupSuccess">
+          <span class="btn-content" *ngIf="!signupLoading && !signupSuccess">
+            Create Account
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="19" y1="8" x2="19" y2="14"/>
+              <line x1="22" y1="11" x2="16" y2="11"/>
+            </svg>
+          </span>
+          <span class="spinner-wrap" *ngIf="signupLoading">
+            <span class="spinner"></span> Creating account…
+          </span>
+          <span class="btn-content" *ngIf="signupSuccess && !signupLoading">
+            Done ✓
+          </span>
+        </button>
+
+        <!-- BACK TO LOGIN -->
+        <button class="back-link" (click)="backToLoginFromSignup()" [disabled]="signupLoading || signupSuccess">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          Already have an account? Sign In
+        </button>
+
+      </div>
+    </div>
+    <!-- ── END CREATE ACCOUNT PANEL ── -->
 
   </div>
 </div>

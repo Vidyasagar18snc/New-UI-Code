@@ -1,171 +1,388 @@
-<div class="job-container">
+<div class="job-page" (click)="onDocClick()">
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
 
-  <!-- Header -->
-  <div class="jc-header">
-    <div class="header-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round">
-        <rect x="2" y="7" width="20" height="14" rx="2" />
-        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-        <line x1="12" y1="12" x2="12" y2="16" />
-        <line x1="10" y1="14" x2="14" y2="14" />
-      </svg>
-    </div>
-    <h2>Create job description</h2>
-
-  </div>
-
-  <div class="jc-body">
-
-    <!-- JD Upload -->
-    <div class="form-group">
-      <label>Upload JD (PDF / DOCX)</label>
-
-      <label class="upload-card" for="jd-file" [class.has-file]="selectedFile">
-        <div class="upload-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="17 8 12 3 7 8" />
-            <line x1="12" y1="3" x2="12" y2="15" />
-          </svg>
-        </div>
-        <div class="upload-text">
-          <strong>Click to browse</strong>
-          <p>or drag &amp; drop your PDF or DOCX file here</p>
-        </div>
-        <input type="file" id="jd-file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx" />
-      </label>
-
-      <!-- File selected state -->
-      <div class="upload-actions" *ngIf="selectedFile">
-        <span class="file-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-          </svg>
-          {{ selectedFile.name }}
-        </span>
-        <button type="button" class="btn-autofill" (click)="uploadJD()" [disabled]="loading">
-          Upload &amp; Auto-Fill
-        </button>
-      </div>
-
-      <!-- Loading state -->
-      <div class="loading-pill" *ngIf="loading">
-        <span class="spinner"></span>
-        Processing JD…
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- Job Title + Experience -->
-    <div class="row-3">
-
-      <!-- Job Title -->
-      <div class="form-group">
-        <label for="jobTitle">Job Title</label>
-        <div class="input-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="8" r="4" />
-            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-          </svg>
-          <input type="text" id="jobTitle" [(ngModel)]="jobTitle" placeholder="Senior Frontend Engineer">
-        </div>
-      </div>
-
-      <!-- Experience -->
-      <div class="form-group">
-        <label for="experience">Experience</label>
-        <div class="input-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="9" />
-            <polyline points="12 7 12 12 15 15" />
-          </svg>
-          <input type="number" id="experience" [(ngModel)]="experience" placeholder="5">
-        </div>
-      </div>
-
-      <!-- Budget -->
-      <div class="form-group">
-        <label for="budget">Budget (LPA)</label>
-        <div class="input-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 2v20" />
-            <path d="M17 6c0-2-2-3-5-3s-5 1-5 3 2 3 5 3 5 1 5 3-2 3-5 3-5-1-5-3" />
-          </svg>
-          <input type="text" id="budget" [(ngModel)]="budget" placeholder="10 - 15 LPA">
-        </div>
-      </div>
-
-    </div>
-
-
-
-
-    <!-- Location -->
-    <div class="form-group">
-      <label for="location">Location</label>
-      <div class="input-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-          <circle cx="12" cy="9" r="2.5" />
+  <!-- ══════════════════════════════
+       HEADER BAR
+  ══════════════════════════════ -->
+  <div class="greeting-bar">
+    <div class="greeting-left">
+      <div class="greeting-icon-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
         </svg>
-        <input type="text" id="location" [(ngModel)]="location" placeholder="e.g. Bengaluru, India · Remote">
+      </div>
+      <div>
+        <h2>Create job description</h2>
+        <p>Add job details to attract the right talent.</p>
       </div>
     </div>
+    <div class="greeting-right">
 
-    <hr class="divider">
+      <!-- ① ASK AI RECRUIT -->
+      <div class="ai-btn-wrapper">
+        <button class="search-ai-btn" (click)="toggleAiPanel($event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="sparkle-icon">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <span>Ask AI Recruit</span>
+        </button>
 
-    <!-- Skills -->
-    <div class="form-group">
-      <label>Required skills</label>
-      <div class="skill-input-row">
-        <!-- <input
-          type="text"
-          [(ngModel)]="skillInput"
-          (keydown.enter)="addSkill()"
-          placeholder="Type a skill and press Add or Enter"
-        > -->
-        <button type="button" class="btn-add" (click)="addSkill()">+ Add</button>
+        <!-- AI Chat Panel -->
+        <div class="ai-chat-panel" *ngIf="showAiPanel" (click)="$event.stopPropagation()">
+          <div class="acp-header">
+            <div class="acp-title-row">
+              <div class="acp-avatar">AI</div>
+              <div>
+                <div class="acp-title">AI Recruit</div>
+                <div class="acp-status"><span class="acp-dot"></span> Online</div>
+              </div>
+            </div>
+            <button class="acp-close" (click)="closeAiPanel()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="acp-messages">
+            <div *ngFor="let msg of aiMessages" class="acp-msg" [class.acp-msg-user]="msg.role==='user'" [class.acp-msg-ai]="msg.role==='ai'">
+              <div class="acp-bubble">{{ msg.text }}</div>
+            </div>
+            <div class="acp-msg acp-msg-ai" *ngIf="aiLoading">
+              <div class="acp-bubble acp-typing"><span></span><span></span></div>
+            </div>
+          </div>
+
+          <div class="acp-footer">
+            <input class="acp-input" type="text" [(ngModel)]="aiInput" [ngModelOptions]="{standalone:true}"
+              placeholder="Ask for JD suggestions…" (keydown)="onAiKeydown($event)">
+            <button class="acp-send" (click)="sendAiMessage()" [disabled]="!aiInput.trim()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="skill-tags" *ngIf="skills.length > 0">
-        <span class="skill-tag" *ngFor="let skill of skills; let i = index">
-          {{ skill }}
-          <button type="button" (click)="removeSkill(i)" title="Remove skill">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-              stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
+
+      <!-- ② NOTIFICATION BELL -->
+      <div class="notif-wrapper">
+        <button class="notif-badge" (click)="toggleNotifPanel($event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="red-dot" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+        </button>
+
+        <!-- Notifications Dropdown -->
+        <div class="notif-panel" *ngIf="showNotifPanel" (click)="$event.stopPropagation()">
+          <div class="np-header">
+            <span class="np-title">Notifications</span>
+            <button class="np-mark-read" (click)="markAllRead()">Mark all read</button>
+          </div>
+          <div class="np-list">
+            <div class="np-item" *ngFor="let n of notifications$ | async" [class.np-unread]="!n.read" (click)="markRead(n)">
+              <div class="np-icon">{{ n.icon }}</div>
+              <div class="np-body">
+                <div class="np-item-title">{{ n.title }}</div>
+                <div class="np-item-desc">{{ n.description }}</div>
+                <div class="np-item-time">{{ n.timeDisplay }}</div>
+              </div>
+              <div class="np-unread-dot" *ngIf="!n.read"></div>
+            </div>
+            
+            <div class="np-empty-state" *ngIf="(notifications$ | async)?.length === 0">
+              <div class="np-empty-icon">🎉</div>
+              <div class="np-empty-title">All caught up!</div>
+              <div class="np-empty-desc">You have no unread notifications.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ HR AVATAR / PROFILE MENU -->
+      <div class="avatar-wrapper">
+        <button class="user-avatar-top" (click)="toggleProfileMenu($event)">HR</button>
+
+        <div class="profile-menu" *ngIf="showProfileMenu" (click)="$event.stopPropagation()">
+          <div class="pm-header">
+            <div class="pm-avatar">HR</div>
+            <div>
+              <div class="pm-name">{{ employeeName }}</div>
+              <div class="pm-role">HR Admin · Recruiter</div>
+            </div>
+          </div>
+          <div class="pm-divider"></div>
+          <button class="pm-item" (click)="goToDashboard()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
           </button>
-        </span>
+          <button class="pm-item pm-item-danger" (click)="logout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /greeting-bar -->
+
+  <!-- Main Single-Column Form Card -->
+  <div class="job-card-single">
+    <div class="jc-body">
+      <!-- JD Upload Section -->
+      <div class="form-group upload-section">
+        <label class="section-title">Upload JD (PDF / DOCX)</label>
+        <p class="section-desc">Upload an existing JD to auto-generate details with AI.</p>
+
+        <label class="upload-card-box" for="jd-file" 
+          [class.has-file]="selectedFile"
+          [class.drag-over]="isDragging"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onFileDropped($event)">
+          <div class="upload-icon-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 16 12 12 8 16" />
+              <line x1="12" y1="12" x2="12" y2="21" />
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+            </svg>
+          </div>
+          <div class="upload-text-info">
+            <strong class="browse-link">Click to browse</strong>
+            <span class="drag-text">or drag &amp; drop your PDF or DOCX file here</span>
+            <span class="max-size-hint">Max file size: 20MB</span>
+          </div>
+          <input type="file" id="jd-file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx" />
+        </label>
+
+        <!-- File selected actions -->
+        <div class="upload-actions" *ngIf="selectedFile"
+             [class.pdf-file]="selectedFile.name.toLowerCase().endsWith('.pdf')"
+             [class.word-file]="selectedFile.name.toLowerCase().endsWith('.doc') || selectedFile.name.toLowerCase().endsWith('.docx')">
+          <span class="file-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            {{ selectedFile.name }}
+          </span>
+          <button type="button" class="btn-autofill" (click)="uploadJD()" [disabled]="loading">
+            Upload &amp; Auto-Fill
+          </button>
+        </div>
+
+        <!-- Loading spinner -->
+        <div class="loading-pill" *ngIf="loading">
+          <span class="spinner"></span>
+          Processing JD…
+        </div>
+      </div>
+
+      <hr class="divider-line">
+
+      <!-- Job Title + Experience -->
+      <div class="row-2">
+        <!-- Job Title -->
+        <div class="form-group">
+          <label for="jobTitle" class="input-label-required">Job Title</label>
+          <div class="input-prefix-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-prefix-icon">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+            </svg>
+            <input type="text" id="jobTitle" [(ngModel)]="jobTitle" placeholder="e.g. Senior Frontend Engineer">
+          </div>
+        </div>
+
+        <!-- Experience -->
+        <div class="form-group">
+          <label for="experience" class="input-label-required">Experience (Years)</label>
+          <div class="input-prefix-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-prefix-icon">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <input type="number" id="experience" [(ngModel)]="experience" placeholder="e.g. 3 - 5">
+          </div>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="form-group">
+        <label for="location" class="input-label-required">Location</label>
+        <div class="input-prefix-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-prefix-icon">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          <input type="text" id="location" [(ngModel)]="location" placeholder="e.g. Bengaluru, India · Remote">
+        </div>
+      </div>
+
+      <hr class="divider-line">
+
+      <!-- Required Skills -->
+      <div class="form-group">
+        <div class="skills-header-row">
+          <div>
+            <label class="input-label-required">Required Skills</label>
+            <p class="section-desc">Add the key skills required for this role.</p>
+          </div>
+          <button type="button" class="btn-ai-suggest" (click)="suggestSkills()" [disabled]="aiSuggesting">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            AI Suggest Skills
+          </button>
+        </div>
+
+        <div class="skill-input-bar">
+          <div class="input-prefix-wrap skill-input-prefix-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-prefix-icon">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <input
+              type="text"
+              [(ngModel)]="skillInput"
+              (keydown.enter)="addSkill()"
+              placeholder="Type a skill and press Enter"
+            >
+          </div>
+          
+          <div class="skill-tags-group">
+            <button type="button" class="btn-add-skill-tag" (click)="addSkill()">+ Add Skill</button>
+            <span class="skill-pill-tag" *ngFor="let skill of skills; let i = index">
+              {{ skill }}
+              <button type="button" class="remove-skill-pill" (click)="removeSkill(i)" title="Remove skill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <!-- AI Suggested Skills -->
+        <div class="ai-suggested-skills-container" *ngIf="aiSuggesting || suggestedSkills.length > 0">
+          <div class="ai-suggested-header">
+            <svg class="sparkle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px; stroke: #6d28d9; fill: rgba(109, 40, 217, 0.1);">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            <span>AI Suggested Skills:</span>
+            <span class="ai-suggest-loading" *ngIf="aiSuggesting">
+              <span class="spinner-sm"></span> Generating suggestions...
+            </span>
+          </div>
+          <div class="ai-suggested-list" *ngIf="!aiSuggesting">
+            <button type="button" class="suggested-skill-btn" *ngFor="let s of suggestedSkills; let idx = index" (click)="addSuggestedSkill(s, idx)">
+              + {{ s }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider-line">
+
+      <!-- Rich Text Editor Job Description -->
+      <div class="form-group">
+        <label for="description" class="input-label-required">Job Description</label>
+        <p class="section-desc">Describe the role, responsibilities, and requirements in detail.</p>
+        
+        <div class="editor-container">
+          <!-- Mock rich text toolbar -->
+          <div class="editor-toolbar">
+            <div class="toolbar-left-group">
+              <div class="format-select-wrap">
+                <span>Paragraph</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </div>
+              <div class="toolbar-divider"></div>
+              <button type="button" class="toolbar-btn bold-btn" title="Bold">B</button>
+              <button type="button" class="toolbar-btn italic-btn" title="Italic">I</button>
+              <button type="button" class="toolbar-btn underline-btn" title="Underline">U</button>
+              <div class="toolbar-divider"></div>
+              <button type="button" class="toolbar-btn" title="Bullet List">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                  <circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/>
+                </svg>
+              </button>
+              <button type="button" class="toolbar-btn" title="Numbered List">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/>
+                  <path d="M4 6h1v4M4 10h2"/>
+                </svg>
+              </button>
+              <div class="toolbar-divider"></div>
+              <button type="button" class="toolbar-btn" title="Align Left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="15" y1="18" x2="3" y2="18"/>
+                </svg>
+              </button>
+              <button type="button" class="toolbar-btn" title="Link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+              </button>
+            </div>
+
+            <button type="button" class="btn-ai-enhance" (click)="enhanceDescription()" [disabled]="aiEnhancing">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              {{ aiEnhancing ? 'Enhancing…' : 'AI Enhance' }}
+            </button>
+          </div>
+
+          <div class="textarea-relative-wrapper">
+            <textarea id="description" [(ngModel)]="description" (input)="updateCharCount()"
+              [disabled]="aiEnhancing"
+              placeholder="Write the job description here…"></textarea>
+            
+            <!-- AI Enhancing Overlay -->
+            <div class="ai-enhancing-overlay" *ngIf="aiEnhancing">
+              <div class="enhancing-loader-content">
+                <span class="enhance-spinner"></span>
+                <span class="enhancing-text">AI is rewriting & enhancing your job description...</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="editor-char-hint">{{ charCount }} / 5000</div>
+        </div>
       </div>
     </div>
 
-    <!-- Description -->
-    <div class="form-group">
-      <label for="description">Job description</label>
-      <textarea id="description" [(ngModel)]="description" (input)="updateCharCount()"
-        placeholder="Describe the role, responsibilities, and requirements…"></textarea>
-      <div class="char-hint">{{ charCount }} characters</div>
+    <!-- Action Buttons -->
+    <div class="action-buttons-single">
+      <button type="button" class="btn-cancel-single" (click)="resetForm()">Reset</button>
+      <button type="button" class="btn-submit-single" (click)="submitJob()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
+        Save Job Description
+      </button>
     </div>
-
   </div>
 
-  <!-- Action Buttons -->
-  <div class="action-buttons">
-    <button type="button" class="btn-cancel" (click)="resetForm()">Cancel</button>
-    <button type="button" class="btn-submit" (click)="submitJob()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round">
-        <polyline points="20 6 9 17 4 12" />
-      </svg>
-      Create job
-    </button>
+  <!-- Footer -->
+  <div class="upload-footer" style="text-align: center; margin-top: 36px; font-size: 12px; color: var(--rc-text-4, #a49dbf); font-weight: 500;">
+    © 2026 AI Recruiter. All rights reserved.
   </div>
 
+  <!-- Toast Notification -->
+  <div class="toast-notification" [class.show]="showToast" [class.success]="toastType==='success'" [class.error]="toastType==='error'">
+    <div class="toast-content">
+      <span class="toast-icon">{{ toastType === 'success' ? '✅' : '❌' }}</span>
+      <span class="toast-text">{{ toastMessage }}</span>
+    </div>
+  </div>
 </div>

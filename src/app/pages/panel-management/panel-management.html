@@ -39,6 +39,18 @@
         placeholder="Enter password">
     </div>
 
+    <!-- Job Title dropdown, fetched from Jobs API -->
+    <div class="form-group">
+      <label>Job Title</label>
+      <select [(ngModel)]="panel.jobTitle">
+        <option value="" disabled selected>Select a job title</option>
+        <option *ngFor="let job of jobs" [value]="getJobLabel(job)">
+          {{ getJobLabel(job) }}
+        </option>
+      </select>
+      <span *ngIf="jobsError" class="field-error">{{ jobsError }}</span>
+    </div>
+
     <button class="save-btn" (click)="savePanel()">
       Add Panel
     </button>
@@ -56,6 +68,7 @@
           <th>Name</th>
           <th>Email</th>
           <th>Role</th>
+          <th>Job Title</th>
           <th>Status</th>
           <th>Action</th>
         </tr>
@@ -68,6 +81,7 @@
           <td>{{ p.name }}</td>
           <td>{{ p.email }}</td>
           <td>{{ p.role }}</td>
+          <td>{{ p.jobTitle || '—' }}</td>
 
           <td>
             <span
@@ -89,8 +103,8 @@
 
       </tbody>
 
-    </table>    
+    </table>
 
   </div>
 
-</div> 
+</div>

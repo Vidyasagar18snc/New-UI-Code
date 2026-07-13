@@ -41,7 +41,7 @@ export class AnalyticsComponent implements AfterViewInit {
  
   funnelLabels  = ['Uploaded','Parsed','Matched','Shortlisted','Interviewed','Hired'];
   funnelData    = [1284, 1201, 874, 412, 198, 67];
-  funnelColors  = ['#378ADD','#378ADD','#1D9E75','#1D9E75','#7F77DD','#EF9F27'];
+  funnelColors  = ['#7c3aed', '#6366f1', '#3b82f6', '#10b981', '#f59e0b', '#22c55e'];
 
  
   weekLabels    = ['W1','W2','W3','W4','W5','W6','W7','W8'];
@@ -51,17 +51,17 @@ export class AnalyticsComponent implements AfterViewInit {
 
   fakeLabels    = ['Genuine','Suspicious','Flagged fake'];
   fakeData      = [82, 11, 7];
-  fakeColors    = ['#1D9E75','#EF9F27','#E24B4A'];
+  fakeColors    = ['#22c55e', '#f59e0b', '#ef4444'];
 
   
   scoreLabels   = ['0-20','20-40','40-60','60-70','70-80','80-90','90-100'];
   scoreData     = [18, 54, 143, 212, 287, 198, 72];
-  scoreColors   = ['#E24B4A','#E24B4A','#EF9F27','#378ADD','#1D9E75','#1D9E75','#7F77DD'];
+  scoreColors   = ['#ef4444', '#ef4444', '#f59e0b', '#3b82f6', '#22c55e', '#22c55e', '#7c3aed'];
 
  
   interviewLabels = ['Shortlisted','Pending','Rejected'];
   interviewData   = [38, 29, 33];
-  interviewColors = ['#378ADD','#888780','#E24B4A'];
+  interviewColors = ['#3b82f6', '#9ca3af', '#ef4444'];
 
 
   skillsData: SkillGap[] = [
@@ -86,12 +86,10 @@ export class AnalyticsComponent implements AfterViewInit {
   private charts: Chart[] = [];
 
   private get gridColor(): string {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'rgba(255,255,255,0.07)'
-      : 'rgba(0,0,0,0.07)';
+    return 'rgba(109, 40, 217, 0.05)';
   }
   private get tickColor(): string {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? '#9ca3af' : '#6b7280';
+    return '#6b7280';
   }
 
   ngAfterViewInit(): void {
@@ -148,15 +146,15 @@ export class AnalyticsComponent implements AfterViewInit {
           {
             label: 'Uploads',
             data: this.uploadsData,
-            borderColor: '#378ADD',
-            backgroundColor: 'rgba(55,138,221,0.08)',
+            borderColor: '#7c3aed',
+            backgroundColor: 'rgba(124, 58, 237, 0.05)',
             tension: 0.4, fill: true, pointRadius: 3, borderWidth: 2
           },
           {
             label: 'Matches',
             data: this.matchesData,
-            borderColor: '#1D9E75',
-            backgroundColor: 'rgba(29,158,117,0.08)',
+            borderColor: '#22c55e',
+            backgroundColor: 'rgba(34, 197, 94, 0.05)',
             tension: 0.4, fill: true, pointRadius: 3, borderWidth: 2
           }
         ]
@@ -232,8 +230,8 @@ export class AnalyticsComponent implements AfterViewInit {
       data: {
         labels: this.skillsData.map(s => s.skill),
         datasets: [
-          { label: 'Required in JDs', data: this.skillsData.map(s => s.required), backgroundColor: '#7F77DD', borderRadius: 3, borderSkipped: false },
-          { label: 'Found in resumes', data: this.skillsData.map(s => s.available), backgroundColor: '#5DCAA5', borderRadius: 3, borderSkipped: false }
+          { label: 'Required in JDs', data: this.skillsData.map(s => s.required), backgroundColor: '#7c3aed', borderRadius: 3, borderSkipped: false },
+          { label: 'Found in resumes', data: this.skillsData.map(s => s.available), backgroundColor: '#34d399', borderRadius: 3, borderSkipped: false }
         ]
       },
       options: {

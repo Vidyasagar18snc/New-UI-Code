@@ -1,24 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
-/* GLOBAL RESET */
+:root {
+  /* Corporate Lavender Theme */
+  --bg-primary: #f2f0fa;
+  --bg-surface: #ffffff;
+  --border-color: #e4e0f0;
+  --text-primary: #1d124d;
+  --text-secondary: #4a4270;
+  --text-muted: #9c95be;
+  --accent-color: #6d28d9;
+  --accent-hover: #5b21b6;
+  --input-bg: #f8f7fc;
+  --input-border: #d4d0e8;
+  --input-focus-border: #8b5cf6;
+  --input-focus-shadow: rgba(139, 92, 246, 0.18);
+  --card-shadow: 0 4px 24px rgba(109, 40, 217, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);
+  --panel-side-bg: #eae7f5;
+  --panel-side-border: #d9d4ec;
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(109, 40, 217, 0.06);
+  --bg-grid-color: rgba(109, 40, 217, 0.03);
+}
 
 html,
 body {
-
   margin: 0;
-
   padding: 0;
-
   width: 100%;
-
   min-height: 100%;
-
   overflow-x: hidden;
-
-  font-family:
-    'Inter',
-    sans-serif;
-
-  background: #f1f5f9;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 /* ROOT */

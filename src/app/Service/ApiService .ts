@@ -47,6 +47,12 @@ export class ApiService {
   submitTest(payload: any) {
     return this.http.post(`${this.baseUrl}/submit`, payload);
   }
+  recordViolation(token: string, violationType: string) {
+  return this.http.post<any>(`${this.baseUrl}/violation`, {
+    token,
+    violationType,
+  });
+}
   getRanking() {
     return this.http.get<any[]>(`${this.baseUrl}/all`);
   }
@@ -64,7 +70,7 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/feedback/dashboard`);
   }
   sendOffer(data: any) {
-    return this.http.post(`${this.baseUrl}/send`, data);
+    return this.http.post(`${this.baseUrl}/send`, data, { responseType: 'text' });
   }
   updateJob(id: string, data: any) {
     return this.http.put(`${this.baseUrl}/jobs/${id}`, data);
@@ -393,5 +399,62 @@ sendBackgroundVerification(
       }
     }
   );
+}
+register(data: { username: string; email: string; password: string; department: string;  }): Observable<any> {
+  return this.http.post(`${this.baseUrl}/register`, data);
+}
+getShortlistedCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/candidates/shortlisted/count`);
+  }
+   getTotalUploadedResumes(): Observable<{ totalUploadedResumes: number }> {
+    return this.http.get<{ totalUploadedResumes: number }>(
+      `${this.baseUrl}/candidates/uploaded/count`
+    );
+  }
+  getOpenPositionsCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/open-positions/count`);
+  }
+  getAllKTRecords(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/kt/all`);
+  }
+   getTotalDeboardingCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/deboarding/count`);
+  }
+  getTotalKTCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/kt/count`);
+  }
+   getTotalAlumniCount(): Observable<{ alumniCount: number }> {
+    return this.http.get<{ alumniCount: number }>(`${this.baseUrl}/alumni/count`);
+  }
+  getAttritionSummary(): Observable<{ currentMonthRate: number; lastMonthRate: number; change: number }> {
+  return this.http.get<{ currentMonthRate: number; lastMonthRate: number; change: number }>(
+    `${this.baseUrl}/attrition-summary`
+  );
+}
+getOfferAcceptanceSummary(): Observable<{ currentMonthRate: number; lastMonthRate: number; change: number }> {
+  return this.http.get<{ currentMonthRate: number; lastMonthRate: number; change: number }>(
+    `${this.baseUrl}/acceptance-summary`
+  );
+}
+getPendingOnboardingSummary(): Observable<{ currentMonthPendingCount: number; lastMonthPendingCount: number; change: number }> {
+  return this.http.get<{ currentMonthPendingCount: number; lastMonthPendingCount: number; change: number }>(
+    `${this.baseUrl}/onboarding/pending-summary`
+  );
+}
+getRetentionSummary(): Observable<{ currentMonthRate: number; lastMonthRate: number; change: number }> {
+  return this.http.get<{ currentMonthRate: number; lastMonthRate: number; change: number }>(
+    `${this.baseUrl}/retention-summary`
+  );
+}
+getTimeToHireSummary(): Observable<{ currentMonthDays: number; lastMonthDays: number; change: number }> {
+  return this.http.get<{ currentMonthDays: number; lastMonthDays: number; change: number }>(
+    `${this.baseUrl}/time-to-hire-summary`
+  );
+}
+getResumeViewUrl(candidateId: string): string {
+    return `${this.baseUrl}/resume/view/${candidateId}`;
+  }
+  getDepartmentOverview(): Observable<any> {
+  return this.http.get<any>(`${this.baseUrl}/department-overview`);
 }
 }

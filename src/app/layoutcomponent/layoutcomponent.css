@@ -5,7 +5,7 @@
 .main {
   flex: 1;
   padding: 20px;
-  background: #f4f6f9;
+  background: var(--bg-primary);
   min-height: 100vh;
 }
 .layout {
@@ -17,5 +17,5 @@
   margin-left: 240px;             
   width: calc(100% - 240px);      
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-primary);
 }

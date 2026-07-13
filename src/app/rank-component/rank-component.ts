@@ -67,6 +67,30 @@ export class RankComponent implements OnInit, OnDestroy {
     return Math.round(this.rankings.reduce((s, r) => s + r.timeTaken, 0) / this.rankings.length);
   }
 
+  get topCandidate(): Ranking | null {
+    if (!this.rankings.length) return null;
+    return [...this.rankings].sort((a, b) => a.rank - b.rank)[0];
+  }
+
+  get fastCandidate(): Ranking | null {
+    if (!this.rankings.length) return null;
+    const passing = this.rankings.filter(r => r.score >= 60);
+    if (!passing.length) return null;
+    return [...passing].sort((a, b) => a.timeTaken - b.timeTaken)[0];
+  }
+
+  get highPerformersCount(): number {
+    return this.rankings.filter(r => r.score >= 80).length;
+  }
+
+  get midPerformersCount(): number {
+    return this.rankings.filter(r => r.score >= 50 && r.score < 80).length;
+  }
+
+  get lowPerformersCount(): number {
+    return this.rankings.filter(r => r.score < 50).length;
+  }
+
   /* ── Pagination ─────────────────────────────────────────── */
   get totalPages():  number   { return Math.max(1, Math.ceil(this.filtered.length / this.pageSize)); }
   get pageNumbers(): number[] { return Array.from({ length: this.totalPages }, (_, i) => i + 1); }

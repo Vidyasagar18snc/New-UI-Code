@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject,} from '@angular/core';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { Subject, forkJoin } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { ApiService } from '../Service/ApiService ';
@@ -21,7 +22,26 @@ export class EmployeeDashboardComponent
   implements OnInit, OnDestroy
 {
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
   private destroy$ = new Subject<void>();
+
+  showLogoutModal = false;
+
+  confirmLogout(): void {
+    this.showLogoutModal = true;
+    this.cdr.markForCheck();
+  }
+
+  cancelLogout(): void {
+    this.showLogoutModal = false;
+    this.cdr.markForCheck();
+  }
+
+  logout(): void {
+    this.showLogoutModal = false;
+    localStorage.clear();
+    this.router.navigate(['/PortalLogin']);
+  }
 
   employeeName = '';
   employeeId = '';
